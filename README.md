@@ -4,18 +4,22 @@ An interactive, single-file HTML demo of the individual KYC (background screenin
 fill the workbook, encrypt it, email it to the agent, get verification results back — and
 keep talking to the agent in plain English on the same thread.
 
-Built from three supplied sources:
+Built from four supplied sources:
 
 - **`KYC_____1.xlsx`** — the `Background_Screening_Orders` template. All 18 bilingual column
   headers, the row-2 sample data, the mandatory-field rules and the instruction text are
   reproduced verbatim.
-- **`Fill_Easy_HK_Agency_Onboarding_Data_Map_2.xlsx`** — the data points. The demo uses the
-  key checks from the due-diligence map rather than invented ones: Mainland ID verification,
-  Global PEP / terrorist screening, Global sanctions & adverse media, the Mainland court and
-  enforcement layer (失信 / 限高), the consented criminal / police record, and academic
-  credential verification through CHESICC / 學信網. The last three are the
-  Mainland-background (MCV) layer — for HK-local recruits the map records those channels as
-  N/A or non-existent, and the demo says so.
+- **`Fill_Easy_HK_Agency_Onboarding_Data_Map_2.xlsx`** — the checks. Taken from the
+  due-diligence map rather than invented, and ordered by what actually stops an application:
+  **IA register** (licence and appointment history, whether the previous appointment is
+  terminated, public enforcement actions) and **legal search** (bankruptcy & IVA at the ORO,
+  litigation and court search, Companies Registry directorships) are the critical sections;
+  identity and global screening sits behind them.
+- **`Register_of_Licensed_Insurance_Intermediaries.pdf`** — the IA register layout. The licence
+  particulars block in the summary report mirrors it field for field: Licence No., Licence Type,
+  Licence Status, Licence Period, Line(s) of Business, Current Appointing Principal(s), Conditions
+  of the Licence, Public Enforcement Actions in the last 5 years, and the previous-appointments
+  table with appointment and termination dates.
 - **`Fill_Easy_HK_Company_Search_Guide_v2.docx`** — the agent's reply format. The
   `Fill Easy` / `Automated Notification` bar, the `ORDER SUCCESS` / `PROCESSING (n)` /
   `NEED CLARIFICATION (n)` sections, the `Request ID | Request | Status` tables, the yellow
@@ -25,15 +29,18 @@ Built from three supplied sources:
 
 | # | Step | What happens |
 |---|---|---|
-| 1 | Fill the template | Fill rows 3–5 of `Background_Screening_Orders`, one per subject. Mandatory: 中文名 and the 18-digit 身份證號碼. Column Q sets the scope per person. |
+| 1 | Fill the template | Fill rows 3–5, one per candidate. Mandatory: 中文名, the 18-digit 身份證號碼 and the English name. Columns S–U are added to the supplied template — the IA register, ORO and court searches key off the English name, HKID and licence number, not the Chinese name. |
 | 2 | Encrypt the file | Set a password. The workbook is locked with AES-256 before it goes near email. |
 | 3 | Attach and send | One email to `agent@ses.fill-easy.com` covering the whole batch, written in plain language. |
-| 4 | Processed | The acknowledgement returns automatically: one request ID per data field per subject, plus a clarification for the blank academic-credential columns. |
-| 5 | Results returned | `ORDER SUCCESS` with verification outcomes as an encrypted workbook, plus a downloadable summary report. |
-| 6 | Reply in plain English | A follow-up reply adds the driving-licence check. No re-upload, same thread. |
+| 4 | Processed | The acknowledgement returns automatically: one request ID per check per candidate, plus a clarification for the blank academic-credential columns. |
+| 5 | Results returned | `ORDER SUCCESS` as an encrypted workbook, plus the summary report — critical findings first, then IA register, legal search, and identity screening. |
+| 6 | Reply in plain English | A follow-up chases the same-name writ on 王建国. No re-upload, same thread. |
 
-One email covers three subjects, and the results come back per data field per person — so a
-single flagged bank account shows on its own line instead of sinking the batch.
+One email covers three candidates and 22 checks. 王建国 is the case study: still appointed by
+AIA with no termination date published (which blocks the IIC submission), a public enforcement
+action from 2023, a writ matching his name, and an undisclosed directorship. The same-name writ
+is what the step-6 follow-up resolves — ID-anchored matching separates a real hit from a false
+positive, and the declaration stays with the recruit.
 
 ## Interactions
 

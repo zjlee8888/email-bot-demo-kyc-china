@@ -295,6 +295,8 @@ table.sh thead tr.hd th {
 }
 table.sh thead tr.hd th .en { display: block; font-size: 10px; font-weight: 400; color: var(--ink-3); margin-top: 2px; }
 table.sh thead tr.hd th .rq { color: var(--crit); }
+table.sh thead tr.hd th.added { background: var(--accent-sf); }
+table.sh thead tr.hd th.added .en b { color: var(--accent); font-weight: 700; }
 table.sh td.rn { background: var(--surface-2); color: var(--ink-3); font-family: var(--mono); font-size: 10px; text-align: center; position: sticky; left: 0; z-index: 2; min-width: 28px; }
 table.sh th.cnr { position: sticky; left: 0; z-index: 4; background: var(--surface-2); min-width: 28px; }
 table.sh td { background: var(--surface); white-space: nowrap; }
@@ -399,10 +401,32 @@ table.res td.d { color: var(--ink-2); }
 .rep-sub { margin: 0 0 6px; font-size: var(--f-xs); color: var(--ink-3); }
 .rep-h { margin: 20px 0 4px; padding-bottom: 5px; font-size: var(--f-md); font-weight: 680; border-bottom: 2px solid var(--accent); }
 .rep-h .mono { font-size: var(--f-xs); color: var(--ink-3); font-weight: 400; margin-left: 5px; }
-.rep .res th, .rep .res td { padding: 8px 10px; }
+.rp-title { margin: 0 0 4px; font-size: var(--f-lg); font-weight: 680; }
+.rp-meta { margin: 0 0 16px; font-size: var(--f-xs); color: var(--ink-3); }
+.rp-crit { border: 1px solid var(--gold-line); background: var(--gold-sf); border-radius: var(--r-sm); padding: 13px 15px; margin-bottom: 22px; }
+.rp-crit-h { font-size: 10px; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; color: var(--gold); margin-bottom: 7px; }
+.rp-crit ul { margin: 0; padding-left: 17px; font-size: var(--f-sm); line-height: 1.6; }
+.rp-crit li { margin-bottom: 5px; }
+.rp-crit p { margin: 0; font-size: var(--f-sm); }
+.rp-sec { font-size: var(--f-md); font-weight: 700; margin: 26px 0 4px; padding-bottom: 6px; border-bottom: 2px solid var(--accent); }
+.rp-sub { font-size: var(--f-sm); font-weight: 680; margin: 16px 0 7px; }
+.rp .m { font-family: var(--mono); font-size: var(--f-xs); color: var(--ink-3); font-weight: 400; }
+.rp .nw { white-space: nowrap; }
+.rp-part { display: grid; grid-template-columns: minmax(140px, 240px) 1fr; gap: 0 16px; margin: 0 0 12px; font-size: var(--f-sm); border-top: 1px solid var(--line); }
+.rp-part dt { padding: 6px 12px 6px 0; color: var(--ink-3); border-bottom: 1px solid var(--line); }
+.rp-part dd { padding: 6px 0; margin: 0; border-bottom: 1px solid var(--line); }
+.rp-tbl { border-collapse: collapse; width: 100%; font-size: var(--f-sm); margin-bottom: 12px; display: block; overflow-x: auto; }
+.rp-tbl th, .rp-tbl td { border: 1px solid var(--line); padding: 8px 10px; text-align: left; vertical-align: top; }
+.rp-tbl th { background: var(--surface-2); font-weight: 700; }
+.rp .p { display: inline-block; padding: 1px 9px; border-radius: var(--pill); font-size: var(--f-xs); font-weight: 700; white-space: nowrap; }
+.rp .ok { background: var(--ok-sf); color: var(--ok); }
+.rp .fl { background: var(--gold-sf); color: var(--gold); }
+.rp .na { background: var(--surface-2); color: var(--ink-2); }
 .dl-note { margin: 12px 0 0; font-size: var(--f-xs); color: var(--ink-3); line-height: 1.55; max-width: 68ch; }
 .dl-note b { color: var(--ink-2); }
-table.res tr.grp td { padding-top: 18px; font-weight: 680; font-size: var(--f-md); border-bottom-color: var(--line-2); }
+table.res tr.grp td { padding-top: 14px; font-weight: 680; font-size: var(--f-sm); border-bottom-color: var(--line); }
+table.res tr.sec td { padding-top: 22px; font-size: 10px; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; color: var(--accent); border-bottom: 2px solid var(--accent); }
+table.res tbody tr.sec:first-child td { padding-top: 8px; }
 table.res tbody tr:first-child td { padding-top: 8px; }
 
 /* ============================================================
@@ -498,7 +522,8 @@ table.res tbody tr:first-child td { padding-top: 8px; }
   "use strict";
 
   /* ==========================================================
-     Fixtures drawn from the supplied template + guide
+     Fixtures drawn from the supplied template, guide, data map
+     and the IA register printout
      ========================================================== */
   var AGENT_ADDR = "agent@ses.fill-easy.com";
   var USER = { nm: "Matthew Lee", ad: "matthew.lee@citic-demo.example", ini: "ML" };
@@ -507,6 +532,9 @@ table.res tbody tr:first-child td { padding-top: 8px; }
   var RESULTS_FILE = "KYC_Screening_Results_BGS-2026-014.xlsx";
   var DESK_PW = "FE-Desk-2026-CN";
 
+  /* Columns A–R are the supplied template. S–U are added for this flow:
+     the IA register, ORO and court searches all key off the English name,
+     the HKID and the licence number. */
   var COLS = [
     { c: "A", cn: "內部參考編號", en: "Internal Reference Number" },
     { c: "B", cn: "地區", en: "Region" },
@@ -525,63 +553,139 @@ table.res tbody tr:first-child td { padding-top: 8px; }
     { c: "O", cn: "駕駛執照編號", en: "Driver's License Number" },
     { c: "P", cn: "地址", en: "Address" },
     { c: "Q", cn: "所需數據字段", en: "Requested Data Fields" },
-    { c: "R", cn: "備註", en: "Notes/Comments" }
+    { c: "R", cn: "備註", en: "Notes/Comments" },
+    { c: "S", cn: "英文姓名", en: "English Name (as per HKID)", rq: true, add: true },
+    { c: "T", cn: "香港身份證號碼", en: "HKID Number", add: true },
+    { c: "U", cn: "保險中介人牌照號碼", en: "IA Licence Number", add: true }
   ];
-  /* narrow default view — the rest of the 18 columns are one click away */
-  var KEY_COLS = [0, 1, 2, 3, 5, 10, 16];
+  /* the narrow default view leads with what the critical searches key off */
+  var KEY_COLS = [0, 2, 3, 16, 18, 19, 20];
+  var ADDED_FROM = 18;
 
-  /* row 2 — the sample shipped inside the template */
   var SAMPLE = ["BGS-2025-001", "China - CN", "张三", "110101199001011234", "2016.01.01", "2027.12.12",
                 "12345678", "Passport", "12667788991", "", "1234567890", "12345678", "12345678",
-                "12345678", "1234567", "北京王府大道某某小区xx栋12楼A室", "KYC1 / KYC2", ""];
+                "12345678", "1234567", "北京王府大道某某小区xx栋12楼A室", "KYC1 / KYC2", "",
+                "ZHANG San", "Z123456(7)", "JA0000"];
 
-  /* rows 3–5 — this request */
   var ROWS = [
     ["BGS-2026-014", "China - CN", "李慧敏", "310115199204186328", "2018.03.05", "2038.03.05",
      "E64720915", "Passport", "13905217744", "", "6222021001056783", "", "", "JS20190447",
-     "310115199204186328", "上海市浦东新区世纪大道100号28楼", "KYC1 / KYC2", "New hire — senior role"],
+     "310115199204186328", "上海市浦东新区世纪大道100号28楼", "KYC1 / KYC2", "Ex-Prudential agent",
+     "LI Huimin", "Z684512(3)", "JA6021"],
     ["BGS-2026-015", "China - CN", "王建国", "110105198706234519", "2015.09.12", "2029.11.20",
      "E51120847", "Passport", "13611209853", "", "6217001210044892", "", "", "",
-     "110105198706234519", "北京市朝阳区建国路88号15楼", "KYC1", "Existing client — periodic review"],
+     "110105198706234519", "北京市朝阳区建国路88号15楼", "KYC1", "Declares no outside business",
+     "WANG Jianguo", "Y351908(4)", "JA4487"],
     ["BGS-2026-016", "China - CN", "陈晓芸", "440304199508127763", "2017.02.14", "2027.02.14",
      "E73399102", "Passport", "13802964517", "", "6228480018763254", "", "", "",
-     "440304199508127763", "深圳市福田区深南大道6008号", "KYC1 / KYC2", ""]
+     "440304199508127763", "深圳市福田区深南大道6008号", "KYC1 / KYC2", "First-time applicant",
+     "CHEN Xiaoyun", "", ""]
   ];
-  /* only the last row starts blank, so filling it is a real action */
-  var EDIT_ROW = 2, EDIT_CELLS = [2, 3];
+  var EDIT_ROW = 2, EDIT_CELLS = [2, 3, 18];
 
   /* ==========================================================
      Results — one source of truth for the emails, the workbook
-     readout and the downloadable summary report
+     readout, the on-page report and both exports.
+     Sections follow the due-diligence map; the licence block
+     mirrors the IA register printout field for field.
      ========================================================== */
+  var SEC = {
+    ia:  "IA register — licence, appointments, enforcement",
+    leg: "Legal search — bankruptcy, litigation, directorships",
+    bg:  "Identity & global screening"
+  };
+
   var SUBJECTS = [
-    { ref: "BGS-2026-014", name: "李慧敏", fields: [
-      { id: "BGS_7hK2xQm4Rt", doc: "Mainland ID Verification", res: "Verified", detail: "Name and ID number match the public security record." },
-      { id: "BGS_Wq3TbY9dEu", doc: "Global PEP / Terrorist Screening", res: "Verified", detail: "No PEP classification and no watchlist match." },
-      { id: "BGS_Lm6Xz1PkHc", doc: "Global Sanctions & Adverse Media", res: "Verified", detail: "No match on OFAC, UN, EU or HKMA lists; no adverse media returned." },
-      { id: "BGS_Rd9Fj5NwSv", doc: "Mainland Court & Enforcement (失信 / 限高)", res: "Verified", detail: "No dishonest-judgment-debtor or consumption-restriction record." },
-      { id: "BGS_Nq5Yd2VtKx", doc: "Academic Credential (CHESICC / 學信網)", res: "Not run", detail: "Columns L and M were blank in the request workbook." }
-    ] },
-    { ref: "BGS-2026-015", name: "王建国", fields: [
-      { id: "BGS_Kp3Nv8QwTb", doc: "Mainland ID Verification", res: "Verified", detail: "Name and ID number match the public security record." },
-      { id: "BGS_Jd7Fx2LmYc", doc: "Global PEP / Terrorist Screening", res: "Verified", detail: "No PEP classification and no watchlist match." },
-      { id: "BGS_Ht5Zq9RnWp", doc: "Global Sanctions & Adverse Media", res: "Verified", detail: "No match on OFAC, UN, EU or HKMA lists; no adverse media returned." },
-      { id: "BGS_Sw8Bk4MjPe", doc: "Mainland Court & Enforcement (失信 / 限高)", res: "Flagged", detail: "One 限制高消費 consumption-restriction order on file (2024). Review before proceeding." }
-    ] },
-    { ref: "BGS-2026-016", name: "陈晓芸", fields: [
-      { id: "BGS_Bn6Cw4TkVs", doc: "Mainland ID Verification", res: "Verified", detail: "Name and ID number match the public security record." },
-      { id: "BGS_Vc4Lp6WmDz", doc: "ID Card Validity & Expiry", res: "Flagged", detail: "Expires 2027-02-14 — inside the 12-month window you asked to be flagged." },
-      { id: "BGS_Xr2Gm7PdLf", doc: "Global PEP / Terrorist Screening", res: "Verified", detail: "No PEP classification and no watchlist match." },
-      { id: "BGS_Qy8Ts3NbHj", doc: "Global Sanctions & Adverse Media", res: "Verified", detail: "No match on OFAC, UN, EU or HKMA lists; no adverse media returned." },
-      { id: "BGS_Zf9Hd5CxRu", doc: "Criminal / Police Record (consented)", res: "Verified", detail: "No conviction or public-security record returned." }
-    ] }
+    {
+      ref: "BGS-2026-014", name: "李慧敏", en: "LI Huimin", hkid: "Z684512(3)",
+      licence: {
+        no: "JA6021", type: "Individual Insurance Agent", status: "Lapsed",
+        period: "12 Mar 2021 – 31 Aug 2025",
+        lob: "Long Term Business (including Linked Long Term Business)",
+        current: "Nil", conditions: "Nil", enforcement: "Nil",
+        appts: [{ p: "Prudential Hong Kong Limited", lob: "Long Term Business (including Linked Long Term Business)", from: "12 Mar 2021", to: "31 Aug 2025" }]
+      },
+      fields: [
+        { id: "BGS_7hK2xQm4Rt", sec: "ia", doc: "IA Licence & Appointment History", res: "Verified",
+          detail: "Licence JA6021, Individual Insurance Agent, lapsed 31 Aug 2025. One appointment on the register: Prudential Hong Kong Limited, 12 Mar 2021 – 31 Aug 2025. Matches the declared history." },
+        { id: "BGS_Wq3TbY9dEu", sec: "ia", doc: "Appointment Termination Status", res: "Verified",
+          detail: "No current appointing principal. Termination confirmed — clear for IIC submission." },
+        { id: "BGS_Lm6Xz1PkHc", sec: "ia", doc: "Enforcement & Disciplinary Record", res: "Verified",
+          detail: "No public enforcement action in the last 5 years; no condition on the licence." },
+        { id: "BGS_Rd9Fj5NwSv", sec: "leg", doc: "Bankruptcy & IVA Search (ORO)", res: "Verified",
+          detail: "No bankruptcy order and no approved IVA on file." },
+        { id: "BGS_Nq5Yd2VtKx", sec: "leg", doc: "Litigation & Court Search (HK)", res: "Verified",
+          detail: "No civil action or judgment returned against the ID-anchored record." },
+        { id: "BGS_Tg7Mw1XbFo", sec: "leg", doc: "Companies Registry — Directorships", res: "Verified",
+          detail: "No directorship on file. Consistent with the outside-business declaration." },
+        { id: "BGS_Pl2Rk9DsAe", sec: "bg", doc: "Identity & Global Screening", res: "Verified",
+          detail: "Mainland ID matches the public security record. No PEP classification, no sanctions match on OFAC / UN / EU / HKMA lists, no adverse media." },
+        { id: "BGS_Cv6Jn3ZqUt", sec: "bg", doc: "Academic Credential (CHESICC / 學信網)", res: "Not run",
+          detail: "Columns L and M were blank in the request workbook." }
+      ]
+    },
+    {
+      ref: "BGS-2026-015", name: "王建国", en: "WANG Jianguo", hkid: "Y351908(4)",
+      licence: {
+        no: "JA4487", type: "Individual Insurance Agent", status: "Active",
+        period: "01 Jun 2019 – 31 Dec 2026",
+        lob: "General Business",
+        current: "AIA International Limited — General Business, appointed 01 Jun 2019, no termination date",
+        conditions: "Nil", enforcement: "One published disciplinary action (Jan 2023)",
+        appts: [
+          { p: "AIA International Limited", lob: "General Business", from: "01 Jun 2019", to: "— current —" },
+          { p: "Bolttech Insurance (Hong Kong) Company Limited", lob: "General Business", from: "09 Jun 2020", to: "14 Jan 2022" }
+        ]
+      },
+      fields: [
+        { id: "BGS_Kp3Nv8QwTb", sec: "ia", doc: "IA Licence & Appointment History", res: "Verified",
+          detail: "Licence JA4487, Individual Insurance Agent, active to 31 Dec 2026. Two appointments on the register: AIA International Limited from 01 Jun 2019, and Bolttech Insurance (Hong Kong), 09 Jun 2020 – 14 Jan 2022." },
+        { id: "BGS_Jd7Fx2LmYc", sec: "ia", doc: "Appointment Termination Status", res: "Flagged",
+          detail: "Still appointed by AIA International Limited — no termination date published. The previous appointment must be terminated before the IIC application is lodged." },
+        { id: "BGS_Ht5Zq9RnWp", sec: "ia", doc: "Enforcement & Disciplinary Record", res: "Flagged",
+          detail: "One public enforcement action published in the last 5 years (Jan 2023). Retrieve the decision and assess before proceeding." },
+        { id: "BGS_Sw8Bk4MjPe", sec: "leg", doc: "Bankruptcy & IVA Search (ORO)", res: "Verified",
+          detail: "No bankruptcy order and no approved IVA on file." },
+        { id: "BGS_Dx1Vt6YhGn", sec: "leg", doc: "Litigation & Court Search (HK)", res: "Flagged",
+          detail: "One writ matches the name — HCA 1842/2024, civil action. Same-name match only; identity not confirmed. A follow-up declaration is required if it is the candidate." },
+        { id: "BGS_Fy4Qs7WdWr", sec: "leg", doc: "Companies Registry — Directorships", res: "Flagged",
+          detail: "One active directorship on file, not disclosed in the outside-business declaration on the eApplication." },
+        { id: "BGS_Mo9Ce2AtLb", sec: "bg", doc: "Identity & Global Screening", res: "Verified",
+          detail: "Mainland ID matches the public security record. No PEP classification, no sanctions match, no adverse media." }
+      ]
+    },
+    {
+      ref: "BGS-2026-016", name: "陈晓芸", en: "CHEN Xiaoyun", hkid: "—",
+      licence: {
+        no: "—", type: "—", status: "No record",
+        period: "—", lob: "—", current: "Nil", conditions: "—", enforcement: "—", appts: []
+      },
+      fields: [
+        { id: "BGS_Bn6Cw4TkVs", sec: "ia", doc: "IA Licence & Appointment History", res: "No record",
+          detail: "No entry on the IA register. Consistent with a first-time applicant — note the register reflects licensed periods only, so any non-licensed insurance role rests on the declaration." },
+        { id: "BGS_Vc4Lp6WmDz", sec: "ia", doc: "Appointment Termination Status", res: "No record",
+          detail: "No current or previous appointing principal. Nothing to terminate." },
+        { id: "BGS_Xr2Gm7PdLf", sec: "ia", doc: "Enforcement & Disciplinary Record", res: "Verified",
+          detail: "No public enforcement action in the last 5 years." },
+        { id: "BGS_Qy8Ts3NbHj", sec: "leg", doc: "Bankruptcy & IVA Search (ORO)", res: "Verified",
+          detail: "No bankruptcy order and no approved IVA on file." },
+        { id: "BGS_Zf9Hd5CxRu", sec: "leg", doc: "Litigation & Court Search (HK)", res: "Verified",
+          detail: "No civil action or judgment returned." },
+        { id: "BGS_Ei3Ua8KrYv", sec: "leg", doc: "Companies Registry — Directorships", res: "Verified",
+          detail: "No directorship on file." },
+        { id: "BGS_Wt5Ob1NlIc", sec: "bg", doc: "Identity & Global Screening", res: "Flagged",
+          detail: "Identity verified and screening clear, but the mainland ID card expires 2027-02-14 — inside the 12-month window you asked to be flagged." }
+      ]
+    }
   ];
+
   function allFields() {
     var out = [];
     SUBJECTS.forEach(function (s) { s.fields.forEach(function (f) { out.push({ s: s, f: f }); }); });
     return out;
   }
   var TOTAL = allFields().length;
+  function flagged() { return allFields().filter(function (r) { return r.f.res === "Flagged"; }); }
 
   /* ==========================================================
      Builders
@@ -636,7 +740,9 @@ table.res tbody tr:first-child td { padding-top: 8px; }
       '<div class="xl-scroll"><table class="sh"><thead>' +
       '<tr><th class="cnr ltr">&nbsp;</th>' + cols.map(function (i) { return '<th class="ltr">' + COLS[i].c + '</th>'; }).join("") + '</tr>' +
       '<tr class="hd"><th class="cnr">1</th>' + cols.map(function (i) {
-        return '<th>' + COLS[i].cn + (COLS[i].rq ? ' <span class="rq">*</span>' : '') + '<span class="en">' + COLS[i].en + '</span></th>';
+        return '<th' + (COLS[i].add ? ' class="added"' : '') + '>' + COLS[i].cn +
+          (COLS[i].rq ? ' <span class="rq">*</span>' : '') +
+          '<span class="en">' + COLS[i].en + (COLS[i].add ? ' <b>· added</b>' : '') + '</span></th>';
       }).join("") + '</tr></thead><tbody>';
 
     h += '<tr class="spl"><td class="rn">2</td>' + cols.map(function (i) { return '<td>' + (SAMPLE[i] || "") + '</td>'; }).join("") + '</tr>';
@@ -653,7 +759,8 @@ table.res tbody tr:first-child td { padding-top: 8px; }
     });
 
     return h + '</tbody></table></div><div class="xl-foot">' +
-      '<span><b>Row 2</b> is the sample shipped with the template. Rows 3&ndash;5 are this request.</span>' +
+      '<span><b>Row 2</b> is the sample shipped with the template. Rows 3&ndash;5 are this request. ' +
+      'Columns <b>S&ndash;U</b> are added for the register and court searches.</span>' +
       '<button type="button" class="linkbtn" id="colToggle">' +
       (state.allCols ? "Show key columns only" : "Show all 18 columns") + '</button>' +
       '</div></div>';
@@ -661,12 +768,13 @@ table.res tbody tr:first-child td { padding-top: 8px; }
 
   function validation() {
     var out = state.rows.map(function (row, ri) {
-      var name = (row[2] || "").trim(), id = (row[3] || "").trim();
-      var ok = !!name && /^\d{18}$/.test(id);
+      var name = (row[2] || "").trim(), id = (row[3] || "").trim(), en = (row[18] || "").trim();
+      var ok = !!name && /^\d{18}$/.test(id) && !!en;
       var msg = !name ? "中文名 is empty" :
                 !id ? "身份證號碼 is empty" :
                 !/^\d{18}$/.test(id) ? id.length + " digits — mainland IDs must be 18" :
-                name + " · 18 digits · " + (row[16] || "no fields requested");
+                !en ? "English name is empty — the register and court searches key off it" :
+                name + " · " + en + " · " + (row[20] ? "licence " + row[20] : "no IA licence declared");
       return { ok: ok, t: "Row " + (ri + 3) + " — " + (row[0] || "no reference"), s: msg };
     });
     return {
@@ -681,54 +789,20 @@ table.res tbody tr:first-child td { padding-top: 8px; }
   /* ---------- the email, in plain words ---------- */
   function requestBody() {
     return '<p>Hi Fill Easy team,</p>' +
-      '<p>Please run background screening for the three individuals in the attached workbook ' +
+      '<p>Please run onboarding due diligence on the three candidates in the attached workbook ' +
       '(Background_Screening_Orders, rows 3&ndash;5). All three are Mainland-background recruits, ' +
-      'China &mdash; CN, references BGS-2026-014 to 016.</p>' +
-      '<p>For each of them I need identity verification plus the screening layer &mdash; PEP and terrorist ' +
-      'screening, sanctions and adverse media, and the Mainland court and enforcement records (失信 / 限高). ' +
-      'Add the consented criminal record check for 陈晓芸, and 李慧敏&rsquo;s academic credential through 學信網.</p>' +
-      '<p>Flag it to me if any ID card is expired or expires within 12 months.</p>' +
+      'references BGS-2026-014 to 016. I have added the English name, HKID and IA licence number in ' +
+      'columns S to U so the register and court searches have something to key off.</p>' +
+      '<p><b>The two that matter most are the IA register and the legal searches.</b> On the register I need the ' +
+      'licence and appointment history for each of them, whether the previous appointment has actually been ' +
+      'terminated, and any public enforcement action in the last five years. On the legal side: bankruptcy and ' +
+      'IVA at the ORO, a litigation and court search, and Companies Registry directorships to test the ' +
+      'outside-business declaration.</p>' +
+      '<p>Identity and global screening on top of that. Flag it to me if any ID card is expired or expires ' +
+      'within 12 months.</p>' +
       '<p>Please also generate a summary report.</p>' +
       '<p>The workbook is password-protected &mdash; same desk password we registered at onboarding, not in this email.</p>' +
       '<p class="sig">Thanks,<br>Matthew<br>Client Onboarding</p>';
-  }
-
-  /* ---------- downloadable summary report ---------- */
-  function reportHTML() {
-    var rows = SUBJECTS.map(function (s) {
-      return '<h2>' + s.name + ' <span class="ref">' + s.ref + '</span></h2>' +
-        '<table><thead><tr><th>Request ID</th><th>Data field</th><th>Result</th><th>Detail</th></tr></thead><tbody>' +
-        s.fields.map(function (f) {
-          return '<tr><td class="m">' + f.id + '</td><td>' + f.doc + '</td>' +
-            '<td><span class="p ' + (f.res === "Verified" ? "ok" : f.res === "Flagged" ? "fl" : "na") + '">' + f.res + '</span></td>' +
-            '<td>' + f.detail + '</td></tr>';
-        }).join("") +
-        '</tbody></table>';
-    }).join("");
-
-    return '<!doctype html><html lang="en"><head><meta charset="utf-8">' +
-      '<title>Fill Easy — Summary Report BGS-2026-014</title><style>' +
-      'body{margin:0;padding:34px;font-family:-apple-system,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei",sans-serif;color:#1C1C1C;line-height:1.55;max-width:900px}' +
-      '.bar{display:flex;align-items:center;background:#1C1C1C;color:#fff;padding:15px 20px;margin:-34px -34px 26px}' +
-      '.bar b{font-size:17px}.bar span{margin-left:auto;font-size:13px}' +
-      'h1{font-size:19px;margin:0 0 4px}.sub{color:#6E7679;font-size:13px;margin:0 0 22px}' +
-      'h2{font-size:15px;margin:26px 0 8px;padding-bottom:6px;border-bottom:2px solid #0A7A85}' +
-      'h2 .ref{font-family:ui-monospace,Menlo,monospace;font-size:12px;color:#6E7679;font-weight:400;margin-left:6px}' +
-      'table{border-collapse:collapse;width:100%;font-size:12.5px}' +
-      'th,td{border:1px solid #DDE1E2;padding:8px 11px;text-align:left;vertical-align:top}' +
-      'th{background:#F7F8F8}td.m{font-family:ui-monospace,Menlo,monospace;font-size:11px;white-space:nowrap}' +
-      '.p{display:inline-block;padding:1px 9px;border-radius:99px;font-size:11px;font-weight:700;white-space:nowrap}' +
-      '.ok{background:#DAF0E2;color:#1F7A45}.fl{background:#FDF1D8;color:#A8710A}.na{background:#EFF2F2;color:#48595C}' +
-      '.foot{margin-top:30px;padding-top:14px;border-top:1px solid #DDE1E2;color:#6E7679;font-size:11.5px}' +
-      '@media print{body{padding:0}.bar{margin:0 0 20px}}' +
-      '</style></head><body>' +
-      '<div class="bar"><b>Fill Easy</b><span>Summary Report</span></div>' +
-      '<h1>Background screening &mdash; summary report</h1>' +
-      '<p class="sub">References BGS-2026-014 to 016 &middot; China (CN) &middot; ' + TOTAL + ' data fields across ' + SUBJECTS.length + ' subjects &middot; requested by ' + USER.nm + '</p>' +
-      rows +
-      '<p class="foot">Illustrative demo for stakeholder visualisation &mdash; sample data is fictitious. ' +
-      'Generated from the Fill Easy individual KYC walkthrough. Print this page to save it as a PDF.</p>' +
-      '</body></html>';
   }
 
   /* Embedded previews are sandboxed and block file downloads, so the report is
@@ -766,32 +840,129 @@ table.res tbody tr:first-child td { padding-top: 8px; }
     } catch (e) { return false; }
   }
 
-  /* the same report, rendered on the page */
+  /* ==========================================================
+     Summary report — IA register and legal search lead, because
+     those are the findings that stop an application
+     ========================================================== */
+  function pill(res) {
+    var c = res === "Verified" ? "ok" : res === "Flagged" ? "fl" : "na";
+    return '<span class="p ' + c + '">' + res + '</span>';
+  }
+
+  function licenceBlock(s) {
+    var L = s.licence;
+    var rows = [
+      ["Licence No.", L.no], ["Licence Type", L.type], ["Licence Status", L.status],
+      ["Licence Period", L.period], ["Line(s) of Business", L.lob],
+      ["Current Appointing Principal(s)", L.current],
+      ["Conditions of the Licence", L.conditions],
+      ["Public Enforcement Actions (last 5 years)", L.enforcement]
+    ];
+    var h = '<dl class="rp-part">' + rows.map(function (r) {
+      return '<dt>' + r[0] + '</dt><dd>' + r[1] + '</dd>';
+    }).join("") + '</dl>';
+
+    if (L.appts.length) {
+      h += '<table class="rp-tbl"><thead><tr><th>Appointing Principal</th><th>Line(s) of Business</th>' +
+        '<th>Appointed</th><th>Terminated</th></tr></thead><tbody>' +
+        L.appts.map(function (a) {
+          return '<tr><td>' + a.p + '</td><td>' + a.lob + '</td><td class="nw">' + a.from + '</td><td class="nw">' + a.to + '</td></tr>';
+        }).join("") + '</tbody></table>';
+    }
+    return h;
+  }
+
+  function fieldTable(s, sec) {
+    var rows = s.fields.filter(function (f) { return f.sec === sec; });
+    if (!rows.length) return "";
+    return '<table class="rp-tbl"><thead><tr><th>Request ID</th><th>Check</th><th>Result</th><th>Finding</th></tr></thead><tbody>' +
+      rows.map(function (f) {
+        return '<tr><td class="m nw">' + f.id + '</td><td>' + f.doc + '</td><td>' + pill(f.res) + '</td><td>' + f.detail + '</td></tr>';
+      }).join("") + '</tbody></table>';
+  }
+
+  /* the body is shared by the on-page view and the downloadable file */
+  function reportBody() {
+    var flags = flagged();
+    var h = '<p class="rp-meta">References BGS-2026-014 to 016 &middot; Mainland-background recruits &middot; ' +
+      TOTAL + ' checks across ' + SUBJECTS.length + ' subjects &middot; requested by ' + USER.nm + '</p>';
+
+    h += '<div class="rp-crit"><div class="rp-crit-h">Critical findings &mdash; ' + flags.length + '</div>' +
+      (flags.length
+        ? '<ul>' + flags.map(function (r) {
+            return '<li><b>' + r.s.name + '</b> <span class="m">' + r.s.ref + '</span> &mdash; ' +
+              r.f.doc + '. ' + r.f.detail + '</li>';
+          }).join("") + '</ul>'
+        : '<p>Nothing flagged.</p>') +
+      '</div>';
+
+    h += '<h2 class="rp-sec">1 &middot; ' + SEC.ia + '</h2>' +
+      SUBJECTS.map(function (s) {
+        return '<h3 class="rp-sub">' + s.name + ' &middot; ' + s.en + ' <span class="m">' + s.ref + '</span></h3>' +
+          licenceBlock(s) + fieldTable(s, "ia");
+      }).join("");
+
+    h += '<h2 class="rp-sec">2 &middot; ' + SEC.leg + '</h2>' +
+      SUBJECTS.map(function (s) {
+        return '<h3 class="rp-sub">' + s.name + ' &middot; ' + s.en + ' <span class="m">' + s.ref + '</span></h3>' +
+          fieldTable(s, "leg");
+      }).join("");
+
+    h += '<h2 class="rp-sec">3 &middot; ' + SEC.bg + '</h2>' +
+      SUBJECTS.map(function (s) {
+        return '<h3 class="rp-sub">' + s.name + ' &middot; ' + s.en + ' <span class="m">' + s.ref + '</span></h3>' +
+          fieldTable(s, "bg");
+      }).join("");
+
+    return h;
+  }
+
   function reportInline() {
-    return '<div class="rep">' +
-      '<div class="fe-bar"><span class="b">Fill Easy</span><span class="a">Summary Report</span></div>' +
-      '<div class="rep-in">' +
-        '<h3>Background screening &mdash; summary report</h3>' +
-        '<p class="rep-sub">References BGS-2026-014 to 016 &middot; China (CN) &middot; ' + TOTAL +
-        ' data fields across ' + SUBJECTS.length + ' subjects &middot; requested by ' + USER.nm + '</p>' +
-        SUBJECTS.map(function (s) {
-          return '<h4 class="rep-h">' + s.name + ' <span class="mono">' + s.ref + '</span></h4>' +
-            '<div style="overflow-x:auto"><table class="res"><thead><tr><th>Request ID</th><th>Data field</th><th>Result</th><th>Detail</th></tr></thead><tbody>' +
-            s.fields.map(function (f) {
-              return '<tr><td class="mono" style="font-size:var(--f-xs);white-space:nowrap">' + f.id + '</td>' +
-                '<td class="f">' + f.doc + '</td>' +
-                '<td><span class="tag ' + (f.res === "Verified" ? "t-ok" : f.res === "Flagged" ? "t-gold" : "t-mut") + '">' + f.res + '</span></td>' +
-                '<td class="d">' + f.detail + '</td></tr>';
-            }).join("") +
-            '</tbody></table></div>';
-        }).join("") +
-      '</div></div>';
+    return '<div class="rep"><div class="fe-bar"><span class="b">Fill Easy</span><span class="a">Summary Report</span></div>' +
+      '<div class="rep-in rp"><h3 class="rp-title">Background screening &mdash; summary report</h3>' +
+      reportBody() + '</div></div>';
+  }
+
+  function reportHTML() {
+    return '<!doctype html><html lang="en"><head><meta charset="utf-8">' +
+      '<title>Fill Easy — Summary Report BGS-2026-014</title><style>' +
+      'body{margin:0;padding:34px;font-family:-apple-system,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei",sans-serif;color:#1C1C1C;line-height:1.55;max-width:940px}' +
+      '.bar{display:flex;align-items:center;background:#1C1C1C;color:#fff;padding:15px 20px;margin:-34px -34px 26px}' +
+      '.bar b{font-size:17px}.bar span{margin-left:auto;font-size:13px}' +
+      '.rp-title{font-size:19px;margin:0 0 4px}' +
+      '.rp-meta{color:#6E7679;font-size:12.5px;margin:0 0 18px}' +
+      '.rp-crit{border:1px solid #E6C173;background:#FDF1D8;border-radius:8px;padding:14px 16px;margin:0 0 26px}' +
+      '.rp-crit-h{font-size:11px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:#A8710A;margin-bottom:8px}' +
+      '.rp-crit ul{margin:0;padding-left:18px;font-size:12.5px}.rp-crit li{margin-bottom:6px}' +
+      '.rp-sec{font-size:15px;margin:30px 0 4px;padding-bottom:7px;border-bottom:2px solid #0A7A85}' +
+      '.rp-sub{font-size:13.5px;margin:20px 0 8px;color:#1C1C1C}' +
+      '.m{font-family:ui-monospace,Menlo,monospace;font-size:11.5px;color:#6E7679;font-weight:400}' +
+      '.nw{white-space:nowrap}' +
+      '.rp-part{display:grid;grid-template-columns:270px 1fr;gap:0 18px;margin:0 0 12px;font-size:12.5px;border-top:1px solid #DDE1E2}' +
+      '.rp-part dt{padding:6px 0;color:#6E7679;border-bottom:1px solid #EFF1F1;padding-right:14px}' +
+      '.rp-part dd{padding:6px 0;margin:0;border-bottom:1px solid #EFF1F1}' +
+      '.rp-tbl{border-collapse:collapse;width:100%;font-size:12.5px;margin-bottom:14px}' +
+      '.rp-tbl th,.rp-tbl td{border:1px solid #DDE1E2;padding:8px 11px;text-align:left;vertical-align:top}' +
+      '.rp-tbl th{background:#F7F8F8;font-weight:700}' +
+      '.p{display:inline-block;padding:1px 9px;border-radius:99px;font-size:11px;font-weight:700;white-space:nowrap}' +
+      '.ok{background:#DAF0E2;color:#1F7A45}.fl{background:#FDF1D8;color:#A8710A}.na{background:#EFF2F2;color:#48595C}' +
+      '.foot{margin-top:30px;padding-top:14px;border-top:1px solid #DDE1E2;color:#6E7679;font-size:11.5px}' +
+      '@media print{body{padding:0;max-width:none}.bar{margin:0 0 20px}.rp-sec{break-after:avoid}.rp-tbl{break-inside:avoid}}' +
+      '</style></head><body>' +
+      '<div class="bar"><b>Fill Easy</b><span>Summary Report</span></div>' +
+      '<h1 class="rp-title">Background screening &mdash; summary report</h1>' +
+      reportBody() +
+      '<p class="foot">Illustrative demo for stakeholder visualisation &mdash; sample data is fictitious. ' +
+      'Licence particulars follow the layout of the Register of Licensed Insurance Intermediaries (Individual). ' +
+      'Print this page to save it as a PDF.</p></body></html>';
   }
 
   function reportCSV() {
-    var out = [["Reference", "Subject", "Request ID", "Data field", "Result", "Detail"]];
+    var out = [["Section", "Reference", "Subject", "English name", "IA licence", "Request ID", "Check", "Result", "Finding"]];
     SUBJECTS.forEach(function (s) {
-      s.fields.forEach(function (f) { out.push([s.ref, s.name, f.id, f.doc, f.res, f.detail]); });
+      s.fields.forEach(function (f) {
+        out.push([SEC[f.sec], s.ref, s.name, s.en, s.licence.no, f.id, f.doc, f.res, f.detail]);
+      });
     });
     return out.map(function (r) {
       return r.map(function (c) { return '"' + String(c).replace(/"/g, '""') + '"'; }).join(",");
@@ -803,10 +974,10 @@ table.res tbody tr:first-child td { padding-top: 8px; }
      ========================================================== */
   var STEPS = [
 
-    { nav: "Fill the template", eyebrow: "Fill the template", title: "One row per person",
-      you: "Open the workbook and fill a row for each subject. Only two columns are mandatory — 中文名 and the 18-digit 中國大陸身份證號碼.",
-      bts: "Column Q sets which data fields come back for that person, so different subjects in the same batch can carry different scopes. Row 2 is the sample shipped with the template and can be overwritten.",
-      chips: ["Background_Screening_Orders", "3 subjects", "18 columns"],
+    { nav: "Fill the template", eyebrow: "Fill the template", title: "One row per candidate",
+      you: "Open the workbook and fill a row for each candidate. Mandatory: 中文名, the 18-digit 中國大陸身份證號碼, and the English name the registers are searched under.",
+      bts: "Columns S to U are added to the supplied template: the IA register, the ORO and the court searches all key off the English name, the HKID and the licence number rather than the Chinese name. Row 2 is the sample shipped with the template.",
+      chips: ["Background_Screening_Orders", "3 candidates", "21 columns"],
       stage: function () {
         return sheet(true) +
           '<div class="row">' +
@@ -851,13 +1022,13 @@ table.res tbody tr:first-child td { padding-top: 8px; }
     },
 
     { nav: "Attach and send", eyebrow: "Attach and send", title: "One email, written like any other",
-      you: "Attach the locked workbook and write the request in plain language. There is no required format, and one email covers the whole batch.",
+      you: "Attach the locked workbook and set out what you need in plain language — here, the IA register position and the legal searches first.",
       encNote: "The attachment leaves encrypted — the gold chip with the lock is the workbook in a state nobody in transit can read. The sending address must also be whitelisted with Fill Easy.",
       chips: ["agent@ses.fill-easy.com", "1 encrypted attachment"],
       stage: function () {
         return '<div class="mail">' +
           '<div class="m-fld"><span class="k">To</span><span class="v mono">' + AGENT_ADDR + '</span></div>' +
-          '<div class="m-fld"><span class="k">Subject</span><span class="v">Background screening &mdash; BGS-2026-014 to 016 (China)</span></div>' +
+          '<div class="m-fld"><span class="k">Subject</span><span class="v">Onboarding due diligence &mdash; BGS-2026-014 to 016</span></div>' +
           atts([{ n: FILE, m: "18 KB &middot; encrypted &middot; password required", enc: true }]) +
           '<div class="m-body">' + requestBody() + '</div>' +
           '<div class="m-foot"><button type="button" class="btn" id="sendBtn">' + (state.sent ? "Sent &#10003;" : "Send") + '</button>' +
@@ -868,11 +1039,11 @@ table.res tbody tr:first-child td { padding-top: 8px; }
 
     { nav: "Processed", eyebrow: "Processed automatically", title: "The reply comes back on its own",
       you: "Nothing. The request is processed automatically by email and the acknowledgement arrives in the same thread.",
-      bts: "Each data point for each subject is returned as its own request ID, so a partial failure shows on its own line instead of sinking the batch. Anything that cannot run is raised as a clarification you answer in the yellow column.",
-      chips: [TOTAL + " data points", "1 clarification", "under 5 min"],
+      bts: "Each check for each candidate is returned as its own request ID, so a single flagged finding shows on its own line instead of sinking the batch. Anything that cannot run is raised as a clarification you answer in the yellow column.",
+      chips: [TOTAL + " checks", "1 clarification", "under 5 min"],
       stage: function () {
         return '<div class="mail">' +
-          mailHead({ from: AGENT, subject: "Re: Background screening — BGS-2026-014 to 016 (China)", time: "Tue 28 Jul, 09:13" }) +
+          mailHead({ from: AGENT, subject: "Re: Onboarding due diligence — BGS-2026-014 to 016", time: "Tue 28 Jul, 09:13" }) +
           atts([{ n: "Disclaimer.txt", m: "743 bytes" }]) +
           '<div class="m-body">' + feBlock([
             { type: "clar", rows: [{ subject: "李慧敏 — Academic Credential (CHESICC / 學信網)",
@@ -882,14 +1053,14 @@ table.res tbody tr:first-child td { padding-top: 8px; }
       }
     },
 
-    { nav: "Results", eyebrow: "Results returned", title: "Encrypted in, encrypted out",
+    { nav: "Results", eyebrow: "Results returned", title: "IA register and legal search lead",
       you: "Open the results workbook with the same password, then view or export the summary report you asked for in the email.",
-      bts: "The court and enforcement records (失信 / 限高) and the consented police record are the Mainland-background layer — for HK-local recruits those channels are either not applicable or do not exist.",
+      bts: "The IA register and the legal searches carry the findings that stop an application, so the report leads on those and puts identity and global screening behind them. 王建国 comes back with three: still appointed, an enforcement action, and a writ.",
       encNote: "Because the request arrived encrypted, the response leaves the same way — locked with the same desk password, never sent alongside the file.",
-      chips: ["2 flagged", "1 not run", "summary report"],
+      chips: [flagged().length + " critical findings", "summary report"],
       stage: function () {
         var mail = '<div class="mail">' +
-          mailHead({ from: AGENT, subject: "Re: Background screening — BGS-2026-014 to 016 (China)", time: "Tue 28 Jul, 09:17" }) +
+          mailHead({ from: AGENT, subject: "Re: Onboarding due diligence — BGS-2026-014 to 016", time: "Tue 28 Jul, 09:17" }) +
           atts([{ n: "Disclaimer.txt", m: "743 bytes" },
                 { n: RESULTS_FILE, m: "24 KB &middot; encrypted &middot; same desk password", enc: true }]) +
           '<div class="m-body">' + feBlock([{ title: "ORDER SUCCESS", rows: feRows("Completed") }]) + '</div></div>';
@@ -904,14 +1075,18 @@ table.res tbody tr:first-child td { padding-top: 8px; }
             '<div class="row"><button type="button" class="btn" id="openGo">Open workbook</button>' +
             '<button type="button" class="btn quiet" id="openHint">Use desk password</button></div></div></div></div>';
         } else {
-          var body = SUBJECTS.map(function (s) {
-            return '<tr class="grp"><td colspan="3">' + s.name + ' <span class="mono" style="color:var(--ink-3);font-size:var(--f-xs)">' + s.ref + '</span></td></tr>' +
-              s.fields.map(function (f) {
-                return '<tr><td class="f">' + f.doc + '</td>' +
-                  '<td><span class="tag ' + (f.res === "Verified" ? "t-ok" : f.res === "Flagged" ? "t-gold" : "t-mut") + '">' + f.res + '</span></td>' +
-                  '<td class="d">' + f.detail + '</td></tr>';
-              }).join("") +
-              '';
+          var body = Object.keys(SEC).map(function (k) {
+            return '<tr class="sec"><td colspan="3">' + SEC[k] + '</td></tr>' +
+              SUBJECTS.map(function (s) {
+                var rows = s.fields.filter(function (f) { return f.sec === k; });
+                if (!rows.length) return "";
+                return '<tr class="grp"><td colspan="3">' + s.name + ' <span class="mono" style="color:var(--ink-3);font-size:var(--f-xs)">' + s.ref + '</span></td></tr>' +
+                  rows.map(function (f) {
+                    return '<tr><td class="f">' + f.doc + '</td>' +
+                      '<td><span class="tag ' + (f.res === "Verified" ? "t-ok" : f.res === "Flagged" ? "t-gold" : "t-mut") + '">' + f.res + '</span></td>' +
+                      '<td class="d">' + f.detail + '</td></tr>';
+                  }).join("");
+              }).join("");
           }).join("");
 
           wb = '<div class="card"><div class="card-h"><h3>Results workbook</h3><span class="r mono">' + RESULTS_FILE + '</span></div>' +
@@ -937,23 +1112,24 @@ table.res tbody tr:first-child td { padding-top: 8px; }
     },
 
     { nav: "Follow up", eyebrow: "Reply in plain English", title: "Follow-ups are just replies",
-      you: "Reply on the thread in ordinary words. No new workbook, no re-upload.",
-      bts: "The follow-up is handled on the same thread and returns only the extra field. The outstanding academic credential is raised again rather than quietly dropped.",
-      chips: ["1 added check", "no re-upload", "same key"],
+      you: "Reply on the thread in ordinary words to chase a finding. No new workbook, no re-upload.",
+      bts: "The follow-up runs on the same thread and returns only what was asked. ID-anchored matching is what separates a real hit from a same-name false positive — the declaration and any settlement proof stay with the recruit.",
+      chips: ["HCA 1842/2024", "no re-upload", "same key"],
       stage: function () {
         return '<div class="mail">' +
-            mailHead({ from: AGENT, subject: "Re: Background screening — BGS-2026-014 to 016 (China)", time: "Tue 28 Jul, 09:41" }) +
+            mailHead({ from: AGENT, subject: "Re: Onboarding due diligence — BGS-2026-014 to 016", time: "Tue 28 Jul, 09:41" }) +
             atts([{ n: "Disclaimer.txt", m: "743 bytes" },
                   { n: "KYC_Screening_Results_BGS-2026-014-A.xlsx", m: "9 KB &middot; encrypted &middot; same password", enc: true }]) +
             '<div class="m-body">' + feBlock([
-              { title: "ORDER SUCCESS", rows: [{ id: "BGS_Yp8Kc3RmTn", ref: "BGS-2026-014-A", subject: "李慧敏", doc: "Driver's License Verification", status: "Completed" }] },
-              { type: "clar", rows: [{ subject: "李慧敏 — Academic Credential (CHESICC / 學信網)",
-                issue: "Still outstanding from the original order. Send the certificate number for column L and we will run it on this thread." }] }
+              { title: "ORDER SUCCESS", rows: [{ id: "BGS_Yp8Kc3RmTn", ref: "BGS-2026-015-A", subject: "王建国", doc: "Court Writ Particulars — HCA 1842/2024", status: "Completed" }] },
+              { type: "clar", rows: [{ subject: "王建国 — Same-name writ declaration",
+                issue: "Writ particulars returned and the defendant's ID does not match the candidate. Confirm whether you still want the recruit's declaration on file, or whether we close it as a same-name false positive." }] }
             ]) + '</div>' +
           '</div>' +
           '<div><h4 class="sec-h">The reply that triggered it</h4><div class="card"><div class="card-b"><div class="quote"><div class="qh">Tue 28 Jul, 09:38 &mdash; Matthew Lee</div>' +
-          '<p style="margin:0">Thanks &mdash; that all looks fine, I&rsquo;ll come back on 王建国&rsquo;s bank account separately. One more thing: can you also check 李慧敏&rsquo;s driving licence? ' +
-          'The number is in column O of the sheet I sent. Same encryption please, and no need to re-run anything else.</p>' +
+          '<p style="margin:0">Thanks. The one I need to close out is 王建国&rsquo;s writ &mdash; HCA 1842/2024. ' +
+          'Can you pull the particulars and the settlement status? It came back on name alone, so before I go and ask him for a ' +
+          'declaration I want to know whether it is actually him. Nothing else needs re-running.</p>' +
           '</div></div></div></div>';
       }
     }
