@@ -4,547 +4,488 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Fill Easy — Individual KYC by Email</title>
-<meta name="description" content="Interactive demo: fill the Background Screening Orders workbook, encrypt it, email it to the Fill Easy agent, and get verification results back — all in plain language.">
+<meta name="description" content="Walk through the individual KYC journey: fill the Background Screening Orders workbook, encrypt it, email it to the Fill Easy agent, and get verification results back.">
 <meta name="color-scheme" content="light dark">
 <meta name="theme-color" content="#0B5C63">
 <!-- ARTIFACT:STYLE:BEGIN -->
 <style>
 /* ============================================================
-   Tokens — petrol primary, amber reserved for encryption state
+   Tokens
+   One accent (petrol). Gold means encryption, and nothing else.
+   Green means verified, and nothing else.
+   Separation comes from space and elevation, not from borders.
    ============================================================ */
 :root {
   color-scheme: light dark;
 
-  --paper:      #ECF1F1;
+  --paper:      #F1F5F5;
   --surface:    #FFFFFF;
-  --surface-2:  #F4F7F7;
-  --surface-3:  #E3EAEA;
-  --border:     #D5DEDF;
-  --border-2:   #BDCACB;
-  --ink:        #101A1C;
-  --ink-2:      #415356;
-  --ink-3:      #6B7C7F;
+  --surface-2:  #F6F9F9;
+  --line:       #E6ECEC;
+  --line-2:     #D3DDDE;
 
-  --brand:      #0B5C63;
-  --brand-2:    #08464C;
-  --brand-soft: #DCEBEC;
+  --ink:        #0F1A1C;
+  --ink-2:      #5A6B6E;
+  --ink-3:      #8A9A9D;
+
+  --accent:     #0B5C63;
+  --accent-2:   #084A50;
+  --accent-sf:  #E4EFF0;
 
   --gold:       #8A6108;
-  --gold-soft:  #F7EBD2;
-  --gold-line:  #E5C55A;
+  --gold-sf:    #FBF2DE;
+  --gold-line:  #E7D3A2;
+
   --ok:         #2C6E49;
-  --ok-soft:    #DEEDE3;
+  --ok-sf:      #E4EFE8;
   --crit:       #A33A31;
-  --crit-soft:  #F7E3E1;
+  --crit-sf:    #F9E9E7;
 
-  /* Fill Easy agent notification block */
-  --fe-bar:     #1C1C1C;
-  --fe-bar-tx:  #FFFFFF;
-  --fe-cell:    #FFFFFF;
-  --fe-head:    #F7F8F8;
-  --fe-line:    #DDE1E2;
-  --fe-tx:      #1C1C1C;
-  --fe-mut:     #6E7679;
-  --fe-yellow:  #FFF4C2;
-  --fe-red:     #C0392B;
+  /* Fill Easy notification block — reproduces the product email */
+  --fe-bar:  #1C1C1C;  --fe-bar-tx: #FFFFFF;
+  --fe-cell: #FFFFFF;  --fe-head:   #F7F8F8;
+  --fe-line: #DDE1E2;  --fe-tx:     #1C1C1C;
+  --fe-mut:  #6E7679;  --fe-yellow: #FFF4C2;
+  --fe-red:  #C0392B;
 
-  /* parsed-request slot categories */
-  --s-subj: #0B5C63; --s-subj-bg: #DCEBEC;
-  --s-id:   #6A4A9C; --s-id-bg:   #E7E0F3;
-  --s-fld:  #2C6E49; --s-fld-bg:  #DEEDE3;
-  --s-sec:  #8A6108; --s-sec-bg:  #F7EBD2;
-
-  --sh-1: 0 1px 2px rgba(16,26,28,.07);
-  --sh-2: 0 10px 28px rgba(16,26,28,.12), 0 2px 6px rgba(16,26,28,.06);
+  --sh:    0 1px 3px rgba(15,26,28,.04), 0 8px 24px rgba(15,26,28,.06);
+  --sh-lg: 0 2px 6px rgba(15,26,28,.05), 0 16px 44px rgba(15,26,28,.09);
 
   --sans: ui-sans-serif, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial,
           "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans SC", sans-serif;
   --mono: ui-monospace, "SF Mono", SFMono-Regular, "Cascadia Mono", Menlo, Consolas, monospace;
 
-  --r-sm: 6px; --r: 10px; --r-lg: 14px;
+  --f-xs: 11.5px; --f-sm: 12.5px; --f-md: 13.5px; --f-lg: 15px;
+  --r: 14px; --r-sm: 10px; --pill: 999px;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --paper:#0B1113; --surface:#131B1D; --surface-2:#182225; --surface-3:#202C2F;
-    --border:#273538; --border-2:#38494D; --ink:#E2EAEB; --ink-2:#A5B4B6; --ink-3:#78888B;
-    --brand:#5FAAB1; --brand-2:#8AC6CB; --brand-soft:#123336;
-    --gold:#D5A24A; --gold-soft:#2E2413; --gold-line:#6B551F;
-    --ok:#6BB98C; --ok-soft:#152C20; --crit:#DE8B82; --crit-soft:#331D1B;
-    --fe-bar:#000000; --fe-bar-tx:#FFFFFF;
-    --fe-cell:#131B1D; --fe-head:#182225; --fe-line:#273538; --fe-tx:#E2EAEB; --fe-mut:#8B999C;
-    --fe-yellow:#3A3216; --fe-red:#E08379;
-    --s-subj:#5FAAB1; --s-subj-bg:#123336;
-    --s-id:#AE96DE;   --s-id-bg:#241D33;
-    --s-fld:#6BB98C;  --s-fld-bg:#152C20;
-    --s-sec:#D5A24A;  --s-sec-bg:#2E2413;
-    --sh-1: 0 1px 2px rgba(0,0,0,.45);
-    --sh-2: 0 12px 32px rgba(0,0,0,.55);
+    --paper:#0B1113; --surface:#161F21; --surface-2:#1C2629; --line:#263235; --line-2:#38484B;
+    --ink:#E4EBEC; --ink-2:#9FAEB0; --ink-3:#76868A;
+    --accent:#63ADB4; --accent-2:#8FCACF; --accent-sf:#123236;
+    --gold:#D7A54E; --gold-sf:#2C2413; --gold-line:#5F4D1F;
+    --ok:#6DBA8E; --ok-sf:#152C20; --crit:#DF8C83; --crit-sf:#331D1B;
+    --fe-bar:#000000; --fe-cell:#161F21; --fe-head:#1C2629; --fe-line:#263235;
+    --fe-tx:#E4EBEC; --fe-mut:#8C9A9D; --fe-yellow:#3A3216; --fe-red:#E08379;
+    --sh:    0 1px 3px rgba(0,0,0,.35), 0 8px 24px rgba(0,0,0,.34);
+    --sh-lg: 0 2px 6px rgba(0,0,0,.4), 0 16px 44px rgba(0,0,0,.45);
   }
 }
 :root[data-theme="dark"] {
-  --paper:#0B1113; --surface:#131B1D; --surface-2:#182225; --surface-3:#202C2F;
-  --border:#273538; --border-2:#38494D; --ink:#E2EAEB; --ink-2:#A5B4B6; --ink-3:#78888B;
-  --brand:#5FAAB1; --brand-2:#8AC6CB; --brand-soft:#123336;
-  --gold:#D5A24A; --gold-soft:#2E2413; --gold-line:#6B551F;
-  --ok:#6BB98C; --ok-soft:#152C20; --crit:#DE8B82; --crit-soft:#331D1B;
-  --fe-bar:#000000; --fe-bar-tx:#FFFFFF;
-  --fe-cell:#131B1D; --fe-head:#182225; --fe-line:#273538; --fe-tx:#E2EAEB; --fe-mut:#8B999C;
-  --fe-yellow:#3A3216; --fe-red:#E08379;
-  --s-subj:#5FAAB1; --s-subj-bg:#123336;
-  --s-id:#AE96DE;   --s-id-bg:#241D33;
-  --s-fld:#6BB98C;  --s-fld-bg:#152C20;
-  --s-sec:#D5A24A;  --s-sec-bg:#2E2413;
-  --sh-1: 0 1px 2px rgba(0,0,0,.45);
-  --sh-2: 0 12px 32px rgba(0,0,0,.55);
+  --paper:#0B1113; --surface:#161F21; --surface-2:#1C2629; --line:#263235; --line-2:#38484B;
+  --ink:#E4EBEC; --ink-2:#9FAEB0; --ink-3:#76868A;
+  --accent:#63ADB4; --accent-2:#8FCACF; --accent-sf:#123236;
+  --gold:#D7A54E; --gold-sf:#2C2413; --gold-line:#5F4D1F;
+  --ok:#6DBA8E; --ok-sf:#152C20; --crit:#DF8C83; --crit-sf:#331D1B;
+  --fe-bar:#000000; --fe-cell:#161F21; --fe-head:#1C2629; --fe-line:#263235;
+  --fe-tx:#E4EBEC; --fe-mut:#8C9A9D; --fe-yellow:#3A3216; --fe-red:#E08379;
+  --sh:    0 1px 3px rgba(0,0,0,.35), 0 8px 24px rgba(0,0,0,.34);
+  --sh-lg: 0 2px 6px rgba(0,0,0,.4), 0 16px 44px rgba(0,0,0,.45);
 }
 :root[data-theme="light"] {
-  --paper:#ECF1F1; --surface:#FFFFFF; --surface-2:#F4F7F7; --surface-3:#E3EAEA;
-  --border:#D5DEDF; --border-2:#BDCACB; --ink:#101A1C; --ink-2:#415356; --ink-3:#6B7C7F;
-  --brand:#0B5C63; --brand-2:#08464C; --brand-soft:#DCEBEC;
-  --gold:#8A6108; --gold-soft:#F7EBD2; --gold-line:#E5C55A;
-  --ok:#2C6E49; --ok-soft:#DEEDE3; --crit:#A33A31; --crit-soft:#F7E3E1;
-  --fe-bar:#1C1C1C; --fe-bar-tx:#FFFFFF;
-  --fe-cell:#FFFFFF; --fe-head:#F7F8F8; --fe-line:#DDE1E2; --fe-tx:#1C1C1C; --fe-mut:#6E7679;
-  --fe-yellow:#FFF4C2; --fe-red:#C0392B;
-  --s-subj:#0B5C63; --s-subj-bg:#DCEBEC;
-  --s-id:#6A4A9C;   --s-id-bg:#E7E0F3;
-  --s-fld:#2C6E49;  --s-fld-bg:#DEEDE3;
-  --s-sec:#8A6108;  --s-sec-bg:#F7EBD2;
-  --sh-1: 0 1px 2px rgba(16,26,28,.07);
-  --sh-2: 0 10px 28px rgba(16,26,28,.12), 0 2px 6px rgba(16,26,28,.06);
+  --paper:#F1F5F5; --surface:#FFFFFF; --surface-2:#F6F9F9; --line:#E6ECEC; --line-2:#D3DDDE;
+  --ink:#0F1A1C; --ink-2:#5A6B6E; --ink-3:#8A9A9D;
+  --accent:#0B5C63; --accent-2:#084A50; --accent-sf:#E4EFF0;
+  --gold:#8A6108; --gold-sf:#FBF2DE; --gold-line:#E7D3A2;
+  --ok:#2C6E49; --ok-sf:#E4EFE8; --crit:#A33A31; --crit-sf:#F9E9E7;
+  --fe-bar:#1C1C1C; --fe-cell:#FFFFFF; --fe-head:#F7F8F8; --fe-line:#DDE1E2;
+  --fe-tx:#1C1C1C; --fe-mut:#6E7679; --fe-yellow:#FFF4C2; --fe-red:#C0392B;
+  --sh:    0 1px 3px rgba(15,26,28,.04), 0 8px 24px rgba(15,26,28,.06);
+  --sh-lg: 0 2px 6px rgba(15,26,28,.05), 0 16px 44px rgba(15,26,28,.09);
 }
 
 /* ============================================================
    Base
    ============================================================ */
 * { box-sizing: border-box; }
-html, body { height: 100%; }
 body {
   margin: 0; background: var(--paper); color: var(--ink);
-  font-family: var(--sans); font-size: 14px; line-height: 1.55;
+  font-family: var(--sans); font-size: var(--f-md); line-height: 1.55;
   -webkit-font-smoothing: antialiased;
 }
-button, input, select, textarea { font: inherit; color: inherit; }
-:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; border-radius: 3px; }
+button, input { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
 .mono { font-family: var(--mono); font-variant-numeric: tabular-nums; }
 
-.app {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  grid-template-rows: auto auto minmax(0, 1fr) auto;
-  height: 100dvh; min-height: 0;
+/* ============================================================
+   Masthead
+   ============================================================ */
+.masthead {
+  display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+  padding: 14px 26px; background: var(--surface);
 }
+.mark {
+  display: grid; place-items: center; width: 26px; height: 26px; flex: none;
+  border-radius: 7px; background: var(--accent); color: #fff;
+  font-size: 11px; font-weight: 700; letter-spacing: -.02em;
+}
+:root[data-theme="dark"] .mark { color: #0B1113; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .mark { color: #0B1113; } }
+.mh-name { font-size: var(--f-md); font-weight: 660; letter-spacing: -.01em; }
+.mh-div { width: 1px; height: 17px; background: var(--line-2); }
+.mh-sub { font-size: var(--f-sm); color: var(--ink-3); }
+.masthead .gap { flex: 1; }
+.demo-pill {
+  padding: 4px 12px; border-radius: var(--pill); background: var(--accent-sf); color: var(--accent);
+  font-size: 10px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+}
+.icon-btn {
+  border: 0; background: var(--surface-2); color: var(--ink-2);
+  width: 30px; height: 30px; border-radius: var(--pill); cursor: pointer; display: grid; place-items: center;
+}
+.icon-btn:hover { color: var(--ink); }
 
 /* ============================================================
-   Brand bar
+   Hero
    ============================================================ */
-.brandbar {
-  display: flex; align-items: center; gap: 10px 14px; flex-wrap: wrap;
-  padding: 10px 18px; background: var(--surface);
-  border-bottom: 1px solid var(--border);
+.hero { text-align: center; padding: 26px 26px 20px; }
+.hero h1 {
+  margin: 0 auto 10px; font-size: 27px; font-weight: 700; letter-spacing: -.024em;
+  line-height: 1.18; text-wrap: balance; max-width: 26ch;
 }
-.logo {
-  display: grid; place-items: center; width: 28px; height: 28px; flex: none;
-  border-radius: var(--r-sm); background: var(--brand); color: #fff;
-  font-size: 13px; font-weight: 700; letter-spacing: -.02em;
-}
-:root[data-theme="dark"] .logo { color: #0B1113; }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .logo { color: #0B1113; } }
-.brandname { font-weight: 660; letter-spacing: -.01em; min-width: 0; }
-.brandsub {
-  color: var(--ink-3); font-size: 12px;
-  padding-left: 14px; border-left: 1px solid var(--border);
-}
-.brandbar .spacer { flex: 1; }
-.iconbtn {
-  border: 1px solid var(--border); background: var(--surface);
-  border-radius: var(--r-sm); width: 32px; height: 31px; cursor: pointer;
-  display: grid; place-items: center; color: var(--ink-2);
-}
-.iconbtn:hover { background: var(--surface-2); color: var(--ink); }
+.hero p { margin: 0 auto; font-size: var(--f-lg); color: var(--ink-2); line-height: 1.55; max-width: 56ch; text-wrap: pretty; }
 
-/* ============================================================
-   Stepper — this IS a real sequence, so it is numbered
-   ============================================================ */
-.stepwrap { background: var(--surface); border-bottom: 1px solid var(--border); padding: 0 18px 12px; }
-.stepper { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: thin; padding-bottom: 2px; }
-.step {
-  flex: 1 1 0; min-width: 132px;
-  display: flex; align-items: flex-start; gap: 9px;
-  padding: 9px 11px; border: 1px solid transparent; border-radius: var(--r-sm);
-  background: transparent; text-align: left; cursor: pointer;
+/* step pills */
+.flow {
+  display: flex; gap: 9px; padding: 6px 26px 4px; margin-bottom: 26px;
+  overflow-x: auto; scrollbar-width: none; justify-content: flex-start;
 }
-.step:hover { background: var(--surface-2); }
-.step .n {
-  width: 21px; height: 21px; flex: none; border-radius: 50%;
-  display: grid; place-items: center;
-  font-size: 11px; font-weight: 700; font-variant-numeric: tabular-nums;
-  border: 1.5px solid var(--border-2); color: var(--ink-3); background: var(--surface);
+.flow::-webkit-scrollbar { display: none; }
+.flow-in { display: flex; gap: 9px; margin: 0 auto; }
+.pill {
+  display: inline-flex; align-items: center; gap: 8px; flex: none;
+  padding: 9px 16px 9px 10px; border: 0; border-radius: var(--pill);
+  background: var(--surface); color: var(--ink-2); box-shadow: var(--sh);
+  cursor: pointer; white-space: nowrap; font-size: var(--f-sm); font-weight: 560;
 }
-.step .t { font-size: 12.5px; font-weight: 560; color: var(--ink-3); line-height: 1.3; }
-.step[data-state="done"] .n { background: var(--brand); border-color: var(--brand); color: #fff; }
-.step[data-state="done"] .t { color: var(--ink-2); }
-.step[data-state="current"] { background: var(--brand-soft); border-color: var(--brand); }
-.step[data-state="current"] .n { background: var(--brand); border-color: var(--brand); color: #fff; }
-.step[data-state="current"] .t { color: var(--ink); font-weight: 660; }
-:root[data-theme="dark"] .step[data-state="done"] .n,
-:root[data-theme="dark"] .step[data-state="current"] .n { color: #0B1113; }
+.pill .n {
+  width: 19px; height: 19px; flex: none; border-radius: var(--pill);
+  display: grid; place-items: center; background: var(--surface-2); color: var(--ink-3);
+  font-size: 10px; font-weight: 700; font-variant-numeric: tabular-nums;
+}
+.pill:hover { color: var(--ink); }
+.pill[data-s="done"] .n { background: var(--accent-sf); color: var(--accent); }
+.pill[data-s="now"] { background: var(--accent); color: #fff; font-weight: 640; box-shadow: var(--sh-lg); }
+.pill[data-s="now"] .n { background: rgba(255,255,255,.22); color: #fff; }
+:root[data-theme="dark"] .pill[data-s="now"] { color: #0B1113; }
+:root[data-theme="dark"] .pill[data-s="now"] .n { background: rgba(0,0,0,.22); color: #0B1113; }
 @media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) .step[data-state="done"] .n,
-  :root:not([data-theme="light"]) .step[data-state="current"] .n { color: #0B1113; }
+  :root:not([data-theme="light"]) .pill[data-s="now"] { color: #0B1113; }
+  :root:not([data-theme="light"]) .pill[data-s="now"] .n { background: rgba(0,0,0,.22); color: #0B1113; }
 }
 
 /* ============================================================
-   Stage
+   Split — stage + explanation card
    ============================================================ */
-.shell { display: grid; grid-template-columns: minmax(0, 1fr) 336px; min-height: 0; }
-.stage { min-width: 0; min-height: 0; overflow: auto; padding: 20px 22px 40px; }
-.stageinner { max-width: 1000px; }
-
-.side { min-width: 0; min-height: 0; overflow: auto; border-left: 1px solid var(--border); background: var(--surface-2); }
-.sidehead {
-  position: sticky; top: 0; z-index: 2; padding: 13px 15px 11px;
-  background: var(--surface-2); border-bottom: 1px solid var(--border);
+.split {
+  display: grid; grid-template-columns: minmax(0, 1fr) 330px; gap: 24px;
+  max-width: 1280px; margin: 0 auto; padding: 0 26px;
+  align-items: start;
 }
-.sidehead .ti { display: flex; align-items: center; gap: 8px; }
-.sidehead h2 { margin: 0; font-size: 11.5px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-2); }
-.pulse { width: 7px; height: 7px; border-radius: 50%; background: var(--ok); box-shadow: 0 0 0 3px var(--ok-soft); flex: none; }
-.sidehead .sb { margin-top: 5px; font-size: 11.5px; color: var(--ink-3); font-family: var(--mono); word-break: break-word; }
-.sidebody { padding: 15px; display: flex; flex-direction: column; gap: 14px; }
+.stage { min-width: 0; }
+.stage > * + * { margin-top: 20px; }
+
+/* the explanation card — one home for all narration */
+.info {
+  position: sticky; top: 20px;
+  background: var(--surface); border-radius: var(--r); box-shadow: var(--sh); padding: 20px;
+}
+.info-top { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+.eyebrow {
+  padding: 4px 11px; border-radius: var(--pill); background: var(--accent-sf); color: var(--accent);
+  font-size: 10px; font-weight: 700; letter-spacing: .09em; text-transform: uppercase;
+}
+.info-top .ct { margin-left: auto; font-size: var(--f-xs); color: var(--ink-3); font-variant-numeric: tabular-nums; }
+.bar { display: flex; gap: 4px; margin-bottom: 16px; }
+.bar i { flex: 1; height: 3px; border-radius: var(--pill); background: var(--line); }
+.bar i.on { background: var(--accent); }
+.info h2 { margin: 0 0 14px; font-size: 18px; font-weight: 680; letter-spacing: -.018em; line-height: 1.28; text-wrap: balance; }
+.blk { border-radius: var(--r-sm); padding: 12px 14px; margin-bottom: 10px; background: var(--surface-2); }
+.blk .lb {
+  font-size: 10px; font-weight: 700; letter-spacing: .09em; text-transform: uppercase;
+  color: var(--ink-3); margin-bottom: 5px;
+}
+.blk p { margin: 0; font-size: var(--f-sm); line-height: 1.6; color: var(--ink-2); }
+.blk.you { background: var(--accent-sf); }
+.blk.you .lb { color: var(--accent); }
+.blk.you p { color: var(--ink); }
+.blk.enc { background: var(--gold-sf); }
+.blk.enc .lb { color: var(--gold); }
+.blk.enc p { color: var(--ink); }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px; }
+.chip {
+  padding: 4px 10px; border-radius: var(--pill); background: var(--surface-2);
+  font-size: var(--f-xs); color: var(--ink-2); font-weight: 540;
+}
+.chip.mono { font-family: var(--mono); font-size: 10.5px; }
 
 /* ============================================================
-   Cards + form controls (the login-page component idiom)
+   Cards
    ============================================================ */
-.card { border: 1px solid var(--border); border-radius: var(--r); background: var(--surface); box-shadow: var(--sh-1); overflow: hidden; margin-bottom: 18px; }
-.card > header {
-  display: flex; align-items: center; gap: 9px; flex-wrap: wrap;
-  padding: 13px 16px; border-bottom: 1px solid var(--border); background: var(--surface-2);
-}
-.card > header h3 { margin: 0; font-size: 14px; font-weight: 660; letter-spacing: -.005em; }
-.card > header .right { margin-left: auto; font-size: 12px; color: var(--ink-3); }
-.card .cb { padding: 16px; }
-.card.gold { border-color: var(--gold-line); }
-.card.gold > header { background: var(--gold-soft); border-bottom-color: var(--gold-line); }
-.card.gold > header h3 { color: var(--gold); }
+.card { background: var(--surface); border-radius: var(--r); box-shadow: var(--sh); overflow: hidden; }
+.card-h { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; padding: 15px 20px 0; }
+.card-h h3 { margin: 0; font-size: var(--f-md); font-weight: 660; }
+.card-h .r { margin-left: auto; font-size: var(--f-xs); color: var(--ink-3); }
+.card-b { padding: 16px 20px 20px; }
+.card.gold { box-shadow: var(--sh), inset 0 0 0 1px var(--gold-line); }
+.card.gold .card-h h3 { color: var(--gold); }
 
-.lede { margin: 0 0 16px; font-size: 14.5px; color: var(--ink-2); max-width: 74ch; }
-.lede strong { color: var(--ink); font-weight: 620; }
-
-.field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
-.field label { font-size: 12.5px; font-weight: 600; color: var(--ink-2); }
-.field label .req { color: var(--crit); }
-.field input, .field select, .field textarea {
-  padding: 10px 12px; border: 1px solid var(--border-2); border-radius: var(--r-sm);
-  background: var(--surface); color: var(--ink); font-size: 14px; width: 100%;
+.sec-h {
+  font-size: 10px; font-weight: 700; letter-spacing: .09em; text-transform: uppercase;
+  color: var(--ink-3); margin: 0 0 10px 2px;
 }
-.field input:focus, .field textarea:focus { outline: none; border-color: var(--brand); box-shadow: 0 0 0 3px var(--brand-soft); }
-.field .hint { font-size: 11.5px; color: var(--ink-3); }
-.field .err { font-size: 11.5px; color: var(--crit); }
-.field.mono input { font-family: var(--mono); }
-.grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 0 16px; }
+
+/* form */
+.form { max-width: 380px; }
+.fld { display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; }
+.fld label { font-size: var(--f-sm); font-weight: 620; color: var(--ink-2); }
+.fld label .rq { color: var(--crit); }
+.fld input {
+  padding: 11px 14px; border: 1px solid var(--line-2); border-radius: var(--r-sm);
+  background: var(--surface); font-size: var(--f-md); width: 100%;
+}
+.fld input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-sf); }
+.fld .hint { font-size: var(--f-xs); color: var(--ink-3); }
+.fld .err { font-size: var(--f-xs); color: var(--crit); }
+
+.pairs { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 16px 24px; }
+.pair .k { font-size: 10px; letter-spacing: .07em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 3px; }
+.pair .v { font-size: var(--f-md); word-break: break-word; }
 
 .btn {
   display: inline-flex; align-items: center; justify-content: center; gap: 7px;
-  border: 1px solid var(--brand); background: var(--brand); color: #fff;
-  padding: 10px 18px; border-radius: var(--r-sm); cursor: pointer;
-  font-size: 13.5px; font-weight: 640;
+  border: 0; background: var(--accent); color: #fff;
+  padding: 11px 22px; border-radius: var(--pill); cursor: pointer;
+  font-size: var(--f-md); font-weight: 640;
 }
-.btn:hover { background: var(--brand-2); border-color: var(--brand-2); }
-.btn[disabled] { opacity: .45; cursor: not-allowed; }
-.btn.ghost { background: transparent; color: var(--ink-2); border-color: var(--border-2); }
-.btn.ghost:hover { background: var(--surface-3); color: var(--ink); }
-.btn.sm { padding: 6px 12px; font-size: 12.5px; }
-.btn.block { width: 100%; }
-:root[data-theme="dark"] .btn:not(.ghost) { color: #0B1113; }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .btn:not(.ghost) { color: #0B1113; } }
-.btnrow { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+.btn:hover { background: var(--accent-2); }
+.btn[disabled] { opacity: .35; cursor: not-allowed; }
+.btn.quiet { background: var(--surface-2); color: var(--ink-2); }
+.btn.quiet:hover { background: var(--line); color: var(--ink); }
+.btn.sm { padding: 8px 16px; font-size: var(--f-sm); }
+:root[data-theme="dark"] .btn:not(.quiet) { color: #0B1113; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .btn:not(.quiet) { color: #0B1113; } }
+.row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
 
-.badge {
-  display: inline-flex; align-items: center; gap: 5px;
-  padding: 2px 9px; border-radius: 20px; font-size: 11px; font-weight: 660;
-  border: 1px solid transparent; white-space: nowrap;
-}
-.b-gold { background: var(--gold-soft); color: var(--gold); border-color: var(--gold-line); }
-.b-ok   { background: var(--ok-soft); color: var(--ok); }
-.b-brand{ background: var(--brand-soft); color: var(--brand); }
-.b-crit { background: var(--crit-soft); color: var(--crit); }
-.b-mut  { background: var(--surface-3); color: var(--ink-2); }
+.tag { display: inline-flex; align-items: center; gap: 5px; padding: 2px 10px; border-radius: var(--pill); font-size: var(--f-xs); font-weight: 640; white-space: nowrap; }
+.t-gold { background: var(--gold-sf); color: var(--gold); }
+.t-ok { background: var(--ok-sf); color: var(--ok); }
+.t-mut { background: var(--surface-2); color: var(--ink-2); }
 
 /* ============================================================
    Spreadsheet
    ============================================================ */
-.xl { border: 1px solid var(--border-2); border-radius: var(--r); overflow: hidden; background: var(--surface); box-shadow: var(--sh-1); }
-.xlbar { display: flex; align-items: center; gap: 9px; flex-wrap: wrap; padding: 9px 13px; background: var(--surface-2); border-bottom: 1px solid var(--border); font-size: 12.5px; }
-.xlbar .fn { font-family: var(--mono); font-size: 11.5px; word-break: break-all; }
-.xltab { display: flex; gap: 3px; padding: 6px 9px 0; background: var(--surface-2); border-bottom: 1px solid var(--border); }
-.xltab span {
-  padding: 5px 13px; border: 1px solid var(--border); border-bottom: 0;
-  border-radius: var(--r-sm) var(--r-sm) 0 0; background: var(--surface);
-  font-size: 11.5px; font-weight: 640; color: var(--ink);
-}
-.xlscroll { overflow-x: auto; }
-table.sheet { border-collapse: separate; border-spacing: 0; font-size: 12px; min-width: 100%; }
-table.sheet th, table.sheet td { border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 6px 9px; text-align: left; vertical-align: top; }
-table.sheet thead th.ch {
-  background: var(--surface-3); color: var(--ink-3); font-weight: 640;
-  font-family: var(--mono); font-size: 10.5px; text-align: center; padding: 3px 6px;
+.xl { background: var(--surface); border-radius: var(--r); box-shadow: var(--sh); overflow: hidden; }
+.xl-top { display: flex; align-items: center; gap: 10px; padding: 14px 20px; }
+.xl-top .nm { font-family: var(--mono); font-size: var(--f-xs); color: var(--ink-2); word-break: break-all; }
+.xl-top .tab { margin-left: auto; padding: 4px 12px; border-radius: var(--pill); background: var(--surface-2); font-size: var(--f-xs); font-weight: 620; color: var(--ink-2); }
+.xl-scroll { overflow-x: auto; }
+table.sh { border-collapse: separate; border-spacing: 0; font-size: var(--f-sm); min-width: 100%; }
+table.sh th, table.sh td { border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); padding: 8px 11px; text-align: left; vertical-align: top; }
+table.sh thead th.ltr {
+  background: var(--surface-2); color: var(--ink-3); font-weight: 500;
+  font-family: var(--mono); font-size: 10px; text-align: center; padding: 3px 6px;
   position: sticky; top: 0; z-index: 3;
 }
-table.sheet thead tr.hdr th {
-  background: var(--brand-soft); color: var(--ink); font-weight: 620;
-  min-width: 132px; max-width: 210px; white-space: normal;
-  position: sticky; top: 20px; z-index: 3;
+table.sh thead tr.hd th {
+  background: var(--surface-2); color: var(--ink-2); font-weight: 620;
+  min-width: 138px; max-width: 210px; white-space: normal;
+  position: sticky; top: 19px; z-index: 3; font-size: var(--f-xs);
 }
-table.sheet thead tr.hdr th .en { display: block; font-size: 10.5px; font-weight: 500; color: var(--ink-3); margin-top: 1px; }
-table.sheet thead tr.hdr th .req { color: var(--crit); }
-table.sheet td.rn {
-  background: var(--surface-3); color: var(--ink-3); font-family: var(--mono);
-  font-size: 10.5px; text-align: center; font-weight: 640;
-  position: sticky; left: 0; z-index: 2; min-width: 30px;
-}
-table.sheet th.corner { position: sticky; left: 0; z-index: 4; background: var(--surface-3); min-width: 30px; }
-table.sheet td { background: var(--surface); white-space: nowrap; }
-table.sheet tr.sample td { color: var(--ink-3); font-style: italic; }
-table.sheet td.cell-edit { background: var(--surface); cursor: text; min-width: 132px; outline: none; }
-table.sheet td.cell-edit:focus { box-shadow: inset 0 0 0 2px var(--brand); background: var(--brand-soft); }
-table.sheet td.cell-edit:empty::before { content: attr(data-ph); color: var(--ink-3); opacity: .65; font-style: italic; }
-table.sheet td.bad { box-shadow: inset 0 0 0 2px var(--crit); }
-.xlnote { padding: 10px 13px; font-size: 11.5px; color: var(--ink-3); background: var(--surface-2); border-top: 1px solid var(--border); }
-.xlnote b { color: var(--ink-2); }
+table.sh thead tr.hd th .en { display: block; font-size: 10px; font-weight: 400; color: var(--ink-3); margin-top: 2px; }
+table.sh thead tr.hd th .rq { color: var(--crit); }
+table.sh td.rn { background: var(--surface-2); color: var(--ink-3); font-family: var(--mono); font-size: 10px; text-align: center; position: sticky; left: 0; z-index: 2; min-width: 28px; }
+table.sh th.cnr { position: sticky; left: 0; z-index: 4; background: var(--surface-2); min-width: 28px; }
+table.sh td { background: var(--surface); white-space: nowrap; }
+table.sh tr.spl td { color: var(--ink-3); }
+table.sh td.ed { cursor: text; min-width: 138px; outline: none; background: var(--accent-sf); }
+table.sh td.ed:focus { box-shadow: inset 0 0 0 2px var(--accent); }
+table.sh td.ed:empty::before { content: attr(data-ph); color: var(--ink-3); opacity: .45; font-style: italic; }
+table.sh td.bad { box-shadow: inset 0 0 0 2px var(--crit); }
+.xl-foot { padding: 13px 20px; font-size: var(--f-xs); color: var(--ink-3); }
+.xl-foot b { color: var(--ink-2); font-weight: 620; }
 
-.instr { margin: 16px 0 0; padding: 13px 15px; border: 1px dashed var(--border-2); border-radius: var(--r); background: var(--surface-2); font-size: 12.5px; color: var(--ink-2); }
-.instr h4 { margin: 0 0 7px; font-size: 12px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--ink-3); }
-.instr ol { margin: 0; padding-left: 18px; }
-.instr li { margin-bottom: 4px; }
-.instr .cn { color: var(--ink-3); }
+.instr { font-size: var(--f-sm); color: var(--ink-2); }
+.instr ol { margin: 0; padding-left: 17px; }
+.instr li { margin-bottom: 8px; }
+.instr li:last-child { margin-bottom: 0; }
+.instr .en { color: var(--ink-3); }
 
-/* validation checklist */
-.vlist { display: flex; flex-direction: column; gap: 7px; }
-.vrow { display: flex; align-items: flex-start; gap: 9px; font-size: 12.5px; }
-.vrow .mk {
-  width: 16px; height: 16px; flex: none; margin-top: 1px; border-radius: 50%;
-  display: grid; place-items: center; font-size: 9px; font-weight: 800;
-  background: var(--surface-3); color: var(--ink-3);
-}
-.vrow[data-ok="true"] .mk { background: var(--ok); color: #fff; }
-.vrow[data-ok="false"] .mk { background: var(--crit-soft); color: var(--crit); }
-:root[data-theme="dark"] .vrow[data-ok="true"] .mk { color: #0B1113; }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .vrow[data-ok="true"] .mk { color: #0B1113; } }
-.vrow .vt { min-width: 0; }
-.vrow .vs { display: block; color: var(--ink-3); font-size: 11.5px; }
+/* validation */
+.vi { display: flex; gap: 10px; padding: 10px 0; border-top: 1px solid var(--line); }
+.vi:first-child { border-top: 0; padding-top: 0; }
+.vi:last-child { padding-bottom: 0; }
+.vi .mk { width: 15px; height: 15px; flex: none; margin-top: 2px; border-radius: var(--pill); display: grid; place-items: center; font-size: 8.5px; font-weight: 800; background: var(--line); color: var(--ink-3); }
+.vi[data-ok="true"] .mk { background: var(--ok); color: #fff; }
+.vi[data-ok="false"] .mk { background: var(--crit-sf); color: var(--crit); }
+.vi .t { display: block; font-size: var(--f-sm); font-weight: 580; line-height: 1.4; }
+.vi .s { display: block; font-size: var(--f-xs); color: var(--ink-3); margin-top: 1px; }
 
 /* ============================================================
    Mail
    ============================================================ */
-.mail { border: 1px solid var(--border); border-radius: var(--r); background: var(--surface); box-shadow: var(--sh-1); overflow: hidden; }
-.mailhead { padding: 14px 18px; border-bottom: 1px solid var(--border); }
-.mailhead h1 { margin: 0 0 11px; font-size: 17px; font-weight: 660; letter-spacing: -.012em; text-wrap: balance; }
-.idline { display: flex; align-items: flex-start; gap: 11px; flex-wrap: wrap; }
-.av { width: 33px; height: 33px; flex: none; border-radius: 50%; display: grid; place-items: center; font-size: 11.5px; font-weight: 700; background: var(--surface-3); color: var(--ink-2); }
-.av[data-fe="1"] { background: var(--fe-bar); color: #fff; }
-.idmeta { min-width: 0; flex: 1; }
-.idmeta .nm { font-size: 13px; font-weight: 640; }
-.idmeta .ad, .idmeta .to { font-size: 11.5px; color: var(--ink-3); font-family: var(--mono); word-break: break-all; }
-.idmeta .to { font-family: var(--sans); margin-top: 2px; }
-.stamp { font-size: 11.5px; color: var(--ink-3); font-variant-numeric: tabular-nums; white-space: nowrap; }
-.mailbody { padding: 16px 18px; font-size: 14px; line-height: 1.65; }
-.mailbody p { margin: 0 0 13px; }
-.mailbody ul { margin: 0 0 13px; padding-left: 20px; }
-.mailbody .sig { color: var(--ink-3); }
+.mail { background: var(--surface); border-radius: var(--r); box-shadow: var(--sh); overflow: hidden; }
+.m-hd { padding: 20px 22px 17px; }
+.m-hd h3 { margin: 0 0 14px; font-size: var(--f-lg); font-weight: 660; letter-spacing: -.012em; text-wrap: balance; }
+.m-id { display: flex; align-items: center; gap: 11px; flex-wrap: wrap; }
+.m-id .av { width: 31px; height: 31px; flex: none; border-radius: var(--pill); display: grid; place-items: center; font-size: var(--f-xs); font-weight: 680; background: var(--surface-2); color: var(--ink-2); }
+.m-id .av[data-fe="1"] { background: var(--fe-bar); color: #fff; }
+.m-id .who { min-width: 0; flex: 1; }
+.m-id .nm { font-size: var(--f-sm); font-weight: 640; }
+.m-id .ad { font-size: var(--f-xs); color: var(--ink-3); font-family: var(--mono); word-break: break-all; }
+.m-id .ts { font-size: var(--f-xs); color: var(--ink-3); white-space: nowrap; }
 
-/* attachment row */
-.attrow { display: flex; flex-wrap: wrap; gap: 10px; padding: 13px 18px; border-bottom: 1px solid var(--border); background: var(--surface-2); }
-.att { display: flex; align-items: center; gap: 11px; padding: 9px 14px 9px 11px; border: 1px solid var(--border-2); border-radius: var(--r-sm); background: var(--surface); min-width: 250px; }
-.att .fi {
-  width: 31px; height: 37px; flex: none; border-radius: 3px; position: relative;
-  display: grid; place-items: center; font-family: var(--mono); font-size: 8.5px; font-weight: 700; color: #fff;
-  background: var(--ok);
-}
-.att .fi[data-k="txt"] { background: var(--ink-3); }
-.att .fi[data-k="lock"] { background: var(--gold); }
-:root[data-theme="dark"] .att .fi { color: #0B1113; }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .att .fi { color: #0B1113; } }
-.att .fn { font-size: 12.5px; font-weight: 620; word-break: break-all; }
-.att .fm { font-size: 11.5px; color: var(--ink-3); font-variant-numeric: tabular-nums; margin-top: 1px; }
-.att.enc { border-color: var(--gold-line); background: var(--gold-soft); }
+.m-fld { display: flex; gap: 14px; padding: 12px 22px; align-items: baseline; }
+.m-fld + .m-fld { padding-top: 0; }
+.m-fld .k { color: var(--ink-3); width: 50px; flex: none; font-size: var(--f-xs); }
+.m-fld .v { font-size: var(--f-md); word-break: break-word; }
+.m-fld .v.mono { font-family: var(--mono); font-size: var(--f-sm); }
 
-/* the encryption call-out — the thing to notice */
-.encnote {
-  display: flex; align-items: flex-start; gap: 10px;
-  margin: 0 0 14px; padding: 11px 13px;
-  border: 1px solid var(--gold-line); border-left-width: 3px; border-radius: 0 var(--r-sm) var(--r-sm) 0;
-  background: var(--gold-soft); color: var(--ink); font-size: 12.5px; line-height: 1.5;
-}
-.encnote b { color: var(--gold); }
-.encnote .lk { font-size: 15px; line-height: 1.2; flex: none; }
+.m-att { display: flex; flex-wrap: wrap; gap: 9px; padding: 14px 22px 0; }
+.att { display: flex; align-items: center; gap: 10px; padding: 9px 15px; border-radius: var(--r-sm); background: var(--surface-2); }
+.att .ic { font-size: 13px; line-height: 1; color: var(--ink-3); flex: none; }
+.att .fn { font-size: var(--f-sm); font-weight: 580; word-break: break-all; }
+.att .fm { font-size: var(--f-xs); color: var(--ink-3); }
+.att.enc { background: var(--gold-sf); }
+.att.enc .ic, .att.enc .fm { color: var(--gold); }
 
-/* compose */
-.cfield { display: flex; gap: 12px; padding: 10px 18px; border-bottom: 1px solid var(--border); font-size: 13px; align-items: baseline; }
-.cfield .lb { color: var(--ink-3); width: 58px; flex: none; font-size: 12px; }
-.cfield .vl { font-family: var(--mono); font-size: 12.5px; word-break: break-all; }
-.cfield .vl.pl { font-family: var(--sans); font-size: 13.5px; }
-.cfoot { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; padding: 13px 18px; border-top: 1px solid var(--border); background: var(--surface-2); }
-.cfoot .hint { margin-left: auto; font-size: 11.5px; color: var(--ink-3); }
+.m-body { padding: 20px 22px; font-size: var(--f-md); line-height: 1.72; }
+.m-body p { margin: 0 0 14px; }
+.m-body p:last-child { margin-bottom: 0; }
+.m-body .sig { color: var(--ink-3); }
+.m-foot { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; padding: 0 22px 20px; }
+.m-foot .h { margin-left: auto; font-size: var(--f-xs); color: var(--ink-3); }
 
-/* NL highlight slots */
-.sl { border-radius: 2px; }
-.hl .sl { padding: 1px 3px; margin: 0 -1px; background: var(--sb); box-shadow: inset 0 -2px 0 var(--sc); }
-.sl[data-s="subj"] { --sc: var(--s-subj); --sb: var(--s-subj-bg); }
-.sl[data-s="id"]   { --sc: var(--s-id);   --sb: var(--s-id-bg); }
-.sl[data-s="fld"]  { --sc: var(--s-fld);  --sb: var(--s-fld-bg); }
-.sl[data-s="sec"]  { --sc: var(--s-sec);  --sb: var(--s-sec-bg); }
-.hl .sl::after {
-  content: attr(data-t); font-family: var(--mono); font-size: 8.5px; font-weight: 700;
-  vertical-align: super; color: var(--sc); margin-left: 2px; letter-spacing: .03em;
-}
-.legend {
-  display: flex; flex-wrap: wrap; gap: 6px 14px; align-items: center;
-  padding: 10px 13px; margin-bottom: 14px;
-  border: 1px solid var(--border); border-radius: var(--r-sm);
-  background: var(--surface-2); font-size: 11.5px; color: var(--ink-2);
-}
-.legend .li { display: flex; align-items: center; gap: 6px; }
-.legend .sw { width: 12px; height: 12px; border-radius: 3px; flex: none; }
-.legend .hint { margin-left: auto; color: var(--ink-3); }
+.hl .x { padding: 1px 3px; border-radius: 3px; background: var(--accent-sf); box-shadow: inset 0 -1.5px 0 var(--accent); }
+.hl .x[data-k="enc"] { background: var(--gold-sf); box-shadow: inset 0 -1.5px 0 var(--gold); }
+.keyline { display: flex; gap: 18px; flex-wrap: wrap; font-size: var(--f-xs); color: var(--ink-3); margin-bottom: 16px; }
+.keyline .i { display: flex; align-items: center; gap: 6px; }
+.keyline .sw { width: 16px; height: 3px; border-radius: var(--pill); background: var(--accent); }
+.keyline .sw.g { background: var(--gold); }
 
-.quoted { border-left: 2px solid var(--border-2); padding-left: 14px; margin: 4px 0 12px; color: var(--ink-3); }
-.quoted .qh { font-size: 11.5px; margin-bottom: 6px; }
+.quote { border-left: 2px solid var(--line-2); padding-left: 15px; color: var(--ink-2); }
+.quote .qh { font-size: var(--f-xs); color: var(--ink-3); margin-bottom: 7px; }
 
 /* ============================================================
-   Fill Easy automated notification block (matches the product)
+   Fill Easy notification block — matches the product email
    ============================================================ */
-.fe { border: 1px solid var(--fe-line); border-radius: 3px; overflow: hidden; background: var(--fe-cell); color: var(--fe-tx); margin: 4px 0 14px; }
-.febar { display: flex; align-items: center; gap: 12px; padding: 15px 20px; background: var(--fe-bar); color: var(--fe-bar-tx); }
-.febar .bn { font-size: 17px; font-weight: 700; letter-spacing: -.01em; }
-.febar .an { margin-left: auto; font-size: 12.5px; }
-.febody { padding: 18px 20px 20px; }
-.fesec { font-size: 13.5px; font-weight: 700; letter-spacing: .02em; margin: 0 0 10px; }
-.fesec .ct { color: var(--fe-mut); font-weight: 600; }
-.fesec.clar { color: var(--fe-red); }
-.fesec.clar .rest { color: var(--fe-tx); font-weight: 400; font-size: 12.5px; letter-spacing: 0; }
-.fesec + .fesec-wrap { margin-top: 0; }
-.fetblwrap { overflow-x: auto; margin-bottom: 20px; }
-table.fetbl { border-collapse: collapse; width: 100%; font-size: 12.5px; min-width: 560px; }
-table.fetbl th, table.fetbl td { border: 1px solid var(--fe-line); padding: 10px 13px; text-align: left; vertical-align: top; }
-table.fetbl thead th { background: var(--fe-head); font-weight: 700; font-size: 12.5px; }
-table.fetbl td.rid { font-weight: 700; font-family: var(--mono); font-size: 11.5px; white-space: nowrap; }
-table.fetbl td .ref { color: var(--fe-mut); font-family: var(--mono); font-size: 11.5px; }
-table.fetbl td .sub { font-weight: 700; }
-table.fetbl td .doc { color: var(--fe-mut); }
-table.fetbl .yl { background: var(--fe-yellow); min-width: 132px; }
-table.fetbl thead th.yl { background: var(--fe-yellow); white-space: nowrap; }
-table.fetbl .ph { color: var(--fe-mut); }
-.fefoot { font-size: 12.5px; color: var(--fe-tx); margin: 0; }
+.fe { border: 1px solid var(--fe-line); border-radius: var(--r-sm); overflow: hidden; background: var(--fe-cell); color: var(--fe-tx); }
+.fe-bar { display: flex; align-items: center; gap: 12px; padding: 15px 20px; background: var(--fe-bar); color: var(--fe-bar-tx); }
+.fe-bar .b { font-size: 16px; font-weight: 700; letter-spacing: -.01em; }
+.fe-bar .a { margin-left: auto; font-size: var(--f-sm); }
+.fe-in { padding: 18px 20px 20px; }
+.fe-h { font-size: var(--f-md); font-weight: 700; letter-spacing: .02em; margin: 0 0 10px; }
+.fe-h .c { color: var(--fe-mut); font-weight: 600; }
+.fe-h.clr { color: var(--fe-red); }
+.fe-h.clr .r { color: var(--fe-tx); font-weight: 400; font-size: var(--f-sm); letter-spacing: 0; }
+.fe-tw { overflow-x: auto; margin-bottom: 20px; }
+table.fet { border-collapse: collapse; width: 100%; font-size: var(--f-sm); min-width: 540px; }
+table.fet th, table.fet td { border: 1px solid var(--fe-line); padding: 10px 13px; text-align: left; vertical-align: top; }
+table.fet thead th { background: var(--fe-head); font-weight: 700; }
+table.fet td.rid { font-weight: 700; font-family: var(--mono); font-size: var(--f-xs); white-space: nowrap; }
+table.fet td .ref { color: var(--fe-mut); font-family: var(--mono); font-size: var(--f-xs); }
+table.fet td .sb { font-weight: 700; }
+table.fet td .dc { color: var(--fe-mut); }
+table.fet .yl { background: var(--fe-yellow); min-width: 128px; }
+table.fet thead th.yl { white-space: nowrap; }
+table.fet .ph { color: var(--fe-mut); }
+.fe-f { font-size: var(--f-sm); margin: 0; }
+
+table.res { border-collapse: collapse; width: 100%; font-size: var(--f-sm); min-width: 520px; }
+table.res th, table.res td { border-bottom: 1px solid var(--line); padding: 11px 14px; text-align: left; vertical-align: top; }
+table.res thead th { font-size: 10px; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-3); font-weight: 700; }
+table.res tbody tr:last-child td { border-bottom: 0; }
+table.res td.f { font-weight: 580; white-space: nowrap; }
+table.res td.d { color: var(--ink-2); }
 
 /* ============================================================
-   Side panel pieces
+   Controls + footer
    ============================================================ */
-.tsteps { display: flex; flex-direction: column; }
-.tstep { display: flex; gap: 10px; padding-bottom: 12px; position: relative; }
-.tstep:not(:last-child)::before { content: ""; position: absolute; left: 6px; top: 16px; bottom: 0; width: 1px; background: var(--border-2); }
-.tstep .bul { width: 13px; height: 13px; flex: none; margin-top: 2px; border-radius: 50%; z-index: 1; border: 2px solid var(--border-2); background: var(--surface-2); }
-.tstep[data-s="done"] .bul { background: var(--ok); border-color: var(--ok); }
-.tstep[data-s="active"] .bul { background: var(--brand); border-color: var(--brand); }
-.tstep .lbl { font-size: 12.5px; font-weight: 570; color: var(--ink-3); line-height: 1.35; }
-.tstep[data-s="done"] .lbl, .tstep[data-s="active"] .lbl { color: var(--ink); }
-.tstep .det { font-size: 11.5px; color: var(--ink-3); font-family: var(--mono); margin-top: 2px; word-break: break-word; }
-
-.pcard { border: 1px solid var(--border); border-radius: var(--r-sm); background: var(--surface); overflow: hidden; }
-.pcard > h3 {
-  margin: 0; padding: 9px 12px; font-size: 10.5px; font-weight: 700; letter-spacing: .07em;
-  text-transform: uppercase; color: var(--ink-3); background: var(--surface-2); border-bottom: 1px solid var(--border);
+.controls { position: sticky; bottom: 22px; z-index: 20; display: flex; justify-content: center; margin: 34px 0 0; padding: 0 26px; }
+.controls .bar-in {
+  display: flex; align-items: center; gap: 10px; padding: 8px;
+  background: var(--surface); border-radius: var(--pill); box-shadow: var(--sh-lg);
 }
-.pcard .pb { padding: 11px 12px; font-size: 12.5px; line-height: 1.5; }
-.srow { display: flex; gap: 9px; padding: 5px 0; border-bottom: 1px dotted var(--border); }
-.srow:last-child { border-bottom: 0; }
-.srow .sk { color: var(--ink-3); font-family: var(--mono); font-size: 11px; flex: none; width: 74px; }
-.srow .sv { min-width: 0; word-break: break-word; font-size: 12px; }
-.srow .sv em { font-style: normal; padding: 0 2px; border-radius: 2px; background: var(--sb); box-shadow: inset 0 -2px 0 var(--sc); }
-.srow[data-s="subj"] { --sc: var(--s-subj); --sb: var(--s-subj-bg); }
-.srow[data-s="id"]   { --sc: var(--s-id);   --sb: var(--s-id-bg); }
-.srow[data-s="fld"]  { --sc: var(--s-fld);  --sb: var(--s-fld-bg); }
-.srow[data-s="sec"]  { --sc: var(--s-sec);  --sb: var(--s-sec-bg); }
+.circ {
+  width: 38px; height: 38px; border: 0; border-radius: var(--pill); cursor: pointer;
+  background: var(--surface-2); color: var(--ink-2); display: grid; place-items: center; font-size: 15px;
+}
+.circ:hover { color: var(--ink); }
+.circ[disabled] { opacity: .3; cursor: not-allowed; }
+.play { padding: 11px 24px; border: 0; border-radius: var(--pill); background: var(--accent); color: #fff; cursor: pointer; font-size: var(--f-md); font-weight: 640; display: inline-flex; align-items: center; gap: 8px; }
+.play:hover { background: var(--accent-2); }
+:root[data-theme="dark"] .play { color: #0B1113; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .play { color: #0B1113; } }
 
-/* ============================================================
-   Narration
-   ============================================================ */
-.coach { display: grid; grid-template-columns: minmax(0,1fr) auto; gap: 18px; align-items: center; padding: 13px 18px; background: var(--surface); border-top: 1px solid var(--border); }
-.coach .st { font-family: var(--mono); font-size: 10.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--brand); font-weight: 700; }
-.coach p { margin: 3px 0 0; font-size: 13.5px; line-height: 1.5; max-width: 96ch; }
-.tip { margin-top: 8px; padding: 8px 12px; border-left: 3px solid var(--gold); border-radius: 0 var(--r-sm) var(--r-sm) 0; background: var(--gold-soft); font-size: 12.5px; }
-.tip b { color: var(--gold); }
-.nav { display: flex; align-items: center; gap: 9px; }
-.nav .cnt { font-family: var(--mono); font-size: 12px; color: var(--ink-3); white-space: nowrap; }
+.hint-line { text-align: center; font-size: var(--f-xs); color: var(--ink-3); margin: 14px 0 0; padding: 0 26px; }
+.page-foot { text-align: center; padding: 26px 26px 34px; font-size: var(--f-xs); color: var(--ink-3); line-height: 1.7; }
 
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .001ms !important; transition-duration: .001ms !important; } }
 
 /* ============================================================
    Responsive
    ============================================================ */
-@media (max-width: 1080px) {
-  .app { height: auto; min-height: 100dvh; }
-  .shell { grid-template-columns: 1fr; }
-  .stage, .side { overflow: visible; }
-  .side { border-left: 0; border-top: 1px solid var(--border); }
-  .coach { grid-template-columns: 1fr; }
-  .nav { justify-content: flex-end; }
+@media (max-width: 1060px) {
+  .split { grid-template-columns: 1fr; }
+  .info { position: static; order: -1; }
 }
 @media (max-width: 620px) {
-  .brandsub { display: none; }
-  .stage { padding: 16px 13px 30px; }
-  .step { min-width: 112px; }
-  .febody, .febar { padding-left: 14px; padding-right: 14px; }
+  .mh-sub, .mh-div { display: none; }
+  .hero { padding: 22px 15px 18px; }
+  .hero h1 { font-size: 21px; }
+  .hero p { font-size: var(--f-md); }
+  .flow { padding-left: 15px; padding-right: 15px; margin-bottom: 20px; }
+  .split { padding: 0 15px; gap: 18px; }
+  .masthead { padding: 12px 15px; }
+  .controls { padding: 0 15px; bottom: 14px; }
+  .fe-in, .fe-bar { padding-left: 14px; padding-right: 14px; }
 }
 </style>
 <!-- ARTIFACT:STYLE:END -->
 </head>
 <body>
 <!-- ARTIFACT:BODY:BEGIN -->
-<div class="app">
+<header class="masthead">
+  <div class="mark">FE</div>
+  <div class="mh-name">Fill Easy</div>
+  <div class="mh-div"></div>
+  <div class="mh-sub">Individual KYC &middot; Mainland China</div>
+  <div class="gap"></div>
+  <span class="demo-pill">Interactive demo</span>
+  <button type="button" class="icon-btn" id="themeBtn" title="Switch light / dark" aria-label="Switch light or dark theme">
+    <svg width="15" height="15" viewBox="0 0 16 16" aria-hidden="true" fill="none">
+      <circle cx="8" cy="8" r="6.25" stroke="currentColor" stroke-width="1.4"></circle>
+      <path d="M8 1.75A6.25 6.25 0 0 1 8 14.25Z" fill="currentColor"></path>
+    </svg>
+  </button>
+</header>
 
-  <header class="brandbar">
-    <div class="logo">FE</div>
-    <div class="brandname">Fill Easy &middot; Individual KYC</div>
-    <div class="brandsub">Background screening by email &mdash; China (CN)</div>
-    <div class="spacer"></div>
-    <span class="badge b-mut" id="fileState">Template not filled</span>
-    <button type="button" class="iconbtn" id="themeBtn" title="Switch light / dark" aria-label="Switch light or dark theme">
-      <svg width="15" height="15" viewBox="0 0 16 16" aria-hidden="true" fill="none">
-        <circle cx="8" cy="8" r="6.25" stroke="currentColor" stroke-width="1.4"></circle>
-        <path d="M8 1.75A6.25 6.25 0 0 1 8 14.25Z" fill="currentColor"></path>
-      </svg>
-    </button>
-  </header>
+<section class="hero">
+  <h1>Walk through the individual KYC journey</h1>
+  <p>From a filled workbook to verified results &mdash; every step happens over ordinary email. The panel explains what the analyst does and what the agent does behind the scenes.</p>
+</section>
 
-  <div class="stepwrap"><div class="stepper" id="stepper" role="tablist" aria-label="Steps"></div></div>
+<nav class="flow" id="flow" aria-label="Steps"><div class="flow-in" id="flowIn"></div></nav>
 
-  <div class="shell">
-    <main class="stage" id="stage"><div class="stageinner" id="stageinner"></div></main>
-    <aside class="side" aria-label="Agent activity">
-      <div class="sidehead">
-        <div class="ti"><span class="pulse" aria-hidden="true"></span><h2>Agent activity</h2></div>
-        <div class="sb" id="sideSub">idle</div>
-      </div>
-      <div class="sidebody" id="sidebody"></div>
-    </aside>
-  </div>
-
-  <footer class="coach">
-    <div>
-      <div class="st" id="coachStep"></div>
-      <p id="coachText"></p>
-      <div class="tip" id="coachTip" hidden></div>
-    </div>
-    <div class="nav">
-      <span class="cnt" id="navCount"></span>
-      <button type="button" class="btn ghost" id="prevBtn">&#8592; Back</button>
-      <button type="button" class="btn" id="nextBtn">Next &#8594;</button>
-      <button type="button" class="btn ghost" id="restartBtn">Restart</button>
-    </div>
-  </footer>
-
+<div class="split">
+  <main class="stage" id="stage"></main>
+  <aside class="info" id="info"></aside>
 </div>
+
+<div class="controls">
+  <div class="bar-in">
+    <button type="button" class="circ" id="prevBtn" aria-label="Previous step">&#8249;</button>
+    <button type="button" class="play" id="playBtn"><span id="playIcon">&#9654;</span> <span id="playText">Auto-play</span></button>
+    <button type="button" class="circ" id="nextBtn" aria-label="Next step">&#8250;</button>
+  </div>
+</div>
+<p class="hint-line">Use the pills to jump &middot; &#8249; &#8250; to step &middot; &larr;/&rarr; keys also work</p>
+
+<footer class="page-foot">
+  Illustrative demo for stakeholder visualisation &middot; sample data is fictitious.<br>
+  Fill Easy Limited &middot; individual KYC background screening by email.
+</footer>
 
 <script>
 (function () {
@@ -558,35 +499,33 @@ table.fetbl .ph { color: var(--fe-mut); }
   var AGENT = { nm: "Fill Easy Agent", ad: AGENT_ADDR, ini: "FA", fe: true };
   var FILE = "KYC_Background_Screening_Orders.xlsx";
   var RESULTS_FILE = "KYC_Screening_Results_BGS-2026-014.xlsx";
+  var DESK_PW = "FE-Desk-2026-CN";
 
-  /* Column definitions, verbatim from Background_Screening_Orders */
   var COLS = [
-    { c: "A", cn: "內部參考編號", en: "Internal Reference Number", req: false, w: "" },
-    { c: "B", cn: "地區", en: "Region", req: false },
-    { c: "C", cn: "中文名", en: "Chinese Name", req: true },
-    { c: "D", cn: "中國大陸身份證號碼", en: "Mainland ID Number", req: true },
-    { c: "E", cn: "身分證簽發日期", en: "ID Card Issue Date", req: false },
-    { c: "F", cn: "身分證到期日期", en: "ID Card Expiry Date", req: false },
-    { c: "G", cn: "其他證件驗證", en: "Other Document Number", req: false },
-    { c: "H", cn: "證件類別", en: "Type of Document", req: false },
-    { c: "I", cn: "電話號碼", en: "Mainland Phone Number", req: false },
-    { c: "J", cn: "證件照", en: "Portrait Photo", req: false },
-    { c: "K", cn: "銀行帳號", en: "Mainland Bank Account Number", req: false },
-    { c: "L", cn: "學歷證書編號", en: "Academic Credential Number", req: false },
-    { c: "M", cn: "學位證書編號", en: "Degree Number", req: false },
-    { c: "N", cn: "專業資格編號", en: "Professional Qualification Number", req: false },
-    { c: "O", cn: "駕駛執照編號", en: "Driver's License Number", req: false },
-    { c: "P", cn: "地址", en: "Address", req: false },
-    { c: "Q", cn: "所需數據字段", en: "Requested Data Fields", req: false },
-    { c: "R", cn: "備註", en: "Notes/Comments", req: false }
+    { c: "A", cn: "內部參考編號", en: "Internal Reference Number" },
+    { c: "B", cn: "地區", en: "Region" },
+    { c: "C", cn: "中文名", en: "Chinese Name", rq: true },
+    { c: "D", cn: "中國大陸身份證號碼", en: "Mainland ID Number", rq: true },
+    { c: "E", cn: "身分證簽發日期", en: "ID Card Issue Date" },
+    { c: "F", cn: "身分證到期日期", en: "ID Card Expiry Date" },
+    { c: "G", cn: "其他證件驗證", en: "Other Document Number" },
+    { c: "H", cn: "證件類別", en: "Type of Document" },
+    { c: "I", cn: "電話號碼", en: "Mainland Phone Number" },
+    { c: "J", cn: "證件照", en: "Portrait Photo" },
+    { c: "K", cn: "銀行帳號", en: "Mainland Bank Account Number" },
+    { c: "L", cn: "學歷證書編號", en: "Academic Credential Number" },
+    { c: "M", cn: "學位證書編號", en: "Degree Number" },
+    { c: "N", cn: "專業資格編號", en: "Professional Qualification Number" },
+    { c: "O", cn: "駕駛執照編號", en: "Driver's License Number" },
+    { c: "P", cn: "地址", en: "Address" },
+    { c: "Q", cn: "所需數據字段", en: "Requested Data Fields" },
+    { c: "R", cn: "備註", en: "Notes/Comments" }
   ];
 
-  /* Row 2 — the sample row shipped in the template */
   var SAMPLE = ["BGS-2025-001", "China - CN", "张三", "110101199001011234", "2016.01.01", "2027.12.12",
                 "12345678", "Passport", "12667788991", "", "1234567890", "12345678", "12345678",
                 "12345678", "1234567", "北京王府大道某某小区xx栋12楼A室", "KYC1 / KYC2", ""];
 
-  /* Row 3 — what the analyst types in this demo */
   var FILLED = ["BGS-2026-014", "China - CN", "李慧敏", "310115199204186328", "2018.03.05", "2038.03.05",
                 "E64720915", "Passport", "13905217744", "", "6222021001056783", "", "",
                 "JS20190447", "310115199204186328", "上海市浦东新区世纪大道100号28楼", "KYC1 / KYC2", "New hire — senior role"];
@@ -594,557 +533,411 @@ table.fetbl .ph { color: var(--fe-mut); }
   var EDITABLE = { 2: "李慧敏", 3: "310115199204186328", 13: "JS20190447", 16: "KYC1 / KYC2" };
 
   /* ==========================================================
-     Small builders
+     Builders
      ========================================================== */
-  function sl(s, t, text) { return '<span class="sl" data-s="' + s + '" data-t="' + t + '">' + text + '</span>'; }
+  function x(t, k) { return '<span class="x"' + (k ? ' data-k="' + k + '"' : '') + '>' + t + '</span>'; }
 
   function mailHead(o) {
-    return '<div class="mailhead">' +
-      '<h1>' + o.subject + '</h1>' +
-      '<div class="idline">' +
-        '<div class="av"' + (o.from.fe ? ' data-fe="1"' : '') + '>' + o.from.ini + '</div>' +
-        '<div class="idmeta"><div class="nm">' + o.from.nm + '</div><div class="ad">' + o.from.ad + '</div>' +
-        '<div class="to">to ' + o.to + '</div></div>' +
-        '<div class="stamp">' + o.time + '</div>' +
-      '</div>' +
-    '</div>';
+    return '<div class="m-hd"><h3>' + o.subject + '</h3><div class="m-id">' +
+      '<span class="av"' + (o.from.fe ? ' data-fe="1"' : '') + '>' + o.from.ini + '</span>' +
+      '<span class="who"><span class="nm">' + o.from.nm + '</span><br>' +
+      '<span class="ad">' + o.from.ad + '</span></span>' +
+      '<span class="ts">' + o.time + '</span></div></div>';
   }
 
-  function attach(list) {
-    return '<div class="attrow">' + list.map(function (a) {
-      return '<div class="att' + (a.enc ? ' enc' : '') + '">' +
-        '<div class="fi" data-k="' + (a.kind || "xlsx") + '">' + (a.kind === "txt" ? "TXT" : a.kind === "lock" ? "XLSX" : "XLSX") + '</div>' +
-        '<div><div class="fn">' + a.n + '</div><div class="fm">' + a.m + '</div></div>' +
-      '</div>';
+  function atts(list) {
+    return '<div class="m-att">' + list.map(function (a) {
+      return '<span class="att' + (a.enc ? ' enc' : '') + '"><span class="ic">' + (a.enc ? "&#128274;" : "&#128196;") + '</span>' +
+        '<span><span class="fn">' + a.n + '</span><br><span class="fm">' + a.m + '</span></span></span>';
     }).join("") + '</div>';
   }
 
-  function legend() {
-    return '<div class="legend">' +
-      '<span class="li"><span class="sw" style="background:var(--s-subj-bg);box-shadow:inset 0 -3px 0 var(--s-subj)"></span> Subject / scope</span>' +
-      '<span class="li"><span class="sw" style="background:var(--s-id-bg);box-shadow:inset 0 -3px 0 var(--s-id)"></span> Attachment &amp; identifiers</span>' +
-      '<span class="li"><span class="sw" style="background:var(--s-fld-bg);box-shadow:inset 0 -3px 0 var(--s-fld)"></span> Requested data fields</span>' +
-      '<span class="li"><span class="sw" style="background:var(--s-sec-bg);box-shadow:inset 0 -3px 0 var(--s-sec)"></span> Encryption &amp; handling</span>' +
-      '<span class="hint">The agent&rsquo;s reading of a plain email &mdash; no form, no fixed syntax.</span>' +
-    '</div>';
-  }
-
-  /* Fill Easy automated notification block */
   function feBlock(sections) {
-    var h = '<div class="fe"><div class="febar"><span class="bn">Fill Easy</span><span class="an">Automated Notification</span></div><div class="febody">';
+    var h = '<div class="fe"><div class="fe-bar"><span class="b">Fill Easy</span><span class="a">Automated Notification</span></div><div class="fe-in">';
     sections.forEach(function (s) {
       if (s.type === "clar") {
-        h += '<p class="fesec clar">NEED CLARIFICATION (' + s.rows.length + ') <span class="rest">&mdash; Please review the items below, copy the table into your email and add your answers in the <i>yellow &ldquo;Your reply&rdquo;</i> column.</span></p>' +
-          '<div class="fetblwrap"><table class="fetbl"><thead><tr><th>Request</th><th>Issue (action required)</th><th class="yl">Your reply</th></tr></thead><tbody>' +
-          s.rows.map(function (r) {
-            return '<tr><td><span class="sub">' + r.subject + '</span></td><td>' + r.issue + '</td><td class="yl ph">[Your reply]</td></tr>';
-          }).join("") + '</tbody></table></div>';
+        h += '<p class="fe-h clr">NEED CLARIFICATION (' + s.rows.length + ') <span class="r">&mdash; Please review the items below, copy the table into your email and add your answers in the <i>yellow &ldquo;Your reply&rdquo;</i> column.</span></p>' +
+          '<div class="fe-tw"><table class="fet"><thead><tr><th>Request</th><th>Issue (action required)</th><th class="yl">Your reply</th></tr></thead><tbody>' +
+          s.rows.map(function (r) { return '<tr><td><span class="sb">' + r.subject + '</span></td><td>' + r.issue + '</td><td class="yl ph">[Your reply]</td></tr>'; }).join("") +
+          '</tbody></table></div>';
       } else {
-        h += '<p class="fesec">' + s.title + (s.rows ? ' <span class="ct">(' + s.rows.length + ')</span>' : '') + '</p>' +
-          '<div class="fetblwrap"><table class="fetbl"><thead><tr><th>Request ID</th><th>Request</th><th>Status</th></tr></thead><tbody>' +
+        h += '<p class="fe-h">' + s.title + ' <span class="c">(' + s.rows.length + ')</span></p>' +
+          '<div class="fe-tw"><table class="fet"><thead><tr><th>Request ID</th><th>Request</th><th>Status</th></tr></thead><tbody>' +
           s.rows.map(function (r) {
-            return '<tr><td class="rid">' + r.id + '</td>' +
-              '<td><span class="ref">[' + r.ref + ']</span> <span class="sub">' + r.subject + '</span> <span class="doc">(' + r.doc + ')</span></td>' +
-              '<td>' + r.status + '</td></tr>';
+            return '<tr><td class="rid">' + r.id + '</td><td><span class="ref">[' + r.ref + ']</span> ' +
+              '<span class="sb">' + r.subject + '</span> <span class="dc">(' + r.doc + ')</span></td><td>' + r.status + '</td></tr>';
           }).join("") + '</tbody></table></div>';
       }
     });
-    return h + '<p class="fefoot">You can reply directly to this email with corrections or additional details.</p></div></div>';
+    return h + '<p class="fe-f">You can reply directly to this email with corrections or additional details.</p></div></div>';
   }
 
-  function tsteps(items) {
-    return '<div class="tsteps">' + items.map(function (i) {
-      return '<div class="tstep" data-s="' + i.s + '"><span class="bul"></span><div>' +
-        '<div class="lbl">' + i.l + '</div>' + (i.d ? '<div class="det">' + i.d + '</div>' : '') + '</div></div>';
-    }).join("") + '</div>';
-  }
-
-  function pcard(title, html) { return '<div class="pcard"><h3>' + title + '</h3><div class="pb">' + html + '</div></div>'; }
-
-  function slotcard(title, rows) {
-    return '<div class="pcard"><h3>' + title + '</h3><div class="pb">' + rows.map(function (r) {
-      return '<div class="srow" data-s="' + r.k + '"><span class="sk">' + r.n + '</span><span class="sv">' + r.v + '</span></div>';
-    }).join("") + '</div></div>';
-  }
-
-  /* ==========================================================
-     Spreadsheet
-     ========================================================== */
-  function sheet(opts) {
-    var editable = !!opts.editable;
-    var h = '<div class="xl">' +
-      '<div class="xlbar"><span aria-hidden="true">&#128202;</span><span class="fn">' + FILE + '</span>' +
-      '<span style="margin-left:auto"></span>' +
-      (state.encrypted ? '<span class="badge b-gold">&#128274; Encrypted &middot; AES-256</span>' : '<span class="badge b-mut">Not encrypted</span>') +
-      '</div>' +
-      '<div class="xltab"><span>Background_Screening_Orders</span></div>' +
-      '<div class="xlscroll"><table class="sheet"><thead>' +
-      '<tr><th class="corner ch">&nbsp;</th>' + COLS.map(function (c) { return '<th class="ch">' + c.c + '</th>'; }).join("") + '</tr>' +
-      '<tr class="hdr"><th class="corner">1</th>' + COLS.map(function (c) {
-        return '<th>' + c.cn + (c.req ? ' <span class="req">*</span>' : '') + '<span class="en">' + c.en + '</span></th>';
+  function sheet(editable) {
+    var h = '<div class="xl"><div class="xl-top"><span class="nm">' + FILE + '</span>' +
+      '<span class="tab">Background_Screening_Orders</span></div>' +
+      '<div class="xl-scroll"><table class="sh"><thead>' +
+      '<tr><th class="cnr ltr">&nbsp;</th>' + COLS.map(function (c) { return '<th class="ltr">' + c.c + '</th>'; }).join("") + '</tr>' +
+      '<tr class="hd"><th class="cnr">1</th>' + COLS.map(function (c) {
+        return '<th>' + c.cn + (c.rq ? ' <span class="rq">*</span>' : '') + '<span class="en">' + c.en + '</span></th>';
       }).join("") + '</tr></thead><tbody>';
 
-    h += '<tr class="sample"><td class="rn">2</td>' + SAMPLE.map(function (v) { return '<td>' + (v || "") + '</td>'; }).join("") + '</tr>';
+    h += '<tr class="spl"><td class="rn">2</td>' + SAMPLE.map(function (v) { return '<td>' + (v || "") + '</td>'; }).join("") + '</tr>';
 
     h += '<tr><td class="rn">3</td>' + COLS.map(function (c, i) {
       var val = state.row[i] || "";
       if (editable && EDITABLE[i] !== undefined) {
-        var bad = (i === 2 && !val) || (i === 3 && val && !/^\d{18}$/.test(val)) || (i === 3 && !val);
-        return '<td class="cell-edit' + (bad && state.touched ? ' bad' : '') + '" contenteditable="true" data-i="' + i + '" data-ph="' + (EDITABLE[i]) + '" spellcheck="false">' + val + '</td>';
+        var bad = (i === 2 && !val) || (i === 3 && (!val || !/^\d{18}$/.test(val)));
+        return '<td class="ed' + (bad && state.touched ? ' bad' : '') + '" contenteditable="true" data-i="' + i + '" data-ph="' + EDITABLE[i] + '" spellcheck="false">' + val + '</td>';
       }
       return '<td>' + val + '</td>';
     }).join("") + '</tr>';
 
-    h += '</tbody></table></div>' +
-      '<div class="xlnote"><b>Row 2</b> is the sample data shipped with the template and can be overwritten. ' +
-      (editable ? 'The four highlighted cells in <b>row 3</b> are editable &mdash; type into them, or press <b>Fill sample row</b>.' :
-       'Row 3 holds this request.') + '</div></div>';
-    return h;
+    return h + '</tbody></table></div><div class="xl-foot">' +
+      '<b>Row 2</b> is the sample data shipped with the template and can be overwritten. ' +
+      (editable ? 'The four tinted cells in <b>row 3</b> are editable.' : 'Row 3 holds this request.') +
+      '</div></div>';
   }
 
   function validation() {
-    var name = (state.row[2] || "").trim();
-    var id = (state.row[3] || "").trim();
-    var fields = (state.row[16] || "").trim();
+    var name = (state.row[2] || "").trim(), id = (state.row[3] || "").trim(), f = (state.row[16] || "").trim();
     var checks = [
-      { ok: !!name, t: "中文名 / Chinese Name", s: name ? "&#10003; " + name : "Mandatory field — still empty" },
-      { ok: /^\d{18}$/.test(id), t: "中國大陸身份證號碼 / Mainland ID Number", s: !id ? "Mandatory field — still empty" : (/^\d{18}$/.test(id) ? "&#10003; 18 digits" : id.length + " digits — mainland IDs must be 18") },
-      { ok: !!fields, t: "所需數據字段 / Requested Data Fields", s: fields ? "&#10003; " + fields : "No data fields requested for this row" }
+      { ok: !!name, t: "中文名 / Chinese Name", s: name ? name : "Mandatory field — still empty" },
+      { ok: /^\d{18}$/.test(id), t: "中國大陸身份證號碼 / Mainland ID Number",
+        s: !id ? "Mandatory field — still empty" : (/^\d{18}$/.test(id) ? "18 digits" : id.length + " digits — mainland IDs must be 18") },
+      { ok: !!f, t: "所需數據字段 / Requested Data Fields", s: f ? f : "No data fields requested for this row" }
     ];
-    var pass = checks.every(function (c) { return c.ok; });
-    return { pass: pass, html: '<div class="vlist">' + checks.map(function (c) {
-      return '<div class="vrow" data-ok="' + c.ok + '"><span class="mk">' + (c.ok ? "&#10003;" : "!") + '</span>' +
-        '<span class="vt">' + c.t + '<span class="vs">' + c.s + '</span></span></div>';
-    }).join("") + '</div>' };
+    return {
+      pass: checks.every(function (c) { return c.ok; }),
+      html: checks.map(function (c) {
+        return '<div class="vi" data-ok="' + c.ok + '"><span class="mk">' + (c.ok ? "&#10003;" : "!") + '</span>' +
+          '<span><span class="t">' + c.t + '</span><span class="s">' + c.s + '</span></span></div>';
+      }).join("")
+    };
   }
 
-  /* ==========================================================
-     The natural-language email
-     ========================================================== */
   function requestBody() {
     return '<p>Hi Fill Easy team,</p>' +
-      '<p>Please run ' + sl("subj", "SVC", "background screening") + ' for ' + sl("subj", "N", "the subject in the attached workbook") + ' &mdash; ' +
-      sl("id", "FILE", "Background_Screening_Orders") + ', row 3. She is ' + sl("subj", "REG", "China &mdash; CN") + ', internal ref ' +
-      sl("id", "REF", "BGS-2026-014") + '.</p>' +
-      '<p>I need the data fields marked in column Q (' + sl("fld", "FLD", "KYC1 and KYC2") + '), and on top of that please verify her ' +
-      sl("fld", "FLD", "professional qualification number") + ' and ' + sl("fld", "FLD", "mainland bank account") + '. ' +
-      'Flag it to me if ' + sl("fld", "COND", "the ID card is expired or expires within 12 months") + '.</p>' +
-      '<p>' + sl("sec", "ENC", "The workbook is password-protected") + ' &mdash; ' +
-      sl("sec", "KEY", "same desk password we registered at onboarding") + ', not in this email.</p>' +
+      '<p>Please run ' + x("background screening") + ' for ' + x("the subject in the attached workbook") + ' &mdash; ' +
+      x("Background_Screening_Orders") + ', row 3. She is ' + x("China &mdash; CN") + ', internal ref ' + x("BGS-2026-014") + '.</p>' +
+      '<p>I need the data fields marked in column Q (' + x("KYC1 and KYC2") + '), and on top of that please verify her ' +
+      x("professional qualification number") + ' and ' + x("mainland bank account") + '. ' +
+      'Flag it to me if ' + x("the ID card is expired or expires within 12 months") + '.</p>' +
+      '<p>' + x("The workbook is password-protected", "enc") + ' &mdash; ' +
+      x("same desk password we registered at onboarding", "enc") + ', not in this email.</p>' +
       '<p class="sig">Thanks,<br>Matthew<br>Client Onboarding</p>';
   }
 
+  var PROCESSING_ROWS = [
+    { id: "BGS_7hK2xQm4Rt", doc: "Mainland ID Verification" },
+    { id: "BGS_c4Vn8sLpZa", doc: "ID Card Validity & Expiry" },
+    { id: "BGS_Wq3TbY9dEu", doc: "Mainland Phone Verification" },
+    { id: "BGS_Lm6Xz1PkHc", doc: "Mainland Bank Account Verification" },
+    { id: "BGS_Rd9Fj5NwSv", doc: "Professional Qualification" },
+    { id: "BGS_Tz2Gh7BqMx", doc: "Address Verification" }
+  ];
+  function feRows(status) {
+    return PROCESSING_ROWS.map(function (r) {
+      return { id: r.id, ref: "BGS-2026-014", subject: state.row[2] || "—", doc: r.doc, status: status };
+    });
+  }
+
   /* ==========================================================
-     Steps
+     Steps — stage content, plus one explanation card each
      ========================================================== */
   var STEPS = [
 
-    /* ---------- 1. Fill ---------- */
-    { k: "Fill the template",
-      narr: "Start in the workbook, not the inbox. Only two columns are mandatory — Chinese Name and the 18-digit Mainland ID — and column Q says which data fields you want back.",
-      sub: "waiting · nothing sent yet",
+    { nav: "Fill the template", eyebrow: "Fill the template", title: "Complete a row in the workbook",
+      you: "Open the workbook and fill row 3. Only two columns are mandatory — 中文名 and the 18-digit 中國大陸身份證號碼.",
+      bts: "Column Q is what tells the agent which data fields to return. Row 2 is the sample that ships with the template and can be overwritten.",
+      chips: ["Background_Screening_Orders", "Row 3", "18 columns"],
       stage: function () {
-        var v = validation();
-        return '<p class="lede">Open <strong>' + FILE + '</strong> and complete a row on the <strong>Background_Screening_Orders</strong> sheet. ' +
-          'Row 2 is the sample that ships with the template; your request goes in row 3.</p>' +
-          sheet({ editable: true }) +
-          '<div class="btnrow" style="margin-top:14px">' +
-            '<button type="button" class="btn ghost sm" id="fillSample">Fill sample row</button>' +
-            '<button type="button" class="btn ghost sm" id="clearRow">Clear row</button>' +
-            '<span class="badge ' + (v.pass ? "b-ok" : "b-mut") + '" id="rowBadge">' + (v.pass ? "Row 3 valid" : "Row 3 incomplete") + '</span>' +
+        return sheet(true) +
+          '<div class="row">' +
+            '<button type="button" class="btn quiet sm" id="fillSample">Fill sample row</button>' +
+            '<button type="button" class="btn quiet sm" id="clearRow">Clear row</button>' +
           '</div>' +
-          '<div class="instr"><h4>Instructions from the template</h4><ol>' +
-            '<li>請填寫所有標有 * 的必填項（中文姓名、大陸身份證號碼）<span class="cn"><br>Fill in all mandatory fields marked with * (Chinese Name, Mainland ID Number)</span></li>' +
-            '<li>請確保身份證號碼輸入準確—中國大陸的身份證號碼應爲18位<span class="cn"><br>Ensure ID numbers are entered accurately — they should be 18 digits for mainland China IDs</span></li>' +
-          '</ol></div>';
-      },
-      side: function () {
-        var v = validation();
-        return tsteps([
-          { s: "active", l: "Template being filled", d: "Background_Screening_Orders" },
-          { s: "wait", l: "Encrypt workbook" },
-          { s: "wait", l: "Email to agent" },
-          { s: "wait", l: "Agent parses request" },
-          { s: "wait", l: "Results returned" }
-        ]) + pcard("Row 3 validation", v.html);
+          '<div><h4 class="sec-h">Validation</h4><div class="card"><div class="card-b">' + validation().html + '</div></div></div>' +
+          '<div><h4 class="sec-h">Instructions from the template</h4><div class="card"><div class="card-b"><div class="instr"><ol>' +
+            '<li>請填寫所有標有 * 的必填項（中文姓名、大陸身份證號碼）<br><span class="en">Fill in all mandatory fields marked with * (Chinese Name, Mainland ID Number)</span></li>' +
+            '<li>請確保身份證號碼輸入準確—中國大陸的身份證號碼應爲18位<br><span class="en">Ensure ID numbers are entered accurately — they should be 18 digits for mainland China IDs</span></li>' +
+          '</ol></div></div></div></div>';
       }
     },
 
-    /* ---------- 2. Encrypt ---------- */
-    { k: "Encrypt the file",
-      narr: "The workbook now holds an ID number, a bank account and a home address, so it gets encrypted before it goes anywhere near email. Set a password to lock it.",
-      tip: "<b>Why this step exists.</b> Excel's own AES-256 encryption travels with the file. The password is never typed into the email — the Fill Easy desk already holds it from onboarding.",
-      sub: function () { return state.encrypted ? "workbook encrypted · AES-256" : "waiting · file not yet encrypted"; },
+    { nav: "Encrypt", eyebrow: "Encrypt the file", title: "Lock the workbook before it travels",
+      you: "Set a password on the workbook — File → Info → Protect Workbook → Encrypt with Password.",
+      encNote: "Excel's AES-256 encryption travels with the file. The password is never typed into the email; the Fill Easy desk already holds it from onboarding.",
+      chips: ["AES-256", "Desk password"],
       stage: function () {
         if (state.encrypted) {
-          return '<p class="lede">The workbook is encrypted and ready to attach.</p>' +
-            '<div class="card gold"><header><h3>&#128274; Workbook encrypted</h3><span class="right">AES-256 &middot; ECMA-376 agile</span></header><div class="cb">' +
-              '<div class="encnote"><span class="lk">&#128274;</span><div>Opening <b>' + FILE + '</b> now requires the password. Anyone intercepting the email gets a file they cannot read.</div></div>' +
-              '<div class="grid2">' +
-                '<div class="field"><label>File</label><div class="mono" style="font-size:12.5px">' + FILE + '</div></div>' +
-                '<div class="field"><label>Password</label><div class="mono" style="font-size:12.5px">' + state.pw.replace(/./g, "&bull;") + ' <span style="color:var(--ink-3)">(' + state.pw.length + ' characters)</span></div></div>' +
-                '<div class="field"><label>Delivery of the key</label><div style="font-size:13px">Pre-registered desk password &mdash; not sent in the email</div></div>' +
-                '<div class="field"><label>Size</label><div class="mono" style="font-size:12.5px">18 KB</div></div>' +
-              '</div>' +
-              '<div class="btnrow"><button type="button" class="btn ghost sm" id="unencrypt">Change password</button></div>' +
-            '</div></div>' + sheet({ editable: false });
+          return '<div class="card gold"><div class="card-h"><h3>&#128274; Workbook encrypted</h3><span class="r">AES-256 &middot; ECMA-376 agile</span></div><div class="card-b">' +
+            '<div class="pairs">' +
+              '<div class="pair"><div class="k">File</div><div class="v mono" style="font-size:var(--f-sm)">' + FILE + '</div></div>' +
+              '<div class="pair"><div class="k">Password</div><div class="v mono">' + state.pw.replace(/./g, "&bull;") + ' <span style="color:var(--ink-3)">(' + state.pw.length + ')</span></div></div>' +
+              '<div class="pair"><div class="k">Key delivery</div><div class="v">Pre-registered desk password</div></div>' +
+              '<div class="pair"><div class="k">Size</div><div class="v mono">18 KB</div></div>' +
+            '</div>' +
+            '<div class="row" style="margin-top:18px"><button type="button" class="btn quiet sm" id="unencrypt">Change password</button></div>' +
+          '</div></div>' + sheet(false);
         }
-        return '<p class="lede">Encrypt the workbook before attaching it. In Excel this is <strong>File &rarr; Info &rarr; Protect Workbook &rarr; Encrypt with Password</strong>.</p>' +
-          '<div class="card"><header><h3>Encrypt with password</h3><span class="right">' + FILE + '</span></header><div class="cb" style="max-width:440px">' +
-            '<div class="field mono"><label for="pw1">Password <span class="req">*</span></label>' +
-              '<input type="text" id="pw1" autocomplete="off" spellcheck="false" placeholder="Enter a password">' +
-              '<span class="hint">Use the desk password already registered with Fill Easy.</span></div>' +
-            '<div class="field mono"><label for="pw2">Confirm password <span class="req">*</span></label>' +
-              '<input type="text" id="pw2" autocomplete="off" spellcheck="false" placeholder="Re-enter the password">' +
-              '<span class="err" id="pwErr"></span></div>' +
-            '<div class="btnrow"><button type="button" class="btn" id="doEnc">Encrypt workbook</button>' +
-            '<button type="button" class="btn ghost" id="genPw">Use desk password</button></div>' +
-          '</div></div>';
-      },
-      side: function () {
-        return tsteps([
-          { s: "done", l: "Template filled", d: (state.row[2] || "—") + " · row 3" },
-          { s: state.encrypted ? "done" : "active", l: "Encrypt workbook", d: state.encrypted ? "AES-256 · locked" : "awaiting password" },
-          { s: "wait", l: "Email to agent" },
-          { s: "wait", l: "Agent parses request" },
-          { s: "wait", l: "Results returned" }
-        ]) + pcard("Why encrypt this file", "Row 3 carries a mainland ID number, a bank account number, a phone number and a residential address. That is exactly the payload worth protecting in transit.");
+        return '<div class="card"><div class="card-h"><h3>Encrypt with password</h3><span class="r">' + FILE + '</span></div><div class="card-b"><div class="form">' +
+          '<div class="fld"><label for="pw1">Password <span class="rq">*</span></label>' +
+            '<input type="text" id="pw1" autocomplete="off" spellcheck="false" placeholder="Enter a password">' +
+            '<span class="hint">Use the desk password already registered with Fill Easy.</span></div>' +
+          '<div class="fld"><label for="pw2">Confirm password <span class="rq">*</span></label>' +
+            '<input type="text" id="pw2" autocomplete="off" spellcheck="false" placeholder="Re-enter the password">' +
+            '<span class="err" id="pwErr"></span></div>' +
+          '<div class="row"><button type="button" class="btn" id="doEnc">Encrypt workbook</button>' +
+          '<button type="button" class="btn quiet" id="genPw">Use desk password</button></div>' +
+        '</div></div></div>';
       }
     },
 
-    /* ---------- 3. Send ---------- */
-    { k: "Attach and send",
-      narr: "Attach the locked workbook and write the request the way you would to a colleague. There is no required format — the agent parses natural language.",
-      tip: "<b>Note the attachment chip.</b> It is gold, not green, and carries a lock: that is the demo showing you the file leaving encrypted.",
-      sub: state_sub_pending,
+    { nav: "Attach and send", eyebrow: "Attach and send", title: "One email, written like any other",
+      you: "Attach the locked workbook and write the request the way you would to a colleague. There is no required format.",
+      encNote: "The attachment leaves encrypted — the gold chip with the lock is the workbook in a state nobody in transit can read. The sender address must also be whitelisted with Fill Easy.",
+      chips: ["agent@ses.fill-easy.com", "1 encrypted attachment"],
       stage: function () {
-        return '<p class="lede">One email to <strong>' + AGENT_ADDR + '</strong> with the encrypted workbook attached.</p>' +
-          '<div class="mail">' +
-            '<div class="cfield"><span class="lb">To</span><span class="vl">' + AGENT_ADDR + '</span></div>' +
-            '<div class="cfield"><span class="lb">Subject</span><span class="vl pl">Background screening &mdash; BGS-2026-014 (China)</span></div>' +
-            attach([{ n: FILE, m: "18 KB &middot; encrypted &middot; password required", kind: "lock", enc: true }]) +
-            '<div class="mailbody">' +
-              '<div class="encnote"><span class="lk">&#128274;</span><div><b>Attached file is encrypted.</b> ' + FILE + ' is locked with AES-256. The Fill Easy desk opens it with the password registered at onboarding &mdash; the password is not written anywhere in this email.</div></div>' +
+        return '<div class="mail">' +
+          '<div class="m-fld"><span class="k">To</span><span class="v mono">' + AGENT_ADDR + '</span></div>' +
+          '<div class="m-fld"><span class="k">Subject</span><span class="v">Background screening &mdash; BGS-2026-014 (China)</span></div>' +
+          atts([{ n: FILE, m: "18 KB &middot; encrypted &middot; password required", enc: true }]) +
+          '<div class="m-body">' + requestBody() + '</div>' +
+          '<div class="m-foot"><button type="button" class="btn" id="sendBtn">' + (state.sent ? "Sent &#10003;" : "Send") + '</button>' +
+          '<span class="h">Plain language &middot; no template, no fixed syntax</span></div>' +
+        '</div>';
+      }
+    },
+
+    { nav: "Agent reads it", eyebrow: "Agent reads it", title: "The agent merges the sheet and the sentence",
+      you: "Nothing — the email is sent. Watch what the agent pulls out of it.",
+      bts: "The agent decrypts the attachment, reads row 3, and marks up the sentence. Two of the checks were asked for in prose and never appeared in column Q.",
+      chips: ["6 data fields", "1 condition", "confidence 0.95"],
+      stage: function () {
+        return '<div class="mail">' +
+            mailHead({ from: USER, subject: "Background screening — BGS-2026-014 (China)", time: "Tue 28 Jul, 09:12" }) +
+            atts([{ n: FILE, m: "opened with desk password", enc: true }]) +
+            '<div class="m-body hl">' +
+              '<div class="keyline"><span class="i"><span class="sw"></span> Extracted by the agent</span>' +
+              '<span class="i"><span class="sw g"></span> Encryption and handling</span></div>' +
               requestBody() +
             '</div>' +
-            '<div class="cfoot"><button type="button" class="btn" id="sendBtn">' + (state.sent ? "Sent &#10003;" : "Send") + '</button>' +
-            '<span class="badge b-gold">&#128274; 1 encrypted attachment</span>' +
-            '<span class="hint">Plain language &middot; no template, no fixed syntax</span></div>' +
-          '</div>';
-      },
-      side: function () {
-        return tsteps([
-          { s: "done", l: "Template filled", d: (state.row[2] || "—") + " · row 3" },
-          { s: "done", l: "Workbook encrypted", d: "AES-256 · 18 KB" },
-          { s: state.sent ? "done" : "active", l: "Email to agent", d: state.sent ? "sent · " + AGENT_ADDR : "composing" },
-          { s: "wait", l: "Agent parses request" },
-          { s: "wait", l: "Results returned" }
-        ]) + pcard("Sender must be whitelisted", "Fill Easy only accepts requests from addresses on the approved sender list. An unrecognised sender is rejected rather than processed.");
+          '</div>' +
+          '<div><h4 class="sec-h">Read from the attachment &mdash; row 3</h4><div class="card"><div class="card-b"><div class="pairs">' +
+            '<div class="pair"><div class="k">Internal reference</div><div class="v mono">' + (state.row[0] || "—") + '</div></div>' +
+            '<div class="pair"><div class="k">中文名 / Chinese Name</div><div class="v">' + (state.row[2] || "—") + '</div></div>' +
+            '<div class="pair"><div class="k">身份證號碼 / Mainland ID</div><div class="v mono" style="font-size:var(--f-sm)">' + (state.row[3] || "—") + ' <span class="tag t-ok">18 digits</span></div></div>' +
+            '<div class="pair"><div class="k">所需數據字段 / Requested fields</div><div class="v">' + (state.row[16] || "—") + '</div></div>' +
+          '</div></div></div></div>';
       }
     },
 
-    /* ---------- 4. Parse ---------- */
-    { k: "Agent reads it",
-      hl: true,
-      narr: "The agent decrypts the attachment, reads row 3, and marks up the sentence. Every highlight is a slot it filled — including the two extra checks asked for in prose that were never in column Q.",
-      tip: "<b>This is the point of the demo.</b> The workbook carries the structured identifiers; the email body carries the intent. The agent merges the two.",
-      sub: "parsing · individual_kyc · 0.95",
+    { nav: "Processing", eyebrow: "Processing reply", title: "Every data field gets its own request ID",
+      you: "Read the reply. Answer the clarification in the yellow column and send it back — nothing needs re-uploading.",
+      bts: "A partial failure shows up on its own line rather than sinking the whole order. Columns L and M were blank, so academic verification is raised rather than silently skipped.",
+      chips: ["6 processing", "1 clarification"],
       stage: function () {
-        return mailHead({ from: USER, to: AGENT_ADDR, subject: "Background screening — BGS-2026-014 (China)", time: "Tue 28 Jul, 09:12" }) +
-          attach([{ n: FILE, m: "18 KB &middot; encrypted &middot; opened with desk password", kind: "lock", enc: true }]) +
-          '<div style="padding:16px 0 0">' + legend() + '</div>' +
-          '<div class="mailbody hl" style="padding-left:0;padding-right:0">' + requestBody() + '</div>' +
-          '<div class="card"><header><h3>Attachment read</h3><span class="right">row 3 of Background_Screening_Orders</span></header><div class="cb">' +
-            '<div class="grid2">' +
-              '<div class="field"><label>Internal reference</label><div class="mono" style="font-size:12.5px">' + (state.row[0] || "—") + '</div></div>' +
-              '<div class="field"><label>中文名 / Chinese Name</label><div style="font-size:13.5px">' + (state.row[2] || "—") + '</div></div>' +
-              '<div class="field"><label>身份證號碼 / Mainland ID</label><div class="mono" style="font-size:12.5px">' + (state.row[3] || "—") + ' <span class="badge b-ok">18 digits</span></div></div>' +
-              '<div class="field"><label>所需數據字段 / Requested fields</label><div style="font-size:13.5px">' + (state.row[16] || "—") + '</div></div>' +
-            '</div>' +
-          '</div></div>';
-      },
-      side: function () {
-        return tsteps([
-          { s: "done", l: "Mail received", d: "sender whitelisted · 09:12:04" },
-          { s: "done", l: "Attachment decrypted", d: "desk password · AES-256" },
-          { s: "done", l: "Row parsed", d: "1 subject · mandatory fields present" },
-          { s: "active", l: "Request built", d: "6 data fields · 1 condition" },
-          { s: "wait", l: "Results returned" }
-        ]) + slotcard("Parsed request", [
-          { k: "subj", n: "subject", v: '<em>' + (state.row[2] || "—") + '</em> · row 3' },
-          { k: "subj", n: "region", v: '<em>China — CN</em> · automated market' },
-          { k: "id", n: "ref", v: '<em>' + (state.row[0] || "—") + '</em>' },
-          { k: "id", n: "id no.", v: '<em>' + (state.row[3] || "—") + '</em>' },
-          { k: "fld", n: "from Q", v: '<em>KYC1</em>, <em>KYC2</em>' },
-          { k: "fld", n: "from body", v: '<em>professional qualification</em>, <em>bank account</em>' },
-          { k: "fld", n: "condition", v: '<em>flag ID expiry ≤ 12 months</em>' },
-          { k: "sec", n: "security", v: '<em>encrypted in</em> → encrypted out' }
-        ]);
+        return '<div class="mail">' +
+          mailHead({ from: AGENT, subject: "Re: Background screening — BGS-2026-014 (China)", time: "Tue 28 Jul, 09:13" }) +
+          atts([{ n: "Disclaimer.txt", m: "743 bytes" }]) +
+          '<div class="m-body">' + feBlock([
+            { type: "clar", rows: [{ subject: (state.row[2] || "—") + " — Academic Credential",
+              issue: "Columns L and M (Academic Credential Number, Degree Number) are blank, so academic verification cannot run. Please advise how you'd like us to proceed." }] },
+            { title: "PROCESSING", rows: feRows("Processing") }
+          ]) + '</div></div>';
       }
     },
 
-    /* ---------- 5. Acknowledgement ---------- */
-    { k: "Processing reply",
-      narr: "The first reply comes back in the standard Fill Easy notification format: every data field becomes its own request ID, and anything ambiguous is raised as a clarification you answer in the yellow column.",
-      sub: "BGS-2026-014 · 6 processing · 1 clarification",
+    { nav: "Results", eyebrow: "Results returned", title: "Encrypted in, encrypted out",
+      you: "Open the results workbook with the same password you set in step 2.",
+      encNote: "Because the request arrived encrypted, the response leaves the same way — locked with the same desk password, never sent alongside the file.",
+      chips: ["6 of 6 completed", "China · under 5 min"],
       stage: function () {
-        return mailHead({ from: AGENT, to: "Matthew Lee", subject: "Re: Background screening — BGS-2026-014 (China)", time: "Tue 28 Jul, 09:13" }) +
-          attach([{ n: "Disclaimer.txt", m: "743 bytes", kind: "txt" }]) +
-          '<div class="mailbody">' + feBlock([
-            { type: "clar", rows: [
-              { subject: "李慧敏 — Academic Credential", issue: "Columns L and M (Academic Credential Number, Degree Number) are blank, so academic verification cannot run. Please advise how you'd like us to proceed." }
-            ] },
-            { title: "PROCESSING", rows: [
-              { id: "BGS_7hK2xQm4Rt", ref: "BGS-2026-014", subject: "李慧敏", doc: "Mainland ID Verification", status: "Processing" },
-              { id: "BGS_c4Vn8sLpZa", ref: "BGS-2026-014", subject: "李慧敏", doc: "ID Card Validity & Expiry", status: "Processing" },
-              { id: "BGS_Wq3TbY9dEu", ref: "BGS-2026-014", subject: "李慧敏", doc: "Mainland Phone Verification", status: "Processing" },
-              { id: "BGS_Lm6Xz1PkHc", ref: "BGS-2026-014", subject: "李慧敏", doc: "Mainland Bank Account Verification", status: "Processing" },
-              { id: "BGS_Rd9Fj5NwSv", ref: "BGS-2026-014", subject: "李慧敏", doc: "Professional Qualification", status: "Processing" },
-              { id: "BGS_Tz2Gh7BqMx", ref: "BGS-2026-014", subject: "李慧敏", doc: "Address Verification", status: "Processing" }
-            ] }
-          ]) + '</div>';
-      },
-      side: function () {
-        return tsteps([
-          { s: "done", l: "Request built", d: "6 data fields" },
-          { s: "done", l: "Acknowledgement sent", d: "09:13:11 · Disclaimer.txt" },
-          { s: "active", l: "Retrieving", d: "China — automated market · under 5 min" },
-          { s: "wait", l: "Results returned" }
-        ]) + pcard("One request ID per data field", "Each row in the workbook fans out into a request per data field, so a partial failure is visible on its own line rather than sinking the whole order.") +
-        pcard("Clarifications are conversational", "Answer in the yellow <i>Your reply</i> column and send it back. Nothing needs to be re-uploaded.");
-      }
-    },
+        var mail = '<div class="mail">' +
+          mailHead({ from: AGENT, subject: "Re: Background screening — BGS-2026-014 (China)", time: "Tue 28 Jul, 09:17" }) +
+          atts([{ n: "Disclaimer.txt", m: "743 bytes" },
+                { n: RESULTS_FILE, m: "24 KB &middot; encrypted &middot; same desk password", enc: true }]) +
+          '<div class="m-body">' + feBlock([{ title: "ORDER SUCCESS", rows: feRows("Completed") }]) + '</div></div>';
 
-    /* ---------- 6. Results ---------- */
-    { k: "Results returned",
-      narr: "Results come back on the same thread, in the same notification format, with the verification outcomes attached as an encrypted workbook — locked with the same desk password the request arrived under.",
-      tip: "<b>Encrypted in, encrypted out.</b> Because the request arrived encrypted, the response leaves the same way. Unlock it below with the password you set in step 2.",
-      sub: "BGS-2026-014 · complete",
-      stage: function () {
-        var body = mailHead({ from: AGENT, to: "Matthew Lee", subject: "Re: Background screening — BGS-2026-014 (China)", time: "Tue 28 Jul, 09:17" }) +
-          attach([
-            { n: "Disclaimer.txt", m: "743 bytes", kind: "txt" },
-            { n: RESULTS_FILE, m: "24 KB &middot; encrypted &middot; same desk password", kind: "lock", enc: true }
-          ]) +
-          '<div class="mailbody">' + feBlock([
-            { title: "ORDER SUCCESS", rows: [
-              { id: "BGS_7hK2xQm4Rt", ref: "BGS-2026-014", subject: "李慧敏", doc: "Mainland ID Verification", status: "Completed" },
-              { id: "BGS_c4Vn8sLpZa", ref: "BGS-2026-014", subject: "李慧敏", doc: "ID Card Validity & Expiry", status: "Completed" },
-              { id: "BGS_Wq3TbY9dEu", ref: "BGS-2026-014", subject: "李慧敏", doc: "Mainland Phone Verification", status: "Completed" },
-              { id: "BGS_Lm6Xz1PkHc", ref: "BGS-2026-014", subject: "李慧敏", doc: "Mainland Bank Account Verification", status: "Completed" },
-              { id: "BGS_Rd9Fj5NwSv", ref: "BGS-2026-014", subject: "李慧敏", doc: "Professional Qualification", status: "Completed" },
-              { id: "BGS_Tz2Gh7BqMx", ref: "BGS-2026-014", subject: "李慧敏", doc: "Address Verification", status: "Completed" }
-            ] }
-          ]) + '</div>';
-
-        var wb = '<div class="card' + (state.unlocked ? "" : " gold") + '"><header><h3>' + (state.unlocked ? "Results workbook" : "&#128274; Results workbook is encrypted") + '</h3>' +
-          '<span class="right mono" style="font-size:11.5px">' + RESULTS_FILE + '</span></header><div class="cb">';
+        var wb;
         if (!state.unlocked) {
-          wb += '<div class="encnote"><span class="lk">&#128274;</span><div>Excel is asking for the open password. It is the same desk password the request was sent under.</div></div>' +
-            '<div style="max-width:360px"><div class="field mono"><label for="openPw">Password</label>' +
-            '<input type="text" id="openPw" autocomplete="off" spellcheck="false" placeholder="Enter the password"><span class="err" id="openErr"></span></div>' +
-            '<div class="btnrow"><button type="button" class="btn" id="openGo">Open workbook</button>' +
-            '<button type="button" class="btn ghost" id="openHint">Use desk password</button></div></div>';
+          wb = '<div class="card gold"><div class="card-h"><h3>&#128274; Results workbook is encrypted</h3></div><div class="card-b"><div class="form">' +
+            '<div class="fld"><label for="openPw">Open password</label>' +
+            '<input type="text" id="openPw" autocomplete="off" spellcheck="false" placeholder="Enter the password">' +
+            '<span class="hint">' + (state.pw ? "The password you set in step 2." : "Set a password in step 2 first.") + '</span>' +
+            '<span class="err" id="openErr"></span></div>' +
+            '<div class="row"><button type="button" class="btn" id="openGo">Open workbook</button>' +
+            '<button type="button" class="btn quiet" id="openHint">Use desk password</button></div></div></div></div>';
         } else {
-          wb += '<div class="xlscroll"><table class="fetbl"><thead><tr><th>Data field</th><th>Result</th><th>Detail</th></tr></thead><tbody>' +
-            '<tr><td>Mainland ID Verification</td><td><span class="badge b-ok">Verified</span></td><td>Name and ID number match the registry record for ' + (state.row[2] || "—") + '.</td></tr>' +
-            '<tr><td>ID Card Validity &amp; Expiry</td><td><span class="badge b-gold">Flagged</span></td><td>Valid, expires 2038-03-05 — outside the 12-month window you asked to be flagged, so no action needed.</td></tr>' +
-            '<tr><td>Mainland Phone Verification</td><td><span class="badge b-ok">Verified</span></td><td>Number is active and registered to the same name.</td></tr>' +
-            '<tr><td>Mainland Bank Account</td><td><span class="badge b-ok">Verified</span></td><td>Account holder name matches; three-element check passed.</td></tr>' +
-            '<tr><td>Professional Qualification</td><td><span class="badge b-ok">Verified</span></td><td>Certificate JS20190447 confirmed as current.</td></tr>' +
-            '<tr><td>Address Verification</td><td><span class="badge b-ok">Verified</span></td><td>Address consistent with the registered residential record.</td></tr>' +
-            '<tr><td>Academic Credential</td><td><span class="badge b-mut">Not run</span></td><td>Columns L and M were blank — raised as a clarification on the previous email.</td></tr>' +
-            '</tbody></table></div>';
+          wb = '<div class="card"><div class="card-h"><h3>Results workbook</h3><span class="r mono">' + RESULTS_FILE + '</span></div>' +
+            '<div style="overflow-x:auto;padding:14px 6px 6px"><table class="res"><thead><tr><th>Data field</th><th>Result</th><th>Detail</th></tr></thead><tbody>' +
+            '<tr><td class="f">Mainland ID Verification</td><td><span class="tag t-ok">Verified</span></td><td class="d">Name and ID number match the registry record for ' + (state.row[2] || "—") + '.</td></tr>' +
+            '<tr><td class="f">ID Card Validity &amp; Expiry</td><td><span class="tag t-gold">Flagged</span></td><td class="d">Valid, expires 2038-03-05 — outside the 12-month window you asked to be flagged, so no action needed.</td></tr>' +
+            '<tr><td class="f">Mainland Phone Verification</td><td><span class="tag t-ok">Verified</span></td><td class="d">Number is active and registered to the same name.</td></tr>' +
+            '<tr><td class="f">Mainland Bank Account</td><td><span class="tag t-ok">Verified</span></td><td class="d">Account holder name matches; three-element check passed.</td></tr>' +
+            '<tr><td class="f">Professional Qualification</td><td><span class="tag t-ok">Verified</span></td><td class="d">Certificate JS20190447 confirmed as current.</td></tr>' +
+            '<tr><td class="f">Address Verification</td><td><span class="tag t-ok">Verified</span></td><td class="d">Address consistent with the registered residential record.</td></tr>' +
+            '<tr><td class="f">Academic Credential</td><td><span class="tag t-mut">Not run</span></td><td class="d">Columns L and M were blank — raised as a clarification on the previous email.</td></tr>' +
+            '</tbody></table></div></div>';
         }
-        wb += '</div></div>';
-        return body + wb;
-      },
-      side: function () {
-        return tsteps([
-          { s: "done", l: "Retrieval complete", d: "6 of 6 requested fields" },
-          { s: "done", l: "Results encrypted", d: "same desk password" },
-          { s: "done", l: "Delivered", d: "09:17 · 2 attachments" },
-          { s: state.unlocked ? "done" : "active", l: state.unlocked ? "Workbook opened" : "Awaiting open", d: state.unlocked ? "09:19 · logged" : "password required" }
-        ]) + pcard("Password (demo)", state.pw
-          ? 'You set: <span class="mono">' + state.pw + '</span> — or press <b>Use desk password</b>.'
-          : 'Go back to step 2 and set a password first.');
+        return mail + wb;
       }
     },
 
-    /* ---------- 7. Converse ---------- */
-    { k: "Reply in plain English",
-      hl: true,
-      narr: "Follow-ups are just replies. No new workbook, no re-upload — the agent carries the subject from the thread, highlights the new ask, and returns the extra field.",
-      sub: "BGS-2026-014-A · follow-up complete",
+    { nav: "Follow up", eyebrow: "Reply in plain English", title: "Follow-ups are just replies",
+      you: "Reply on the thread in ordinary words. No new workbook, no re-upload.",
+      bts: "The agent resolves “her” to the subject from the thread and reads column O from the workbook it already holds. The academic credential is raised again rather than quietly dropped.",
+      chips: ["1 added check", "no re-upload", "same key"],
       stage: function () {
-        return mailHead({ from: AGENT, to: "Matthew Lee", subject: "Re: Background screening — BGS-2026-014 (China)", time: "Tue 28 Jul, 09:41" }) +
-          attach([{ n: "Disclaimer.txt", m: "743 bytes", kind: "txt" },
-                  { n: "KYC_Screening_Results_BGS-2026-014-A.xlsx", m: "9 KB &middot; encrypted &middot; same password", kind: "lock", enc: true }]) +
-          '<div class="mailbody">' + feBlock([
-            { title: "ORDER SUCCESS", rows: [
-              { id: "BGS_Yp8Kc3RmTn", ref: "BGS-2026-014-A", subject: "李慧敏", doc: "Driver's License Verification", status: "Completed" }
-            ] },
-            { type: "clar", rows: [
-              { subject: "李慧敏 — Academic Credential", issue: "Still outstanding from the original order. Send the certificate number for column L and we will run it on this thread." }
-            ] }
-          ]) +
-          '<div class="quoted"><div class="qh">On Tue 28 Jul at 09:38, Matthew Lee wrote:</div>' +
-          '<p>Thanks &mdash; that all looks fine. One more thing: can you also check ' + sl("fld", "FLD", "her driving licence") + '? ' +
-          'The number is in ' + sl("id", "COL", "column O") + ' of the sheet I sent. ' +
-          sl("sec", "ENC", "Same encryption please") + ', and no need to re-run anything else.</p></div>' +
-          '</div>';
-      },
-      side: function () {
-        return tsteps([
-          { s: "done", l: "Reply parsed", d: "follow_up · confidence 0.93" },
-          { s: "done", l: "Subject carried from thread", d: '"her" → ' + (state.row[2] || "—") },
-          { s: "done", l: "Column O read from stored file", d: "no re-upload needed" },
-          { s: "done", l: "Delta result encrypted & sent", d: "09:41 · same key" }
-        ]) + slotcard("Parsed follow-up", [
-          { k: "subj", n: "subject", v: '<em>her</em> → ' + (state.row[2] || "—") + ' (from thread)' },
-          { k: "fld", n: "add", v: '<em>driving licence</em> → column O' },
-          { k: "id", n: "source", v: '<em>column O</em> of the stored workbook' },
-          { k: "sec", n: "security", v: '<em>same encryption</em> · key reused' },
-          { k: "fld", n: "scope", v: 'nothing else re-run' }
-        ]);
+        return '<div class="mail">' +
+            mailHead({ from: AGENT, subject: "Re: Background screening — BGS-2026-014 (China)", time: "Tue 28 Jul, 09:41" }) +
+            atts([{ n: "Disclaimer.txt", m: "743 bytes" },
+                  { n: "KYC_Screening_Results_BGS-2026-014-A.xlsx", m: "9 KB &middot; encrypted &middot; same password", enc: true }]) +
+            '<div class="m-body">' + feBlock([
+              { title: "ORDER SUCCESS", rows: [{ id: "BGS_Yp8Kc3RmTn", ref: "BGS-2026-014-A", subject: state.row[2] || "—", doc: "Driver's License Verification", status: "Completed" }] },
+              { type: "clar", rows: [{ subject: (state.row[2] || "—") + " — Academic Credential",
+                issue: "Still outstanding from the original order. Send the certificate number for column L and we will run it on this thread." }] }
+            ]) + '</div>' +
+          '</div>' +
+          '<div><h4 class="sec-h">The reply that triggered it</h4><div class="card"><div class="card-b"><div class="quote hl"><div class="qh">Tue 28 Jul, 09:38 &mdash; Matthew Lee</div>' +
+          '<p style="margin:0">Thanks &mdash; that all looks fine. One more thing: can you also check ' + x("her driving licence") + '? ' +
+          'The number is in ' + x("column O") + ' of the sheet I sent. ' + x("Same encryption please", "enc") + ', and no need to re-run anything else.</p>' +
+          '</div></div></div></div>';
       }
     }
   ];
-
-  function state_sub_pending() { return state.sent ? "sent · awaiting agent" : "composing · not sent"; }
 
   /* ==========================================================
      State + render
      ========================================================== */
   var state = { i: 0, row: FILLED.slice(), pw: "", encrypted: false, sent: false, unlocked: false, touched: false };
-  var DESK_PW = "FE-Desk-2026-CN";
-  var lastKey = null;
-
-  /* start with the editable cells empty so filling is a real action */
   Object.keys(EDITABLE).forEach(function (i) { state.row[i] = ""; });
+  var lastStep = null, timer = null;
 
   var el = {
-    stepper: document.getElementById("stepper"),
-    stage: document.getElementById("stage"),
-    inner: document.getElementById("stageinner"),
-    side: document.getElementById("sidebody"),
-    sideSub: document.getElementById("sideSub"),
-    coachStep: document.getElementById("coachStep"),
-    coachText: document.getElementById("coachText"),
-    coachTip: document.getElementById("coachTip"),
-    navCount: document.getElementById("navCount"),
-    prev: document.getElementById("prevBtn"),
-    next: document.getElementById("nextBtn"),
-    restart: document.getElementById("restartBtn"),
-    fileState: document.getElementById("fileState")
+    flow: document.getElementById("flowIn"), stage: document.getElementById("stage"),
+    info: document.getElementById("info"), prev: document.getElementById("prevBtn"),
+    next: document.getElementById("nextBtn"), play: document.getElementById("playBtn"),
+    playIcon: document.getElementById("playIcon"), playText: document.getElementById("playText")
   };
+
+  function infoCard(s) {
+    var blocks = '<div class="blk you"><div class="lb">What you do</div><p>' + s.you + '</p></div>';
+    if (s.bts) blocks += '<div class="blk"><div class="lb">Behind the scenes</div><p>' + s.bts + '</p></div>';
+    if (s.encNote) blocks += '<div class="blk enc"><div class="lb">&#128274; Encryption</div><p>' + s.encNote + '</p></div>';
+    return '<div class="info-top"><span class="eyebrow">' + s.eyebrow + '</span>' +
+      '<span class="ct">' + (state.i + 1) + ' / ' + STEPS.length + '</span></div>' +
+      '<div class="bar">' + STEPS.map(function (_, i) { return '<i class="' + (i <= state.i ? "on" : "") + '"></i>'; }).join("") + '</div>' +
+      '<h2>' + s.title + '</h2>' + blocks +
+      '<div class="chips">' + s.chips.map(function (c) { return '<span class="chip' + (c.indexOf("@") > -1 ? " mono" : "") + '">' + c + '</span>'; }).join("") + '</div>';
+  }
 
   function render() {
     var s = STEPS[state.i];
 
-    el.stepper.innerHTML = STEPS.map(function (st, i) {
-      var t = i < state.i ? "done" : (i === state.i ? "current" : "todo");
-      return '<button type="button" class="step" role="tab" data-i="' + i + '" data-state="' + t + '" aria-selected="' + (i === state.i) + '">' +
-        '<span class="n">' + (i + 1) + '</span><span class="t">' + st.k + '</span></button>';
+    el.flow.innerHTML = STEPS.map(function (st, i) {
+      var t = i < state.i ? "done" : (i === state.i ? "now" : "todo");
+      return '<button type="button" class="pill" data-i="' + i + '" data-s="' + t + '">' +
+        '<span class="n">' + (i + 1) + '</span>' + st.nav + '</button>';
     }).join("");
 
-    el.inner.innerHTML = s.stage();
-    el.inner.classList.toggle("hl", !!s.hl);
-    el.side.innerHTML = s.side();
-    el.sideSub.textContent = typeof s.sub === "function" ? s.sub() : s.sub;
+    el.stage.innerHTML = s.stage();
+    el.info.innerHTML = infoCard(s);
 
-    el.coachStep.textContent = "Step " + (state.i + 1) + " of " + STEPS.length + " · " + s.k;
-    el.coachText.textContent = s.narr;
-    if (s.tip) { el.coachTip.innerHTML = s.tip; el.coachTip.hidden = false; } else { el.coachTip.hidden = true; }
-
-    el.navCount.textContent = (state.i + 1) + " / " + STEPS.length;
     el.prev.disabled = state.i === 0;
     el.next.disabled = state.i === STEPS.length - 1;
 
-    el.fileState.className = "badge " + (state.encrypted ? "b-gold" : (validation().pass ? "b-ok" : "b-mut"));
-    el.fileState.innerHTML = state.encrypted ? "&#128274; Workbook encrypted" : (validation().pass ? "Row 3 ready" : "Template not filled");
-
-    var key = String(state.i);
-    if (key !== lastKey) { lastKey = key; el.stage.scrollTop = 0; }
-
+    if (lastStep !== state.i) {
+      lastStep = state.i;
+      var p = el.flow.querySelector('.pill[data-s="now"]');
+      if (p && p.scrollIntoView) p.scrollIntoView({ block: "nearest", inline: "center" });
+    }
     wire();
   }
 
   function wire() {
-    /* stepper */
-    Array.prototype.forEach.call(document.querySelectorAll(".step"), function (b) {
-      b.addEventListener("click", function () { state.i = Number(b.getAttribute("data-i")); render(); });
+    Array.prototype.forEach.call(document.querySelectorAll(".pill"), function (b) {
+      b.addEventListener("click", function () { stop(); state.i = Number(b.getAttribute("data-i")); render(); });
     });
 
-    /* editable spreadsheet cells — update without re-rendering, to keep the caret */
-    Array.prototype.forEach.call(document.querySelectorAll(".cell-edit"), function (td) {
+    Array.prototype.forEach.call(document.querySelectorAll(".ed"), function (td) {
       td.addEventListener("input", function () {
         state.row[Number(td.getAttribute("data-i"))] = td.textContent.trim();
-        var v = validation();
-        var badge = document.getElementById("rowBadge");
-        if (badge) { badge.className = "badge " + (v.pass ? "b-ok" : "b-mut"); badge.textContent = v.pass ? "Row 3 valid" : "Row 3 incomplete"; }
-        var panel = el.side.querySelector(".pcard .pb");
-        if (panel) panel.innerHTML = v.html;
-        el.fileState.className = "badge " + (v.pass ? "b-ok" : "b-mut");
-        el.fileState.innerHTML = v.pass ? "Row 3 ready" : "Template not filled";
+        var host = el.stage.querySelector(".card-b");
+        if (host) host.innerHTML = validation().html;
       });
       td.addEventListener("blur", function () { state.touched = true; });
     });
 
-    var fs = document.getElementById("fillSample");
-    if (fs) fs.addEventListener("click", function () {
-      Object.keys(EDITABLE).forEach(function (i) { state.row[i] = FILLED[i]; });
-      state.touched = true; render();
-    });
-    var cr = document.getElementById("clearRow");
-    if (cr) cr.addEventListener("click", function () {
+    var f = document.getElementById("fillSample");
+    if (f) f.addEventListener("click", function () { fillRow(); render(); });
+    var c = document.getElementById("clearRow");
+    if (c) c.addEventListener("click", function () {
       Object.keys(EDITABLE).forEach(function (i) { state.row[i] = ""; });
       state.touched = true; render();
     });
 
-    /* encryption */
-    var doEnc = document.getElementById("doEnc");
-    if (doEnc) doEnc.addEventListener("click", function () {
+    var enc = document.getElementById("doEnc");
+    if (enc) enc.addEventListener("click", function () {
       var a = document.getElementById("pw1").value.trim(), b = document.getElementById("pw2").value.trim();
-      var err = document.getElementById("pwErr");
-      if (!a) { err.textContent = "Enter a password to encrypt the workbook."; return; }
-      if (a !== b) { err.textContent = "The two passwords do not match."; return; }
+      var e = document.getElementById("pwErr");
+      if (!a) { e.textContent = "Enter a password to encrypt the workbook."; return; }
+      if (a !== b) { e.textContent = "The two passwords do not match."; return; }
       state.pw = a; state.encrypted = true; render();
     });
-    var gen = document.getElementById("genPw");
-    if (gen) gen.addEventListener("click", function () {
+    var g = document.getElementById("genPw");
+    if (g) g.addEventListener("click", function () {
       document.getElementById("pw1").value = DESK_PW;
       document.getElementById("pw2").value = DESK_PW;
       document.getElementById("pwErr").textContent = "";
     });
-    var un = document.getElementById("unencrypt");
-    if (un) un.addEventListener("click", function () { state.encrypted = false; state.unlocked = false; render(); });
+    var u = document.getElementById("unencrypt");
+    if (u) u.addEventListener("click", function () { state.encrypted = false; state.unlocked = false; render(); });
 
-    /* send */
     var sb = document.getElementById("sendBtn");
-    if (sb) sb.addEventListener("click", function () { state.sent = true; state.i = Math.min(STEPS.length - 1, state.i + 1); render(); });
+    if (sb) sb.addEventListener("click", function () { state.sent = true; step(1); });
 
-    /* open results workbook */
-    var og = document.getElementById("openGo"), oi = document.getElementById("openPw"), oe = document.getElementById("openErr");
+    var go = document.getElementById("openGo"), inp = document.getElementById("openPw"), er = document.getElementById("openErr");
     function tryOpen() {
-      if (!oi) return;
-      if (state.pw && oi.value.trim() === state.pw) { state.unlocked = true; render(); }
-      else { oe.textContent = oi.value.trim() ? "That password does not open this workbook." : "Enter the password you set in step 2."; oi.focus(); }
+      if (!inp) return;
+      if (state.pw && inp.value.trim() === state.pw) { state.unlocked = true; render(); }
+      else { er.textContent = inp.value.trim() ? "That password does not open this workbook." : "Enter the password you set in step 2."; inp.focus(); }
     }
-    if (og) og.addEventListener("click", tryOpen);
-    if (oi) oi.addEventListener("keydown", function (e) { if (e.key === "Enter") tryOpen(); });
+    if (go) go.addEventListener("click", tryOpen);
+    if (inp) inp.addEventListener("keydown", function (e) { if (e.key === "Enter") tryOpen(); });
     var oh = document.getElementById("openHint");
-    if (oh) oh.addEventListener("click", function () { oi.value = state.pw || DESK_PW; tryOpen(); });
+    if (oh) oh.addEventListener("click", function () { inp.value = state.pw || DESK_PW; tryOpen(); });
   }
 
-  function step(d) { state.i = Math.max(0, Math.min(STEPS.length - 1, state.i + d)); render(); }
+  function fillRow() { Object.keys(EDITABLE).forEach(function (i) { state.row[i] = FILLED[i]; }); state.touched = true; }
+
+  /* auto-play fills in whatever the step needs so the walkthrough runs clean */
+  function autoAdvance() {
+    if (state.i === 0) fillRow();
+    if (state.i === 1) { state.pw = state.pw || DESK_PW; state.encrypted = true; }
+    if (state.i === 2) state.sent = true;
+    if (state.i === 5) state.unlocked = true;
+    if (state.i >= STEPS.length - 1) { stop(); render(); return; }
+    state.i++; render();
+  }
+
+  function play() {
+    if (state.i >= STEPS.length - 1) { state.i = 0; }
+    timer = setInterval(autoAdvance, 4200);
+    el.playIcon.innerHTML = "&#10073;&#10073;";
+    el.playText.textContent = "Pause";
+    render();
+  }
+  function stop() {
+    if (timer) { clearInterval(timer); timer = null; }
+    el.playIcon.innerHTML = "&#9654;";
+    el.playText.textContent = "Auto-play";
+  }
+  el.play.addEventListener("click", function () { timer ? stop() : play(); });
+
+  function step(d) { stop(); state.i = Math.max(0, Math.min(STEPS.length - 1, state.i + d)); render(); }
   el.next.addEventListener("click", function () { step(1); });
   el.prev.addEventListener("click", function () { step(-1); });
-  el.restart.addEventListener("click", function () {
-    state = { i: 0, row: FILLED.slice(), pw: "", encrypted: false, sent: false, unlocked: false, touched: false };
-    Object.keys(EDITABLE).forEach(function (i) { state.row[i] = ""; });
-    lastKey = null; render();
-  });
 
   document.addEventListener("keydown", function (e) {
     if (e.target && (/^(INPUT|TEXTAREA)$/.test(e.target.tagName) || e.target.isContentEditable)) return;

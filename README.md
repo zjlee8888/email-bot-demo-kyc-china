@@ -38,7 +38,8 @@ prose and never appeared in column Q.
 - **Step 2** — set a password (mismatch is rejected), or press **Use desk password**.
 - **Step 3** — **Send** advances the demo.
 - **Step 6** — the returned workbook opens only against the password you set in step 2.
-- **Next / Back**, the numbered stepper, or the **← →** arrow keys navigate. **◐** switches
+- **Auto-play** runs the whole walkthrough on a timer, filling in each step's input as it goes.
+  The **‹ ›** controls, the step pills, or the **← →** arrow keys navigate manually. **◐** switches
   light and dark; the page follows the OS setting on load.
 
 ## Viewing it
@@ -53,14 +54,17 @@ branch with folder `/ (root)`. `index.html` is at the root, so it serves directl
 
 - **`KYC1` / `KYC2`** appear as the codes the template uses. Their definitions weren't in the
   supplied documents, so the demo passes them through rather than inventing what they expand to.
-- **Styling reference.** The brief was to mirror the component style of
-  `fill-easy-limited.github.io/prudential-demo-china-login`. That site was unreachable from
-  the build environment (network policy blocks all outbound browsing), so the chrome is built
-  in a form-first idiom — card panels, labelled inputs, numbered stepper, prominent primary
-  button — with a deliberately different palette: petrol `#0B5C63` primary, amber `#8A6108`
-  reserved for encryption state, green `#2C6E49` for verified. The agent notification block is
-  *not* restyled; it reproduces the real template. Point me at that CSS and the chrome can be
-  trued up to it.
+- **Styling reference.** The layout follows the component idiom of the myPrudential Mainland China
+  Verification demo: centered hero, a scrollable row of step pills with the active one filled,
+  white cards floating on a tinted ground with soft shadows rather than hairline borders, fully
+  rounded controls, and a single right-hand explanation card carrying an eyebrow pill, a segmented
+  progress bar, and tinted `WHAT YOU DO` / `BEHIND THE SCENES` blocks. Colours are deliberately
+  different from Prudential red: petrol `#0B5C63` takes the active/primary role, amber `#8A6108`
+  is reserved for encryption state, green `#2C6E49` for verified. The site itself could not be
+  reached from the build environment, so this was matched from a screenshot — the source CSS would
+  let it be trued up exactly.
+- **The agent notification block is not restyled.** The black `Fill Easy` / `Automated Notification`
+  bar and its tables reproduce the real product email, so they deliberately sit outside the palette.
 - Subject data (李慧敏, IDs, bank and certificate numbers) is fabricated. The `.example`
   sender domain is reserved for documentation. There is no mail server, no data source and no
   encryption actually running behind the UI.
