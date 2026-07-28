@@ -18,26 +18,28 @@ Built from two supplied sources:
 
 | # | Step | What happens |
 |---|---|---|
-| 1 | Fill the template | Complete row 3 of `Background_Screening_Orders`. Mandatory: 中文名 and the 18-digit 身份證號碼. Column Q says which data fields you want. |
+| 1 | Fill the template | Fill rows 3–5 of `Background_Screening_Orders`, one per subject. Mandatory: 中文名 and the 18-digit 身份證號碼. Column Q sets the scope per person. |
 | 2 | Encrypt the file | Set a password. The workbook is locked with AES-256 before it goes near email. |
-| 3 | Attach and send | One email to `agent@ses.fill-easy.com` with the encrypted workbook attached, written in plain language. |
-| 4 | Agent reads it | The agent decrypts the attachment, reads row 3, and highlights the request in the email body. |
-| 5 | Processing reply | Standard Fill Easy notification: one request ID per data field, plus a clarification for the blank academic-credential columns. |
-| 6 | Results returned | `ORDER SUCCESS` with verification outcomes, delivered as an encrypted workbook — same password. |
-| 7 | Reply in plain English | A follow-up reply adds the driving-licence check. No re-upload; the agent carries the subject from the thread. |
+| 3 | Attach and send | One email to `agent@ses.fill-easy.com` covering the whole batch, written in plain language. |
+| 4 | Processed | The acknowledgement returns automatically: one request ID per data field per subject, plus a clarification for the blank academic-credential columns. |
+| 5 | Results returned | `ORDER SUCCESS` with verification outcomes as an encrypted workbook, plus a downloadable summary report. |
+| 6 | Reply in plain English | A follow-up reply adds the driving-licence check. No re-upload, same thread. |
 
-The point of the demo is the split between the two inputs: **the workbook carries the
-structured identifiers, the email body carries the intent**, and the agent merges them. The
-two extra checks in step 4 (professional qualification, bank account) were asked for in
-prose and never appeared in column Q.
+One email covers three subjects, and the results come back per data field per person — so a
+single flagged bank account shows on its own line instead of sinking the batch.
 
 ## Interactions
 
-- **Step 1** — four cells in row 3 are editable. Type into them and validation updates live,
-  including the 18-digit mainland ID rule. **Fill sample row** completes it for you.
+- **Step 1** — the grid opens on 7 key columns with **Show all 18 columns** to expand. Row 5's
+  name and ID cells are editable; validation updates live per row, including the 18-digit
+  mainland ID rule. **Fill row 5** completes it for you.
 - **Step 2** — set a password (mismatch is rejected), or press **Use desk password**.
 - **Step 3** — **Send** advances the demo.
-- **Step 6** — the returned workbook opens only against the password you set in step 2.
+- **Step 5** — the returned workbook opens only against the password you set in step 2.
+  **Download summary report** produces a self-contained HTML report (print it to PDF) and
+  **Download CSV** the same data for Excel. The guide documents the Summary Report as a real
+  Fill Easy feature, requested with *"Please also generate a summary report"* — which is what
+  the demo email says.
 - **Auto-play** runs the whole walkthrough on a timer, filling in each step's input as it goes.
   The **‹ ›** controls, the step pills, or the **← →** arrow keys navigate manually. **◐** switches
   light and dark; the page follows the OS setting on load.

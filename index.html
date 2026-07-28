@@ -18,28 +18,28 @@
 :root {
   color-scheme: light dark;
 
-  --paper:      #F1F5F5;
+  --paper:      #EDF2F2;
   --surface:    #FFFFFF;
-  --surface-2:  #F6F9F9;
-  --line:       #E6ECEC;
-  --line-2:     #D3DDDE;
+  --surface-2:  #F3F8F8;
+  --line:       #DFE8E8;
+  --line-2:     #C6D4D5;
 
-  --ink:        #0F1A1C;
-  --ink-2:      #5A6B6E;
-  --ink-3:      #8A9A9D;
+  --ink:        #0A1517;
+  --ink-2:      #48595C;
+  --ink-3:      #77898C;
 
-  --accent:     #0B5C63;
-  --accent-2:   #084A50;
-  --accent-sf:  #E4EFF0;
+  --accent:     #0A7A85;
+  --accent-2:   #065C64;
+  --accent-sf:  #D6EFF1;
 
-  --gold:       #8A6108;
-  --gold-sf:    #FBF2DE;
-  --gold-line:  #E7D3A2;
+  --gold:       #A8710A;
+  --gold-sf:    #FDF1D8;
+  --gold-line:  #E6C173;
 
-  --ok:         #2C6E49;
-  --ok-sf:      #E4EFE8;
-  --crit:       #A33A31;
-  --crit-sf:    #F9E9E7;
+  --ok:         #1F7A45;
+  --ok-sf:      #DAF0E2;
+  --crit:       #BE3428;
+  --crit-sf:    #FBE3E0;
 
   /* Fill Easy notification block — reproduces the product email */
   --fe-bar:  #1C1C1C;  --fe-bar-tx: #FFFFFF;
@@ -61,34 +61,34 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --paper:#0B1113; --surface:#161F21; --surface-2:#1C2629; --line:#263235; --line-2:#38484B;
-    --ink:#E4EBEC; --ink-2:#9FAEB0; --ink-3:#76868A;
-    --accent:#63ADB4; --accent-2:#8FCACF; --accent-sf:#123236;
-    --gold:#D7A54E; --gold-sf:#2C2413; --gold-line:#5F4D1F;
-    --ok:#6DBA8E; --ok-sf:#152C20; --crit:#DF8C83; --crit-sf:#331D1B;
-    --fe-bar:#000000; --fe-cell:#161F21; --fe-head:#1C2629; --fe-line:#263235;
-    --fe-tx:#E4EBEC; --fe-mut:#8C9A9D; --fe-yellow:#3A3216; --fe-red:#E08379;
+    --paper:#081012; --surface:#121B1D; --surface-2:#182325; --line:#243235; --line-2:#38494C;
+    --ink:#E8F0F1; --ink-2:#A3B3B5; --ink-3:#7A8C8F;
+    --accent:#2FC2CE; --accent-2:#6FDAE3; --accent-sf:#0D3438;
+    --gold:#E0AC4E; --gold-sf:#33280F; --gold-line:#6B5520;
+    --ok:#4CC183; --ok-sf:#10301E; --crit:#EE8175; --crit-sf:#381C18;
+    --fe-bar:#000000; --fe-cell:#121B1D; --fe-head:#182325; --fe-line:#243235;
+    --fe-tx:#E8F0F1; --fe-mut:#8E9CA0; --fe-yellow:#3A3216; --fe-red:#E08379;
     --sh:    0 1px 3px rgba(0,0,0,.35), 0 8px 24px rgba(0,0,0,.34);
     --sh-lg: 0 2px 6px rgba(0,0,0,.4), 0 16px 44px rgba(0,0,0,.45);
   }
 }
 :root[data-theme="dark"] {
-  --paper:#0B1113; --surface:#161F21; --surface-2:#1C2629; --line:#263235; --line-2:#38484B;
-  --ink:#E4EBEC; --ink-2:#9FAEB0; --ink-3:#76868A;
-  --accent:#63ADB4; --accent-2:#8FCACF; --accent-sf:#123236;
-  --gold:#D7A54E; --gold-sf:#2C2413; --gold-line:#5F4D1F;
-  --ok:#6DBA8E; --ok-sf:#152C20; --crit:#DF8C83; --crit-sf:#331D1B;
-  --fe-bar:#000000; --fe-cell:#161F21; --fe-head:#1C2629; --fe-line:#263235;
-  --fe-tx:#E4EBEC; --fe-mut:#8C9A9D; --fe-yellow:#3A3216; --fe-red:#E08379;
+  --paper:#081012; --surface:#121B1D; --surface-2:#182325; --line:#243235; --line-2:#38494C;
+  --ink:#E8F0F1; --ink-2:#A3B3B5; --ink-3:#7A8C8F;
+  --accent:#2FC2CE; --accent-2:#6FDAE3; --accent-sf:#0D3438;
+  --gold:#E0AC4E; --gold-sf:#33280F; --gold-line:#6B5520;
+  --ok:#4CC183; --ok-sf:#10301E; --crit:#EE8175; --crit-sf:#381C18;
+  --fe-bar:#000000; --fe-cell:#121B1D; --fe-head:#182325; --fe-line:#243235;
+  --fe-tx:#E8F0F1; --fe-mut:#8E9CA0; --fe-yellow:#3A3216; --fe-red:#E08379;
   --sh:    0 1px 3px rgba(0,0,0,.35), 0 8px 24px rgba(0,0,0,.34);
   --sh-lg: 0 2px 6px rgba(0,0,0,.4), 0 16px 44px rgba(0,0,0,.45);
 }
 :root[data-theme="light"] {
-  --paper:#F1F5F5; --surface:#FFFFFF; --surface-2:#F6F9F9; --line:#E6ECEC; --line-2:#D3DDDE;
-  --ink:#0F1A1C; --ink-2:#5A6B6E; --ink-3:#8A9A9D;
-  --accent:#0B5C63; --accent-2:#084A50; --accent-sf:#E4EFF0;
-  --gold:#8A6108; --gold-sf:#FBF2DE; --gold-line:#E7D3A2;
-  --ok:#2C6E49; --ok-sf:#E4EFE8; --crit:#A33A31; --crit-sf:#F9E9E7;
+  --paper:#EDF2F2; --surface:#FFFFFF; --surface-2:#F3F8F8; --line:#DFE8E8; --line-2:#C6D4D5;
+  --ink:#0A1517; --ink-2:#48595C; --ink-3:#77898C;
+  --accent:#0A7A85; --accent-2:#065C64; --accent-sf:#D6EFF1;
+  --gold:#A8710A; --gold-sf:#FDF1D8; --gold-line:#E6C173;
+  --ok:#1F7A45; --ok-sf:#DAF0E2; --crit:#BE3428; --crit-sf:#FBE3E0;
   --fe-bar:#1C1C1C; --fe-cell:#FFFFFF; --fe-head:#F7F8F8; --fe-line:#DDE1E2;
   --fe-tx:#1C1C1C; --fe-mut:#6E7679; --fe-yellow:#FFF4C2; --fe-red:#C0392B;
   --sh:    0 1px 3px rgba(15,26,28,.04), 0 8px 24px rgba(15,26,28,.06);
@@ -120,8 +120,8 @@ button, input { font: inherit; color: inherit; }
   border-radius: 7px; background: var(--accent); color: #fff;
   font-size: 11px; font-weight: 700; letter-spacing: -.02em;
 }
-:root[data-theme="dark"] .mark { color: #0B1113; }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .mark { color: #0B1113; } }
+:root[data-theme="dark"] .mark { color: #081012; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .mark { color: #081012; } }
 .mh-name { font-size: var(--f-md); font-weight: 660; letter-spacing: -.01em; }
 .mh-div { width: 1px; height: 17px; background: var(--line-2); }
 .mh-sub { font-size: var(--f-sm); color: var(--ink-3); }
@@ -168,11 +168,11 @@ button, input { font: inherit; color: inherit; }
 .pill[data-s="done"] .n { background: var(--accent-sf); color: var(--accent); }
 .pill[data-s="now"] { background: var(--accent); color: #fff; font-weight: 640; box-shadow: var(--sh-lg); }
 .pill[data-s="now"] .n { background: rgba(255,255,255,.22); color: #fff; }
-:root[data-theme="dark"] .pill[data-s="now"] { color: #0B1113; }
-:root[data-theme="dark"] .pill[data-s="now"] .n { background: rgba(0,0,0,.22); color: #0B1113; }
+:root[data-theme="dark"] .pill[data-s="now"] { color: #081012; }
+:root[data-theme="dark"] .pill[data-s="now"] .n { background: rgba(0,0,0,.22); color: #081012; }
 @media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) .pill[data-s="now"] { color: #0B1113; }
-  :root:not([data-theme="light"]) .pill[data-s="now"] .n { background: rgba(0,0,0,.22); color: #0B1113; }
+  :root:not([data-theme="light"]) .pill[data-s="now"] { color: #081012; }
+  :root:not([data-theme="light"]) .pill[data-s="now"] .n { background: rgba(0,0,0,.22); color: #081012; }
 }
 
 /* ============================================================
@@ -264,8 +264,8 @@ button, input { font: inherit; color: inherit; }
 .btn.quiet { background: var(--surface-2); color: var(--ink-2); }
 .btn.quiet:hover { background: var(--line); color: var(--ink); }
 .btn.sm { padding: 8px 16px; font-size: var(--f-sm); }
-:root[data-theme="dark"] .btn:not(.quiet) { color: #0B1113; }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .btn:not(.quiet) { color: #0B1113; } }
+:root[data-theme="dark"] .btn:not(.quiet) { color: #081012; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .btn:not(.quiet) { color: #081012; } }
 .row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
 
 .tag { display: inline-flex; align-items: center; gap: 5px; padding: 2px 10px; border-radius: var(--pill); font-size: var(--f-xs); font-weight: 640; white-space: nowrap; }
@@ -281,8 +281,8 @@ button, input { font: inherit; color: inherit; }
 .xl-top .nm { font-family: var(--mono); font-size: var(--f-xs); color: var(--ink-2); word-break: break-all; }
 .xl-top .tab { margin-left: auto; padding: 4px 12px; border-radius: var(--pill); background: var(--surface-2); font-size: var(--f-xs); font-weight: 620; color: var(--ink-2); }
 .xl-scroll { overflow-x: auto; }
-table.sh { border-collapse: separate; border-spacing: 0; font-size: var(--f-sm); min-width: 100%; }
-table.sh th, table.sh td { border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); padding: 8px 11px; text-align: left; vertical-align: top; }
+table.sh { border-collapse: separate; border-spacing: 0; font-size: var(--f-xs); min-width: 100%; }
+table.sh th, table.sh td { border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); padding: 7px 9px; text-align: left; vertical-align: top; }
 table.sh thead th.ltr {
   background: var(--surface-2); color: var(--ink-3); font-weight: 500;
   font-family: var(--mono); font-size: 10px; text-align: center; padding: 3px 6px;
@@ -290,7 +290,7 @@ table.sh thead th.ltr {
 }
 table.sh thead tr.hd th {
   background: var(--surface-2); color: var(--ink-2); font-weight: 620;
-  min-width: 138px; max-width: 210px; white-space: normal;
+  min-width: 92px; max-width: 150px; white-space: normal;
   position: sticky; top: 19px; z-index: 3; font-size: var(--f-xs);
 }
 table.sh thead tr.hd th .en { display: block; font-size: 10px; font-weight: 400; color: var(--ink-3); margin-top: 2px; }
@@ -299,11 +299,13 @@ table.sh td.rn { background: var(--surface-2); color: var(--ink-3); font-family:
 table.sh th.cnr { position: sticky; left: 0; z-index: 4; background: var(--surface-2); min-width: 28px; }
 table.sh td { background: var(--surface); white-space: nowrap; }
 table.sh tr.spl td { color: var(--ink-3); }
-table.sh td.ed { cursor: text; min-width: 138px; outline: none; background: var(--accent-sf); }
+table.sh td.ed { cursor: text; min-width: 92px; outline: none; background: var(--accent-sf); }
 table.sh td.ed:focus { box-shadow: inset 0 0 0 2px var(--accent); }
 table.sh td.ed:empty::before { content: attr(data-ph); color: var(--ink-3); opacity: .45; font-style: italic; }
 table.sh td.bad { box-shadow: inset 0 0 0 2px var(--crit); }
-.xl-foot { padding: 13px 20px; font-size: var(--f-xs); color: var(--ink-3); }
+.xl-foot { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; padding: 13px 20px; font-size: var(--f-xs); color: var(--ink-3); }
+.linkbtn { border: 0; background: none; padding: 0; margin-left: auto; color: var(--accent); font-size: var(--f-xs); font-weight: 640; cursor: pointer; text-decoration: underline; text-underline-offset: 2px; }
+.linkbtn:hover { color: var(--accent-2); }
 .xl-foot b { color: var(--ink-2); font-weight: 620; }
 
 .instr { font-size: var(--f-sm); color: var(--ink-2); }
@@ -357,13 +359,6 @@ table.sh td.bad { box-shadow: inset 0 0 0 2px var(--crit); }
 .m-foot { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; padding: 0 22px 20px; }
 .m-foot .h { margin-left: auto; font-size: var(--f-xs); color: var(--ink-3); }
 
-.hl .x { padding: 1px 3px; border-radius: 3px; background: var(--accent-sf); box-shadow: inset 0 -1.5px 0 var(--accent); }
-.hl .x[data-k="enc"] { background: var(--gold-sf); box-shadow: inset 0 -1.5px 0 var(--gold); }
-.keyline { display: flex; gap: 18px; flex-wrap: wrap; font-size: var(--f-xs); color: var(--ink-3); margin-bottom: 16px; }
-.keyline .i { display: flex; align-items: center; gap: 6px; }
-.keyline .sw { width: 16px; height: 3px; border-radius: var(--pill); background: var(--accent); }
-.keyline .sw.g { background: var(--gold); }
-
 .quote { border-left: 2px solid var(--line-2); padding-left: 15px; color: var(--ink-2); }
 .quote .qh { font-size: var(--f-xs); color: var(--ink-3); margin-bottom: 7px; }
 
@@ -398,6 +393,8 @@ table.res thead th { font-size: 10px; letter-spacing: .08em; text-transform: upp
 table.res tbody tr:last-child td { border-bottom: 0; }
 table.res td.f { font-weight: 580; white-space: nowrap; }
 table.res td.d { color: var(--ink-2); }
+table.res tr.grp td { padding-top: 18px; font-weight: 680; font-size: var(--f-md); border-bottom-color: var(--line-2); }
+table.res tbody tr:first-child td { padding-top: 8px; }
 
 /* ============================================================
    Controls + footer
@@ -415,8 +412,8 @@ table.res td.d { color: var(--ink-2); }
 .circ[disabled] { opacity: .3; cursor: not-allowed; }
 .play { padding: 11px 24px; border: 0; border-radius: var(--pill); background: var(--accent); color: #fff; cursor: pointer; font-size: var(--f-md); font-weight: 640; display: inline-flex; align-items: center; gap: 8px; }
 .play:hover { background: var(--accent-2); }
-:root[data-theme="dark"] .play { color: #0B1113; }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .play { color: #0B1113; } }
+:root[data-theme="dark"] .play { color: #081012; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .play { color: #081012; } }
 
 .hint-line { text-align: center; font-size: var(--f-xs); color: var(--ink-3); margin: 14px 0 0; padding: 0 26px; }
 .page-foot { text-align: center; padding: 26px 26px 34px; font-size: var(--f-xs); color: var(--ink-3); line-height: 1.7; }
@@ -463,7 +460,7 @@ table.res td.d { color: var(--ink-2); }
 
 <section class="hero">
   <h1>Walk through the individual KYC journey</h1>
-  <p>From a filled workbook to verified results &mdash; every step happens over ordinary email. The panel explains what the analyst does and what the agent does behind the scenes.</p>
+  <p>From a filled workbook to verified results &mdash; every step happens over ordinary email, processed automatically. The panel explains what you do at each step and what comes back.</p>
 </section>
 
 <nav class="flow" id="flow" aria-label="Steps"><div class="flow-in" id="flowIn"></div></nav>
@@ -521,22 +518,62 @@ table.res td.d { color: var(--ink-2); }
     { c: "Q", cn: "所需數據字段", en: "Requested Data Fields" },
     { c: "R", cn: "備註", en: "Notes/Comments" }
   ];
+  /* narrow default view — the rest of the 18 columns are one click away */
+  var KEY_COLS = [0, 1, 2, 3, 5, 10, 16];
 
+  /* row 2 — the sample shipped inside the template */
   var SAMPLE = ["BGS-2025-001", "China - CN", "张三", "110101199001011234", "2016.01.01", "2027.12.12",
                 "12345678", "Passport", "12667788991", "", "1234567890", "12345678", "12345678",
                 "12345678", "1234567", "北京王府大道某某小区xx栋12楼A室", "KYC1 / KYC2", ""];
 
-  var FILLED = ["BGS-2026-014", "China - CN", "李慧敏", "310115199204186328", "2018.03.05", "2038.03.05",
-                "E64720915", "Passport", "13905217744", "", "6222021001056783", "", "",
-                "JS20190447", "310115199204186328", "上海市浦东新区世纪大道100号28楼", "KYC1 / KYC2", "New hire — senior role"];
+  /* rows 3–5 — this request */
+  var ROWS = [
+    ["BGS-2026-014", "China - CN", "李慧敏", "310115199204186328", "2018.03.05", "2038.03.05",
+     "E64720915", "Passport", "13905217744", "", "6222021001056783", "", "", "JS20190447",
+     "310115199204186328", "上海市浦东新区世纪大道100号28楼", "KYC1 / KYC2", "New hire — senior role"],
+    ["BGS-2026-015", "China - CN", "王建国", "110105198706234519", "2015.09.12", "2029.11.20",
+     "E51120847", "Passport", "13611209853", "", "6217001210044892", "", "", "",
+     "110105198706234519", "北京市朝阳区建国路88号15楼", "KYC1", "Existing client — periodic review"],
+    ["BGS-2026-016", "China - CN", "陈晓芸", "440304199508127763", "2017.02.14", "2027.02.14",
+     "E73399102", "Passport", "13802964517", "", "6228480018763254", "", "", "",
+     "440304199508127763", "深圳市福田区深南大道6008号", "KYC1 / KYC2", ""]
+  ];
+  /* only the last row starts blank, so filling it is a real action */
+  var EDIT_ROW = 2, EDIT_CELLS = [2, 3];
 
-  var EDITABLE = { 2: "李慧敏", 3: "310115199204186328", 13: "JS20190447", 16: "KYC1 / KYC2" };
+  /* ==========================================================
+     Results — one source of truth for the emails, the workbook
+     readout and the downloadable summary report
+     ========================================================== */
+  var SUBJECTS = [
+    { ref: "BGS-2026-014", name: "李慧敏", fields: [
+      { id: "BGS_7hK2xQm4Rt", doc: "Mainland ID Verification", res: "Verified", detail: "Name and ID number match the registry record." },
+      { id: "BGS_Wq3TbY9dEu", doc: "Mainland Phone Verification", res: "Verified", detail: "Number is active and registered to the same name." },
+      { id: "BGS_Lm6Xz1PkHc", doc: "Mainland Bank Account Verification", res: "Verified", detail: "Account holder name matches; three-element check passed." },
+      { id: "BGS_Rd9Fj5NwSv", doc: "Professional Qualification", res: "Verified", detail: "Certificate JS20190447 confirmed as current." }
+    ] },
+    { ref: "BGS-2026-015", name: "王建国", fields: [
+      { id: "BGS_Kp3Nv8QwTb", doc: "Mainland ID Verification", res: "Verified", detail: "Name and ID number match the registry record." },
+      { id: "BGS_Jd7Fx2LmYc", doc: "Mainland Phone Verification", res: "Verified", detail: "Number is active and registered to the same name." },
+      { id: "BGS_Ht5Zq9RnWp", doc: "Mainland Bank Account Verification", res: "Flagged", detail: "Account is active but registered to a different name — review recommended." }
+    ] },
+    { ref: "BGS-2026-016", name: "陈晓芸", fields: [
+      { id: "BGS_Bn6Cw4TkVs", doc: "Mainland ID Verification", res: "Verified", detail: "Name and ID number match the registry record." },
+      { id: "BGS_Xr2Gm7PdLf", doc: "Mainland Phone Verification", res: "Verified", detail: "Number is active and registered to the same name." },
+      { id: "BGS_Qy8Ts3NbHj", doc: "Mainland Bank Account Verification", res: "Verified", detail: "Account holder name matches; three-element check passed." },
+      { id: "BGS_Vc4Lp6WmDz", doc: "ID Card Validity & Expiry", res: "Flagged", detail: "Expires 2027-02-14 — within the 12-month window you asked to be flagged." }
+    ] }
+  ];
+  function allFields() {
+    var out = [];
+    SUBJECTS.forEach(function (s) { s.fields.forEach(function (f) { out.push({ s: s, f: f }); }); });
+    return out;
+  }
+  var TOTAL = allFields().length;
 
   /* ==========================================================
      Builders
      ========================================================== */
-  function x(t, k) { return '<span class="x"' + (k ? ' data-k="' + k + '"' : '') + '>' + t + '</span>'; }
-
   function mailHead(o) {
     return '<div class="m-hd"><h3>' + o.subject + '</h3><div class="m-id">' +
       '<span class="av"' + (o.from.fe ? ' data-fe="1"' : '') + '>' + o.from.ini + '</span>' +
@@ -572,89 +609,148 @@ table.res td.d { color: var(--ink-2); }
     return h + '<p class="fe-f">You can reply directly to this email with corrections or additional details.</p></div></div>';
   }
 
+  function feRows(status) {
+    return allFields().map(function (r) {
+      return { id: r.f.id, ref: r.s.ref, subject: r.s.name, doc: r.f.doc, status: status };
+    });
+  }
+
+  /* ---------- spreadsheet ---------- */
   function sheet(editable) {
+    var cols = state.allCols ? COLS.map(function (_, i) { return i; }) : KEY_COLS;
+
     var h = '<div class="xl"><div class="xl-top"><span class="nm">' + FILE + '</span>' +
       '<span class="tab">Background_Screening_Orders</span></div>' +
       '<div class="xl-scroll"><table class="sh"><thead>' +
-      '<tr><th class="cnr ltr">&nbsp;</th>' + COLS.map(function (c) { return '<th class="ltr">' + c.c + '</th>'; }).join("") + '</tr>' +
-      '<tr class="hd"><th class="cnr">1</th>' + COLS.map(function (c) {
-        return '<th>' + c.cn + (c.rq ? ' <span class="rq">*</span>' : '') + '<span class="en">' + c.en + '</span></th>';
+      '<tr><th class="cnr ltr">&nbsp;</th>' + cols.map(function (i) { return '<th class="ltr">' + COLS[i].c + '</th>'; }).join("") + '</tr>' +
+      '<tr class="hd"><th class="cnr">1</th>' + cols.map(function (i) {
+        return '<th>' + COLS[i].cn + (COLS[i].rq ? ' <span class="rq">*</span>' : '') + '<span class="en">' + COLS[i].en + '</span></th>';
       }).join("") + '</tr></thead><tbody>';
 
-    h += '<tr class="spl"><td class="rn">2</td>' + SAMPLE.map(function (v) { return '<td>' + (v || "") + '</td>'; }).join("") + '</tr>';
+    h += '<tr class="spl"><td class="rn">2</td>' + cols.map(function (i) { return '<td>' + (SAMPLE[i] || "") + '</td>'; }).join("") + '</tr>';
 
-    h += '<tr><td class="rn">3</td>' + COLS.map(function (c, i) {
-      var val = state.row[i] || "";
-      if (editable && EDITABLE[i] !== undefined) {
-        var bad = (i === 2 && !val) || (i === 3 && (!val || !/^\d{18}$/.test(val)));
-        return '<td class="ed' + (bad && state.touched ? ' bad' : '') + '" contenteditable="true" data-i="' + i + '" data-ph="' + EDITABLE[i] + '" spellcheck="false">' + val + '</td>';
-      }
-      return '<td>' + val + '</td>';
-    }).join("") + '</tr>';
+    state.rows.forEach(function (row, ri) {
+      h += '<tr><td class="rn">' + (ri + 3) + '</td>' + cols.map(function (i) {
+        var val = row[i] || "";
+        if (editable && ri === EDIT_ROW && EDIT_CELLS.indexOf(i) > -1) {
+          var bad = (i === 2 && !val) || (i === 3 && (!val || !/^\d{18}$/.test(val)));
+          return '<td class="ed' + (bad && state.touched ? ' bad' : '') + '" contenteditable="true" data-r="' + ri + '" data-i="' + i + '" data-ph="' + ROWS[ri][i] + '" spellcheck="false">' + val + '</td>';
+        }
+        return '<td>' + val + '</td>';
+      }).join("") + '</tr>';
+    });
 
     return h + '</tbody></table></div><div class="xl-foot">' +
-      '<b>Row 2</b> is the sample data shipped with the template and can be overwritten. ' +
-      (editable ? 'The four tinted cells in <b>row 3</b> are editable.' : 'Row 3 holds this request.') +
+      '<span><b>Row 2</b> is the sample shipped with the template. Rows 3&ndash;5 are this request.</span>' +
+      '<button type="button" class="linkbtn" id="colToggle">' +
+      (state.allCols ? "Show key columns only" : "Show all 18 columns") + '</button>' +
       '</div></div>';
   }
 
   function validation() {
-    var name = (state.row[2] || "").trim(), id = (state.row[3] || "").trim(), f = (state.row[16] || "").trim();
-    var checks = [
-      { ok: !!name, t: "中文名 / Chinese Name", s: name ? name : "Mandatory field — still empty" },
-      { ok: /^\d{18}$/.test(id), t: "中國大陸身份證號碼 / Mainland ID Number",
-        s: !id ? "Mandatory field — still empty" : (/^\d{18}$/.test(id) ? "18 digits" : id.length + " digits — mainland IDs must be 18") },
-      { ok: !!f, t: "所需數據字段 / Requested Data Fields", s: f ? f : "No data fields requested for this row" }
-    ];
+    var out = state.rows.map(function (row, ri) {
+      var name = (row[2] || "").trim(), id = (row[3] || "").trim();
+      var ok = !!name && /^\d{18}$/.test(id);
+      var msg = !name ? "中文名 is empty" :
+                !id ? "身份證號碼 is empty" :
+                !/^\d{18}$/.test(id) ? id.length + " digits — mainland IDs must be 18" :
+                name + " · 18 digits · " + (row[16] || "no fields requested");
+      return { ok: ok, t: "Row " + (ri + 3) + " — " + (row[0] || "no reference"), s: msg };
+    });
     return {
-      pass: checks.every(function (c) { return c.ok; }),
-      html: checks.map(function (c) {
+      pass: out.every(function (c) { return c.ok; }),
+      html: out.map(function (c) {
         return '<div class="vi" data-ok="' + c.ok + '"><span class="mk">' + (c.ok ? "&#10003;" : "!") + '</span>' +
           '<span><span class="t">' + c.t + '</span><span class="s">' + c.s + '</span></span></div>';
       }).join("")
     };
   }
 
+  /* ---------- the email, in plain words ---------- */
   function requestBody() {
     return '<p>Hi Fill Easy team,</p>' +
-      '<p>Please run ' + x("background screening") + ' for ' + x("the subject in the attached workbook") + ' &mdash; ' +
-      x("Background_Screening_Orders") + ', row 3. She is ' + x("China &mdash; CN") + ', internal ref ' + x("BGS-2026-014") + '.</p>' +
-      '<p>I need the data fields marked in column Q (' + x("KYC1 and KYC2") + '), and on top of that please verify her ' +
-      x("professional qualification number") + ' and ' + x("mainland bank account") + '. ' +
-      'Flag it to me if ' + x("the ID card is expired or expires within 12 months") + '.</p>' +
-      '<p>' + x("The workbook is password-protected", "enc") + ' &mdash; ' +
-      x("same desk password we registered at onboarding", "enc") + ', not in this email.</p>' +
+      '<p>Please run background screening for the three individuals in the attached workbook ' +
+      '(Background_Screening_Orders, rows 3&ndash;5). All three are China &mdash; CN, references BGS-2026-014 to 016.</p>' +
+      '<p>I need the data fields marked in column Q for each of them, and on top of that please verify ' +
+      '李慧敏&rsquo;s professional qualification number. Flag it to me if any ID card is expired or expires within 12 months.</p>' +
+      '<p>Please also generate a summary report.</p>' +
+      '<p>The workbook is password-protected &mdash; same desk password we registered at onboarding, not in this email.</p>' +
       '<p class="sig">Thanks,<br>Matthew<br>Client Onboarding</p>';
   }
 
-  var PROCESSING_ROWS = [
-    { id: "BGS_7hK2xQm4Rt", doc: "Mainland ID Verification" },
-    { id: "BGS_c4Vn8sLpZa", doc: "ID Card Validity & Expiry" },
-    { id: "BGS_Wq3TbY9dEu", doc: "Mainland Phone Verification" },
-    { id: "BGS_Lm6Xz1PkHc", doc: "Mainland Bank Account Verification" },
-    { id: "BGS_Rd9Fj5NwSv", doc: "Professional Qualification" },
-    { id: "BGS_Tz2Gh7BqMx", doc: "Address Verification" }
-  ];
-  function feRows(status) {
-    return PROCESSING_ROWS.map(function (r) {
-      return { id: r.id, ref: "BGS-2026-014", subject: state.row[2] || "—", doc: r.doc, status: status };
+  /* ---------- downloadable summary report ---------- */
+  function reportHTML() {
+    var rows = SUBJECTS.map(function (s) {
+      return '<h2>' + s.name + ' <span class="ref">' + s.ref + '</span></h2>' +
+        '<table><thead><tr><th>Request ID</th><th>Data field</th><th>Result</th><th>Detail</th></tr></thead><tbody>' +
+        s.fields.map(function (f) {
+          return '<tr><td class="m">' + f.id + '</td><td>' + f.doc + '</td>' +
+            '<td><span class="p ' + (f.res === "Verified" ? "ok" : "fl") + '">' + f.res + '</span></td>' +
+            '<td>' + f.detail + '</td></tr>';
+        }).join("") +
+        '<tr><td class="m">&mdash;</td><td>Academic Credential</td><td><span class="p na">Not run</span></td>' +
+        '<td>Columns L and M were blank in the request workbook.</td></tr>' +
+        '</tbody></table>';
+    }).join("");
+
+    return '<!doctype html><html lang="en"><head><meta charset="utf-8">' +
+      '<title>Fill Easy — Summary Report BGS-2026-014</title><style>' +
+      'body{margin:0;padding:34px;font-family:-apple-system,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei",sans-serif;color:#1C1C1C;line-height:1.55;max-width:900px}' +
+      '.bar{display:flex;align-items:center;background:#1C1C1C;color:#fff;padding:15px 20px;margin:-34px -34px 26px}' +
+      '.bar b{font-size:17px}.bar span{margin-left:auto;font-size:13px}' +
+      'h1{font-size:19px;margin:0 0 4px}.sub{color:#6E7679;font-size:13px;margin:0 0 22px}' +
+      'h2{font-size:15px;margin:26px 0 8px;padding-bottom:6px;border-bottom:2px solid #0A7A85}' +
+      'h2 .ref{font-family:ui-monospace,Menlo,monospace;font-size:12px;color:#6E7679;font-weight:400;margin-left:6px}' +
+      'table{border-collapse:collapse;width:100%;font-size:12.5px}' +
+      'th,td{border:1px solid #DDE1E2;padding:8px 11px;text-align:left;vertical-align:top}' +
+      'th{background:#F7F8F8}td.m{font-family:ui-monospace,Menlo,monospace;font-size:11px;white-space:nowrap}' +
+      '.p{display:inline-block;padding:1px 9px;border-radius:99px;font-size:11px;font-weight:700;white-space:nowrap}' +
+      '.ok{background:#DAF0E2;color:#1F7A45}.fl{background:#FDF1D8;color:#A8710A}.na{background:#EFF2F2;color:#48595C}' +
+      '.foot{margin-top:30px;padding-top:14px;border-top:1px solid #DDE1E2;color:#6E7679;font-size:11.5px}' +
+      '@media print{body{padding:0}.bar{margin:0 0 20px}}' +
+      '</style></head><body>' +
+      '<div class="bar"><b>Fill Easy</b><span>Summary Report</span></div>' +
+      '<h1>Background screening &mdash; summary report</h1>' +
+      '<p class="sub">References BGS-2026-014 to 016 &middot; China (CN) &middot; ' + TOTAL + ' data fields across ' + SUBJECTS.length + ' subjects &middot; requested by ' + USER.nm + '</p>' +
+      rows +
+      '<p class="foot">Illustrative demo for stakeholder visualisation &mdash; sample data is fictitious. ' +
+      'Generated from the Fill Easy individual KYC walkthrough. Print this page to save it as a PDF.</p>' +
+      '</body></html>';
+  }
+
+  function download(name, mime, text) {
+    var blob = new Blob([text], { type: mime });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement("a");
+    a.href = url; a.download = name;
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    setTimeout(function () { URL.revokeObjectURL(url); }, 1500);
+  }
+
+  function reportCSV() {
+    var out = [["Reference", "Subject", "Request ID", "Data field", "Result", "Detail"]];
+    SUBJECTS.forEach(function (s) {
+      s.fields.forEach(function (f) { out.push([s.ref, s.name, f.id, f.doc, f.res, f.detail]); });
     });
+    return out.map(function (r) {
+      return r.map(function (c) { return '"' + String(c).replace(/"/g, '""') + '"'; }).join(",");
+    }).join("\r\n");
   }
 
   /* ==========================================================
-     Steps — stage content, plus one explanation card each
+     Steps
      ========================================================== */
   var STEPS = [
 
-    { nav: "Fill the template", eyebrow: "Fill the template", title: "Complete a row in the workbook",
-      you: "Open the workbook and fill row 3. Only two columns are mandatory — 中文名 and the 18-digit 中國大陸身份證號碼.",
-      bts: "Column Q is what tells the agent which data fields to return. Row 2 is the sample that ships with the template and can be overwritten.",
-      chips: ["Background_Screening_Orders", "Row 3", "18 columns"],
+    { nav: "Fill the template", eyebrow: "Fill the template", title: "One row per person",
+      you: "Open the workbook and fill a row for each subject. Only two columns are mandatory — 中文名 and the 18-digit 中國大陸身份證號碼.",
+      bts: "Column Q sets which data fields come back for that person, so different subjects in the same batch can carry different scopes. Row 2 is the sample shipped with the template and can be overwritten.",
+      chips: ["Background_Screening_Orders", "3 subjects", "18 columns"],
       stage: function () {
         return sheet(true) +
           '<div class="row">' +
-            '<button type="button" class="btn quiet sm" id="fillSample">Fill sample row</button>' +
-            '<button type="button" class="btn quiet sm" id="clearRow">Clear row</button>' +
+            '<button type="button" class="btn quiet sm" id="fillSample">Fill row 5</button>' +
+            '<button type="button" class="btn quiet sm" id="clearRow">Clear row 5</button>' +
           '</div>' +
           '<div><h4 class="sec-h">Validation</h4><div class="card"><div class="card-b">' + validation().html + '</div></div></div>' +
           '<div><h4 class="sec-h">Instructions from the template</h4><div class="card"><div class="card-b"><div class="instr"><ol>' +
@@ -675,7 +771,7 @@ table.res td.d { color: var(--ink-2); }
               '<div class="pair"><div class="k">File</div><div class="v mono" style="font-size:var(--f-sm)">' + FILE + '</div></div>' +
               '<div class="pair"><div class="k">Password</div><div class="v mono">' + state.pw.replace(/./g, "&bull;") + ' <span style="color:var(--ink-3)">(' + state.pw.length + ')</span></div></div>' +
               '<div class="pair"><div class="k">Key delivery</div><div class="v">Pre-registered desk password</div></div>' +
-              '<div class="pair"><div class="k">Size</div><div class="v mono">18 KB</div></div>' +
+              '<div class="pair"><div class="k">Contents</div><div class="v">3 subjects &middot; rows 3&ndash;5</div></div>' +
             '</div>' +
             '<div class="row" style="margin-top:18px"><button type="button" class="btn quiet sm" id="unencrypt">Change password</button></div>' +
           '</div></div>' + sheet(false);
@@ -694,13 +790,13 @@ table.res td.d { color: var(--ink-2); }
     },
 
     { nav: "Attach and send", eyebrow: "Attach and send", title: "One email, written like any other",
-      you: "Attach the locked workbook and write the request the way you would to a colleague. There is no required format.",
-      encNote: "The attachment leaves encrypted — the gold chip with the lock is the workbook in a state nobody in transit can read. The sender address must also be whitelisted with Fill Easy.",
+      you: "Attach the locked workbook and write the request in plain language. There is no required format, and one email covers the whole batch.",
+      encNote: "The attachment leaves encrypted — the gold chip with the lock is the workbook in a state nobody in transit can read. The sending address must also be whitelisted with Fill Easy.",
       chips: ["agent@ses.fill-easy.com", "1 encrypted attachment"],
       stage: function () {
         return '<div class="mail">' +
           '<div class="m-fld"><span class="k">To</span><span class="v mono">' + AGENT_ADDR + '</span></div>' +
-          '<div class="m-fld"><span class="k">Subject</span><span class="v">Background screening &mdash; BGS-2026-014 (China)</span></div>' +
+          '<div class="m-fld"><span class="k">Subject</span><span class="v">Background screening &mdash; BGS-2026-014 to 016 (China)</span></div>' +
           atts([{ n: FILE, m: "18 KB &middot; encrypted &middot; password required", enc: true }]) +
           '<div class="m-body">' + requestBody() + '</div>' +
           '<div class="m-foot"><button type="button" class="btn" id="sendBtn">' + (state.sent ? "Sent &#10003;" : "Send") + '</button>' +
@@ -709,39 +805,16 @@ table.res td.d { color: var(--ink-2); }
       }
     },
 
-    { nav: "Agent reads it", eyebrow: "Agent reads it", title: "The agent merges the sheet and the sentence",
-      you: "Nothing — the email is sent. Watch what the agent pulls out of it.",
-      bts: "The agent decrypts the attachment, reads row 3, and marks up the sentence. Two of the checks were asked for in prose and never appeared in column Q.",
-      chips: ["6 data fields", "1 condition", "confidence 0.95"],
+    { nav: "Processed", eyebrow: "Processed automatically", title: "The reply comes back on its own",
+      you: "Nothing. The request is processed automatically by email and the acknowledgement arrives in the same thread.",
+      bts: "Each data field for each subject is returned as its own request ID, so a partial failure shows on its own line instead of sinking the batch. Anything that cannot run is raised as a clarification you answer in the yellow column.",
+      chips: [TOTAL + " processing", "1 clarification", "under 5 min"],
       stage: function () {
         return '<div class="mail">' +
-            mailHead({ from: USER, subject: "Background screening — BGS-2026-014 (China)", time: "Tue 28 Jul, 09:12" }) +
-            atts([{ n: FILE, m: "opened with desk password", enc: true }]) +
-            '<div class="m-body hl">' +
-              '<div class="keyline"><span class="i"><span class="sw"></span> Extracted by the agent</span>' +
-              '<span class="i"><span class="sw g"></span> Encryption and handling</span></div>' +
-              requestBody() +
-            '</div>' +
-          '</div>' +
-          '<div><h4 class="sec-h">Read from the attachment &mdash; row 3</h4><div class="card"><div class="card-b"><div class="pairs">' +
-            '<div class="pair"><div class="k">Internal reference</div><div class="v mono">' + (state.row[0] || "—") + '</div></div>' +
-            '<div class="pair"><div class="k">中文名 / Chinese Name</div><div class="v">' + (state.row[2] || "—") + '</div></div>' +
-            '<div class="pair"><div class="k">身份證號碼 / Mainland ID</div><div class="v mono" style="font-size:var(--f-sm)">' + (state.row[3] || "—") + ' <span class="tag t-ok">18 digits</span></div></div>' +
-            '<div class="pair"><div class="k">所需數據字段 / Requested fields</div><div class="v">' + (state.row[16] || "—") + '</div></div>' +
-          '</div></div></div></div>';
-      }
-    },
-
-    { nav: "Processing", eyebrow: "Processing reply", title: "Every data field gets its own request ID",
-      you: "Read the reply. Answer the clarification in the yellow column and send it back — nothing needs re-uploading.",
-      bts: "A partial failure shows up on its own line rather than sinking the whole order. Columns L and M were blank, so academic verification is raised rather than silently skipped.",
-      chips: ["6 processing", "1 clarification"],
-      stage: function () {
-        return '<div class="mail">' +
-          mailHead({ from: AGENT, subject: "Re: Background screening — BGS-2026-014 (China)", time: "Tue 28 Jul, 09:13" }) +
+          mailHead({ from: AGENT, subject: "Re: Background screening — BGS-2026-014 to 016 (China)", time: "Tue 28 Jul, 09:13" }) +
           atts([{ n: "Disclaimer.txt", m: "743 bytes" }]) +
           '<div class="m-body">' + feBlock([
-            { type: "clar", rows: [{ subject: (state.row[2] || "—") + " — Academic Credential",
+            { type: "clar", rows: [{ subject: "All three subjects — Academic Credential",
               issue: "Columns L and M (Academic Credential Number, Degree Number) are blank, so academic verification cannot run. Please advise how you'd like us to proceed." }] },
             { title: "PROCESSING", rows: feRows("Processing") }
           ]) + '</div></div>';
@@ -749,12 +822,12 @@ table.res td.d { color: var(--ink-2); }
     },
 
     { nav: "Results", eyebrow: "Results returned", title: "Encrypted in, encrypted out",
-      you: "Open the results workbook with the same password you set in step 2.",
+      you: "Open the results workbook with the same password, or download the summary report you asked for in the email.",
       encNote: "Because the request arrived encrypted, the response leaves the same way — locked with the same desk password, never sent alongside the file.",
-      chips: ["6 of 6 completed", "China · under 5 min"],
+      chips: [TOTAL + " completed", "2 flagged", "summary report"],
       stage: function () {
         var mail = '<div class="mail">' +
-          mailHead({ from: AGENT, subject: "Re: Background screening — BGS-2026-014 (China)", time: "Tue 28 Jul, 09:17" }) +
+          mailHead({ from: AGENT, subject: "Re: Background screening — BGS-2026-014 to 016 (China)", time: "Tue 28 Jul, 09:17" }) +
           atts([{ n: "Disclaimer.txt", m: "743 bytes" },
                 { n: RESULTS_FILE, m: "24 KB &middot; encrypted &middot; same desk password", enc: true }]) +
           '<div class="m-body">' + feBlock([{ title: "ORDER SUCCESS", rows: feRows("Completed") }]) + '</div></div>';
@@ -769,39 +842,50 @@ table.res td.d { color: var(--ink-2); }
             '<div class="row"><button type="button" class="btn" id="openGo">Open workbook</button>' +
             '<button type="button" class="btn quiet" id="openHint">Use desk password</button></div></div></div></div>';
         } else {
+          var body = SUBJECTS.map(function (s) {
+            return '<tr class="grp"><td colspan="3">' + s.name + ' <span class="mono" style="color:var(--ink-3);font-size:var(--f-xs)">' + s.ref + '</span></td></tr>' +
+              s.fields.map(function (f) {
+                return '<tr><td class="f">' + f.doc + '</td>' +
+                  '<td><span class="tag ' + (f.res === "Verified" ? "t-ok" : "t-gold") + '">' + f.res + '</span></td>' +
+                  '<td class="d">' + f.detail + '</td></tr>';
+              }).join("") +
+              '<tr><td class="f">Academic Credential</td><td><span class="tag t-mut">Not run</span></td>' +
+              '<td class="d">Columns L and M were blank — raised as a clarification on the previous email.</td></tr>';
+          }).join("");
+
           wb = '<div class="card"><div class="card-h"><h3>Results workbook</h3><span class="r mono">' + RESULTS_FILE + '</span></div>' +
-            '<div style="overflow-x:auto;padding:14px 6px 6px"><table class="res"><thead><tr><th>Data field</th><th>Result</th><th>Detail</th></tr></thead><tbody>' +
-            '<tr><td class="f">Mainland ID Verification</td><td><span class="tag t-ok">Verified</span></td><td class="d">Name and ID number match the registry record for ' + (state.row[2] || "—") + '.</td></tr>' +
-            '<tr><td class="f">ID Card Validity &amp; Expiry</td><td><span class="tag t-gold">Flagged</span></td><td class="d">Valid, expires 2038-03-05 — outside the 12-month window you asked to be flagged, so no action needed.</td></tr>' +
-            '<tr><td class="f">Mainland Phone Verification</td><td><span class="tag t-ok">Verified</span></td><td class="d">Number is active and registered to the same name.</td></tr>' +
-            '<tr><td class="f">Mainland Bank Account</td><td><span class="tag t-ok">Verified</span></td><td class="d">Account holder name matches; three-element check passed.</td></tr>' +
-            '<tr><td class="f">Professional Qualification</td><td><span class="tag t-ok">Verified</span></td><td class="d">Certificate JS20190447 confirmed as current.</td></tr>' +
-            '<tr><td class="f">Address Verification</td><td><span class="tag t-ok">Verified</span></td><td class="d">Address consistent with the registered residential record.</td></tr>' +
-            '<tr><td class="f">Academic Credential</td><td><span class="tag t-mut">Not run</span></td><td class="d">Columns L and M were blank — raised as a clarification on the previous email.</td></tr>' +
-            '</tbody></table></div></div>';
+            '<div style="overflow-x:auto;padding:14px 6px 6px"><table class="res"><thead><tr><th>Data field</th><th>Result</th><th>Detail</th></tr></thead>' +
+            '<tbody>' + body + '</tbody></table></div></div>';
         }
-        return mail + wb;
+
+        var rep = '<div class="card"><div class="card-h"><h3>Summary report</h3><span class="r">requested in the email</span></div><div class="card-b">' +
+          '<p style="margin:0 0 14px;color:var(--ink-2);font-size:var(--f-sm);max-width:62ch">A single report consolidating every data field across all three subjects. ' +
+          'Open it in a browser and print to PDF, or take the CSV straight into Excel.</p>' +
+          '<div class="row"><button type="button" class="btn" id="dlReport">&#8595; Download summary report</button>' +
+          '<button type="button" class="btn quiet" id="dlCsv">Download CSV</button></div></div></div>';
+
+        return mail + wb + rep;
       }
     },
 
     { nav: "Follow up", eyebrow: "Reply in plain English", title: "Follow-ups are just replies",
       you: "Reply on the thread in ordinary words. No new workbook, no re-upload.",
-      bts: "The agent resolves “her” to the subject from the thread and reads column O from the workbook it already holds. The academic credential is raised again rather than quietly dropped.",
+      bts: "The follow-up is handled on the same thread and returns only the extra field. The outstanding academic credential is raised again rather than quietly dropped.",
       chips: ["1 added check", "no re-upload", "same key"],
       stage: function () {
         return '<div class="mail">' +
-            mailHead({ from: AGENT, subject: "Re: Background screening — BGS-2026-014 (China)", time: "Tue 28 Jul, 09:41" }) +
+            mailHead({ from: AGENT, subject: "Re: Background screening — BGS-2026-014 to 016 (China)", time: "Tue 28 Jul, 09:41" }) +
             atts([{ n: "Disclaimer.txt", m: "743 bytes" },
                   { n: "KYC_Screening_Results_BGS-2026-014-A.xlsx", m: "9 KB &middot; encrypted &middot; same password", enc: true }]) +
             '<div class="m-body">' + feBlock([
-              { title: "ORDER SUCCESS", rows: [{ id: "BGS_Yp8Kc3RmTn", ref: "BGS-2026-014-A", subject: state.row[2] || "—", doc: "Driver's License Verification", status: "Completed" }] },
-              { type: "clar", rows: [{ subject: (state.row[2] || "—") + " — Academic Credential",
-                issue: "Still outstanding from the original order. Send the certificate number for column L and we will run it on this thread." }] }
+              { title: "ORDER SUCCESS", rows: [{ id: "BGS_Yp8Kc3RmTn", ref: "BGS-2026-014-A", subject: "李慧敏", doc: "Driver's License Verification", status: "Completed" }] },
+              { type: "clar", rows: [{ subject: "All three subjects — Academic Credential",
+                issue: "Still outstanding from the original order. Send the certificate numbers for column L and we will run them on this thread." }] }
             ]) + '</div>' +
           '</div>' +
-          '<div><h4 class="sec-h">The reply that triggered it</h4><div class="card"><div class="card-b"><div class="quote hl"><div class="qh">Tue 28 Jul, 09:38 &mdash; Matthew Lee</div>' +
-          '<p style="margin:0">Thanks &mdash; that all looks fine. One more thing: can you also check ' + x("her driving licence") + '? ' +
-          'The number is in ' + x("column O") + ' of the sheet I sent. ' + x("Same encryption please", "enc") + ', and no need to re-run anything else.</p>' +
+          '<div><h4 class="sec-h">The reply that triggered it</h4><div class="card"><div class="card-b"><div class="quote"><div class="qh">Tue 28 Jul, 09:38 &mdash; Matthew Lee</div>' +
+          '<p style="margin:0">Thanks &mdash; that all looks fine, I&rsquo;ll come back on 王建国&rsquo;s bank account separately. One more thing: can you also check 李慧敏&rsquo;s driving licence? ' +
+          'The number is in column O of the sheet I sent. Same encryption please, and no need to re-run anything else.</p>' +
           '</div></div></div></div>';
       }
     }
@@ -810,8 +894,12 @@ table.res td.d { color: var(--ink-2); }
   /* ==========================================================
      State + render
      ========================================================== */
-  var state = { i: 0, row: FILLED.slice(), pw: "", encrypted: false, sent: false, unlocked: false, touched: false };
-  Object.keys(EDITABLE).forEach(function (i) { state.row[i] = ""; });
+  function freshRows() {
+    var r = ROWS.map(function (row) { return row.slice(); });
+    EDIT_CELLS.forEach(function (i) { r[EDIT_ROW][i] = ""; });
+    return r;
+  }
+  var state = { i: 0, rows: freshRows(), pw: "", encrypted: false, sent: false, unlocked: false, touched: false, allCols: false };
   var lastStep = null, timer = null;
 
   var el = {
@@ -862,18 +950,21 @@ table.res td.d { color: var(--ink-2); }
 
     Array.prototype.forEach.call(document.querySelectorAll(".ed"), function (td) {
       td.addEventListener("input", function () {
-        state.row[Number(td.getAttribute("data-i"))] = td.textContent.trim();
+        state.rows[Number(td.getAttribute("data-r"))][Number(td.getAttribute("data-i"))] = td.textContent.trim();
         var host = el.stage.querySelector(".card-b");
         if (host) host.innerHTML = validation().html;
       });
       td.addEventListener("blur", function () { state.touched = true; });
     });
 
+    var ct = document.getElementById("colToggle");
+    if (ct) ct.addEventListener("click", function () { state.allCols = !state.allCols; render(); });
+
     var f = document.getElementById("fillSample");
     if (f) f.addEventListener("click", function () { fillRow(); render(); });
     var c = document.getElementById("clearRow");
     if (c) c.addEventListener("click", function () {
-      Object.keys(EDITABLE).forEach(function (i) { state.row[i] = ""; });
+      EDIT_CELLS.forEach(function (i) { state.rows[EDIT_ROW][i] = ""; });
       state.touched = true; render();
     });
 
@@ -907,16 +998,25 @@ table.res td.d { color: var(--ink-2); }
     if (inp) inp.addEventListener("keydown", function (e) { if (e.key === "Enter") tryOpen(); });
     var oh = document.getElementById("openHint");
     if (oh) oh.addEventListener("click", function () { inp.value = state.pw || DESK_PW; tryOpen(); });
+
+    var dr = document.getElementById("dlReport");
+    if (dr) dr.addEventListener("click", function () {
+      download("Fill_Easy_Summary_Report_BGS-2026-014.html", "text/html;charset=utf-8", reportHTML());
+    });
+    var dc = document.getElementById("dlCsv");
+    if (dc) dc.addEventListener("click", function () {
+      download("Fill_Easy_Summary_Report_BGS-2026-014.csv", "text/csv;charset=utf-8", "﻿" + reportCSV());
+    });
   }
 
-  function fillRow() { Object.keys(EDITABLE).forEach(function (i) { state.row[i] = FILLED[i]; }); state.touched = true; }
+  function fillRow() { EDIT_CELLS.forEach(function (i) { state.rows[EDIT_ROW][i] = ROWS[EDIT_ROW][i]; }); state.touched = true; }
 
   /* auto-play fills in whatever the step needs so the walkthrough runs clean */
   function autoAdvance() {
     if (state.i === 0) fillRow();
     if (state.i === 1) { state.pw = state.pw || DESK_PW; state.encrypted = true; }
     if (state.i === 2) state.sent = true;
-    if (state.i === 5) state.unlocked = true;
+    if (state.i === 4) state.unlocked = true;
     if (state.i >= STEPS.length - 1) { stop(); render(); return; }
     state.i++; render();
   }
