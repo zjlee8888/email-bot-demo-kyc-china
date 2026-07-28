@@ -4,11 +4,18 @@ An interactive, single-file HTML demo of the individual KYC (background screenin
 fill the workbook, encrypt it, email it to the agent, get verification results back — and
 keep talking to the agent in plain English on the same thread.
 
-Built from two supplied sources:
+Built from three supplied sources:
 
 - **`KYC_____1.xlsx`** — the `Background_Screening_Orders` template. All 18 bilingual column
   headers, the row-2 sample data, the mandatory-field rules and the instruction text are
   reproduced verbatim.
+- **`Fill_Easy_HK_Agency_Onboarding_Data_Map_2.xlsx`** — the data points. The demo uses the
+  key checks from the due-diligence map rather than invented ones: Mainland ID verification,
+  Global PEP / terrorist screening, Global sanctions & adverse media, the Mainland court and
+  enforcement layer (失信 / 限高), the consented criminal / police record, and academic
+  credential verification through CHESICC / 學信網. The last three are the
+  Mainland-background (MCV) layer — for HK-local recruits the map records those channels as
+  N/A or non-existent, and the demo says so.
 - **`Fill_Easy_HK_Company_Search_Guide_v2.docx`** — the agent's reply format. The
   `Fill Easy` / `Automated Notification` bar, the `ORDER SUCCESS` / `PROCESSING (n)` /
   `NEED CLARIFICATION (n)` sections, the `Request ID | Request | Status` tables, the yellow
@@ -36,10 +43,14 @@ single flagged bank account shows on its own line instead of sinking the batch.
 - **Step 2** — set a password (mismatch is rejected), or press **Use desk password**.
 - **Step 3** — **Send** advances the demo.
 - **Step 5** — the returned workbook opens only against the password you set in step 2.
-  **Download summary report** produces a self-contained HTML report (print it to PDF) and
-  **Download CSV** the same data for Excel. The guide documents the Summary Report as a real
-  Fill Easy feature, requested with *"Please also generate a summary report"* — which is what
-  the demo email says.
+  **View summary report** renders the report inline; **Download HTML** (print it to PDF),
+  **Download CSV** and **Copy as CSV** export it. The guide documents the Summary Report as a
+  real Fill Easy feature, requested with *"Please also generate a summary report"* — which is
+  what the demo email says.
+
+  Sandboxed embeds (including the published artifact) block file downloads at the browser
+  level, so the inline view is the primary path and the page says so when it detects it is
+  framed. The downloads work when `index.html` is opened directly or served from Pages.
 - **Auto-play** runs the whole walkthrough on a timer, filling in each step's input as it goes.
   The **‹ ›** controls, the step pills, or the **← →** arrow keys navigate manually. **◐** switches
   light and dark; the page follows the OS setting on load.

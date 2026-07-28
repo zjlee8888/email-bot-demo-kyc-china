@@ -393,6 +393,15 @@ table.res thead th { font-size: 10px; letter-spacing: .08em; text-transform: upp
 table.res tbody tr:last-child td { border-bottom: 0; }
 table.res td.f { font-weight: 580; white-space: nowrap; }
 table.res td.d { color: var(--ink-2); }
+.rep { margin-top: 16px; border: 1px solid var(--fe-line); border-radius: var(--r-sm); overflow: hidden; }
+.rep-in { padding: 18px; }
+.rep-in h3 { margin: 0 0 4px; font-size: var(--f-lg); font-weight: 680; }
+.rep-sub { margin: 0 0 6px; font-size: var(--f-xs); color: var(--ink-3); }
+.rep-h { margin: 20px 0 4px; padding-bottom: 5px; font-size: var(--f-md); font-weight: 680; border-bottom: 2px solid var(--accent); }
+.rep-h .mono { font-size: var(--f-xs); color: var(--ink-3); font-weight: 400; margin-left: 5px; }
+.rep .res th, .rep .res td { padding: 8px 10px; }
+.dl-note { margin: 12px 0 0; font-size: var(--f-xs); color: var(--ink-3); line-height: 1.55; max-width: 68ch; }
+.dl-note b { color: var(--ink-2); }
 table.res tr.grp td { padding-top: 18px; font-weight: 680; font-size: var(--f-md); border-bottom-color: var(--line-2); }
 table.res tbody tr:first-child td { padding-top: 8px; }
 
@@ -547,21 +556,24 @@ table.res tbody tr:first-child td { padding-top: 8px; }
      ========================================================== */
   var SUBJECTS = [
     { ref: "BGS-2026-014", name: "李慧敏", fields: [
-      { id: "BGS_7hK2xQm4Rt", doc: "Mainland ID Verification", res: "Verified", detail: "Name and ID number match the registry record." },
-      { id: "BGS_Wq3TbY9dEu", doc: "Mainland Phone Verification", res: "Verified", detail: "Number is active and registered to the same name." },
-      { id: "BGS_Lm6Xz1PkHc", doc: "Mainland Bank Account Verification", res: "Verified", detail: "Account holder name matches; three-element check passed." },
-      { id: "BGS_Rd9Fj5NwSv", doc: "Professional Qualification", res: "Verified", detail: "Certificate JS20190447 confirmed as current." }
+      { id: "BGS_7hK2xQm4Rt", doc: "Mainland ID Verification", res: "Verified", detail: "Name and ID number match the public security record." },
+      { id: "BGS_Wq3TbY9dEu", doc: "Global PEP / Terrorist Screening", res: "Verified", detail: "No PEP classification and no watchlist match." },
+      { id: "BGS_Lm6Xz1PkHc", doc: "Global Sanctions & Adverse Media", res: "Verified", detail: "No match on OFAC, UN, EU or HKMA lists; no adverse media returned." },
+      { id: "BGS_Rd9Fj5NwSv", doc: "Mainland Court & Enforcement (失信 / 限高)", res: "Verified", detail: "No dishonest-judgment-debtor or consumption-restriction record." },
+      { id: "BGS_Nq5Yd2VtKx", doc: "Academic Credential (CHESICC / 學信網)", res: "Not run", detail: "Columns L and M were blank in the request workbook." }
     ] },
     { ref: "BGS-2026-015", name: "王建国", fields: [
-      { id: "BGS_Kp3Nv8QwTb", doc: "Mainland ID Verification", res: "Verified", detail: "Name and ID number match the registry record." },
-      { id: "BGS_Jd7Fx2LmYc", doc: "Mainland Phone Verification", res: "Verified", detail: "Number is active and registered to the same name." },
-      { id: "BGS_Ht5Zq9RnWp", doc: "Mainland Bank Account Verification", res: "Flagged", detail: "Account is active but registered to a different name — review recommended." }
+      { id: "BGS_Kp3Nv8QwTb", doc: "Mainland ID Verification", res: "Verified", detail: "Name and ID number match the public security record." },
+      { id: "BGS_Jd7Fx2LmYc", doc: "Global PEP / Terrorist Screening", res: "Verified", detail: "No PEP classification and no watchlist match." },
+      { id: "BGS_Ht5Zq9RnWp", doc: "Global Sanctions & Adverse Media", res: "Verified", detail: "No match on OFAC, UN, EU or HKMA lists; no adverse media returned." },
+      { id: "BGS_Sw8Bk4MjPe", doc: "Mainland Court & Enforcement (失信 / 限高)", res: "Flagged", detail: "One 限制高消費 consumption-restriction order on file (2024). Review before proceeding." }
     ] },
     { ref: "BGS-2026-016", name: "陈晓芸", fields: [
-      { id: "BGS_Bn6Cw4TkVs", doc: "Mainland ID Verification", res: "Verified", detail: "Name and ID number match the registry record." },
-      { id: "BGS_Xr2Gm7PdLf", doc: "Mainland Phone Verification", res: "Verified", detail: "Number is active and registered to the same name." },
-      { id: "BGS_Qy8Ts3NbHj", doc: "Mainland Bank Account Verification", res: "Verified", detail: "Account holder name matches; three-element check passed." },
-      { id: "BGS_Vc4Lp6WmDz", doc: "ID Card Validity & Expiry", res: "Flagged", detail: "Expires 2027-02-14 — within the 12-month window you asked to be flagged." }
+      { id: "BGS_Bn6Cw4TkVs", doc: "Mainland ID Verification", res: "Verified", detail: "Name and ID number match the public security record." },
+      { id: "BGS_Vc4Lp6WmDz", doc: "ID Card Validity & Expiry", res: "Flagged", detail: "Expires 2027-02-14 — inside the 12-month window you asked to be flagged." },
+      { id: "BGS_Xr2Gm7PdLf", doc: "Global PEP / Terrorist Screening", res: "Verified", detail: "No PEP classification and no watchlist match." },
+      { id: "BGS_Qy8Ts3NbHj", doc: "Global Sanctions & Adverse Media", res: "Verified", detail: "No match on OFAC, UN, EU or HKMA lists; no adverse media returned." },
+      { id: "BGS_Zf9Hd5CxRu", doc: "Criminal / Police Record (consented)", res: "Verified", detail: "No conviction or public-security record returned." }
     ] }
   ];
   function allFields() {
@@ -670,9 +682,12 @@ table.res tbody tr:first-child td { padding-top: 8px; }
   function requestBody() {
     return '<p>Hi Fill Easy team,</p>' +
       '<p>Please run background screening for the three individuals in the attached workbook ' +
-      '(Background_Screening_Orders, rows 3&ndash;5). All three are China &mdash; CN, references BGS-2026-014 to 016.</p>' +
-      '<p>I need the data fields marked in column Q for each of them, and on top of that please verify ' +
-      '李慧敏&rsquo;s professional qualification number. Flag it to me if any ID card is expired or expires within 12 months.</p>' +
+      '(Background_Screening_Orders, rows 3&ndash;5). All three are Mainland-background recruits, ' +
+      'China &mdash; CN, references BGS-2026-014 to 016.</p>' +
+      '<p>For each of them I need identity verification plus the screening layer &mdash; PEP and terrorist ' +
+      'screening, sanctions and adverse media, and the Mainland court and enforcement records (失信 / 限高). ' +
+      'Add the consented criminal record check for 陈晓芸, and 李慧敏&rsquo;s academic credential through 學信網.</p>' +
+      '<p>Flag it to me if any ID card is expired or expires within 12 months.</p>' +
       '<p>Please also generate a summary report.</p>' +
       '<p>The workbook is password-protected &mdash; same desk password we registered at onboarding, not in this email.</p>' +
       '<p class="sig">Thanks,<br>Matthew<br>Client Onboarding</p>';
@@ -685,11 +700,9 @@ table.res tbody tr:first-child td { padding-top: 8px; }
         '<table><thead><tr><th>Request ID</th><th>Data field</th><th>Result</th><th>Detail</th></tr></thead><tbody>' +
         s.fields.map(function (f) {
           return '<tr><td class="m">' + f.id + '</td><td>' + f.doc + '</td>' +
-            '<td><span class="p ' + (f.res === "Verified" ? "ok" : "fl") + '">' + f.res + '</span></td>' +
+            '<td><span class="p ' + (f.res === "Verified" ? "ok" : f.res === "Flagged" ? "fl" : "na") + '">' + f.res + '</span></td>' +
             '<td>' + f.detail + '</td></tr>';
         }).join("") +
-        '<tr><td class="m">&mdash;</td><td>Academic Credential</td><td><span class="p na">Not run</span></td>' +
-        '<td>Columns L and M were blank in the request workbook.</td></tr>' +
         '</tbody></table>';
     }).join("");
 
@@ -718,13 +731,61 @@ table.res tbody tr:first-child td { padding-top: 8px; }
       '</body></html>';
   }
 
+  /* Embedded previews are sandboxed and block file downloads, so the report is
+     always rendered on the page too. The exports below are best-effort. */
+  var FRAMED = (function () { try { return window.self !== window.top; } catch (e) { return true; } })();
+
   function download(name, mime, text) {
-    var blob = new Blob([text], { type: mime });
-    var url = URL.createObjectURL(blob);
-    var a = document.createElement("a");
-    a.href = url; a.download = name;
-    document.body.appendChild(a); a.click(); document.body.removeChild(a);
-    setTimeout(function () { URL.revokeObjectURL(url); }, 1500);
+    try {
+      var blob = new Blob([text], { type: mime });
+      if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+        window.navigator.msSaveOrOpenBlob(blob, name); return true;
+      }
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement("a");
+      a.href = url; a.download = name; a.rel = "noopener";
+      document.body.appendChild(a); a.click(); document.body.removeChild(a);
+      setTimeout(function () { URL.revokeObjectURL(url); }, 1500);
+      return true;
+    } catch (e) { return false; }
+  }
+
+  function copyText(text, done) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function () { done(true); }, function () { done(fallbackCopy(text)); });
+    } else { done(fallbackCopy(text)); }
+  }
+  function fallbackCopy(text) {
+    try {
+      var t = document.createElement("textarea");
+      t.value = text; t.setAttribute("readonly", "");
+      t.style.position = "fixed"; t.style.opacity = "0";
+      document.body.appendChild(t); t.select();
+      var ok = document.execCommand("copy");
+      document.body.removeChild(t); return ok;
+    } catch (e) { return false; }
+  }
+
+  /* the same report, rendered on the page */
+  function reportInline() {
+    return '<div class="rep">' +
+      '<div class="fe-bar"><span class="b">Fill Easy</span><span class="a">Summary Report</span></div>' +
+      '<div class="rep-in">' +
+        '<h3>Background screening &mdash; summary report</h3>' +
+        '<p class="rep-sub">References BGS-2026-014 to 016 &middot; China (CN) &middot; ' + TOTAL +
+        ' data fields across ' + SUBJECTS.length + ' subjects &middot; requested by ' + USER.nm + '</p>' +
+        SUBJECTS.map(function (s) {
+          return '<h4 class="rep-h">' + s.name + ' <span class="mono">' + s.ref + '</span></h4>' +
+            '<div style="overflow-x:auto"><table class="res"><thead><tr><th>Request ID</th><th>Data field</th><th>Result</th><th>Detail</th></tr></thead><tbody>' +
+            s.fields.map(function (f) {
+              return '<tr><td class="mono" style="font-size:var(--f-xs);white-space:nowrap">' + f.id + '</td>' +
+                '<td class="f">' + f.doc + '</td>' +
+                '<td><span class="tag ' + (f.res === "Verified" ? "t-ok" : f.res === "Flagged" ? "t-gold" : "t-mut") + '">' + f.res + '</span></td>' +
+                '<td class="d">' + f.detail + '</td></tr>';
+            }).join("") +
+            '</tbody></table></div>';
+        }).join("") +
+      '</div></div>';
   }
 
   function reportCSV() {
@@ -807,24 +868,25 @@ table.res tbody tr:first-child td { padding-top: 8px; }
 
     { nav: "Processed", eyebrow: "Processed automatically", title: "The reply comes back on its own",
       you: "Nothing. The request is processed automatically by email and the acknowledgement arrives in the same thread.",
-      bts: "Each data field for each subject is returned as its own request ID, so a partial failure shows on its own line instead of sinking the batch. Anything that cannot run is raised as a clarification you answer in the yellow column.",
-      chips: [TOTAL + " processing", "1 clarification", "under 5 min"],
+      bts: "Each data point for each subject is returned as its own request ID, so a partial failure shows on its own line instead of sinking the batch. Anything that cannot run is raised as a clarification you answer in the yellow column.",
+      chips: [TOTAL + " data points", "1 clarification", "under 5 min"],
       stage: function () {
         return '<div class="mail">' +
           mailHead({ from: AGENT, subject: "Re: Background screening — BGS-2026-014 to 016 (China)", time: "Tue 28 Jul, 09:13" }) +
           atts([{ n: "Disclaimer.txt", m: "743 bytes" }]) +
           '<div class="m-body">' + feBlock([
-            { type: "clar", rows: [{ subject: "All three subjects — Academic Credential",
-              issue: "Columns L and M (Academic Credential Number, Degree Number) are blank, so academic verification cannot run. Please advise how you'd like us to proceed." }] },
+            { type: "clar", rows: [{ subject: "李慧敏 — Academic Credential (CHESICC / 學信網)",
+              issue: "Columns L and M (Academic Credential Number, Degree Number) are blank, so verification at source cannot run. Please advise how you'd like us to proceed." }] },
             { title: "PROCESSING", rows: feRows("Processing") }
           ]) + '</div></div>';
       }
     },
 
     { nav: "Results", eyebrow: "Results returned", title: "Encrypted in, encrypted out",
-      you: "Open the results workbook with the same password, or download the summary report you asked for in the email.",
+      you: "Open the results workbook with the same password, then view or export the summary report you asked for in the email.",
+      bts: "The court and enforcement records (失信 / 限高) and the consented police record are the Mainland-background layer — for HK-local recruits those channels are either not applicable or do not exist.",
       encNote: "Because the request arrived encrypted, the response leaves the same way — locked with the same desk password, never sent alongside the file.",
-      chips: [TOTAL + " completed", "2 flagged", "summary report"],
+      chips: ["2 flagged", "1 not run", "summary report"],
       stage: function () {
         var mail = '<div class="mail">' +
           mailHead({ from: AGENT, subject: "Re: Background screening — BGS-2026-014 to 016 (China)", time: "Tue 28 Jul, 09:17" }) +
@@ -846,11 +908,10 @@ table.res tbody tr:first-child td { padding-top: 8px; }
             return '<tr class="grp"><td colspan="3">' + s.name + ' <span class="mono" style="color:var(--ink-3);font-size:var(--f-xs)">' + s.ref + '</span></td></tr>' +
               s.fields.map(function (f) {
                 return '<tr><td class="f">' + f.doc + '</td>' +
-                  '<td><span class="tag ' + (f.res === "Verified" ? "t-ok" : "t-gold") + '">' + f.res + '</span></td>' +
+                  '<td><span class="tag ' + (f.res === "Verified" ? "t-ok" : f.res === "Flagged" ? "t-gold" : "t-mut") + '">' + f.res + '</span></td>' +
                   '<td class="d">' + f.detail + '</td></tr>';
               }).join("") +
-              '<tr><td class="f">Academic Credential</td><td><span class="tag t-mut">Not run</span></td>' +
-              '<td class="d">Columns L and M were blank — raised as a clarification on the previous email.</td></tr>';
+              '';
           }).join("");
 
           wb = '<div class="card"><div class="card-h"><h3>Results workbook</h3><span class="r mono">' + RESULTS_FILE + '</span></div>' +
@@ -859,10 +920,17 @@ table.res tbody tr:first-child td { padding-top: 8px; }
         }
 
         var rep = '<div class="card"><div class="card-h"><h3>Summary report</h3><span class="r">requested in the email</span></div><div class="card-b">' +
-          '<p style="margin:0 0 14px;color:var(--ink-2);font-size:var(--f-sm);max-width:62ch">A single report consolidating every data field across all three subjects. ' +
-          'Open it in a browser and print to PDF, or take the CSV straight into Excel.</p>' +
-          '<div class="row"><button type="button" class="btn" id="dlReport">&#8595; Download summary report</button>' +
-          '<button type="button" class="btn quiet" id="dlCsv">Download CSV</button></div></div></div>';
+          '<p style="margin:0 0 14px;color:var(--ink-2);font-size:var(--f-sm);max-width:64ch">A single report consolidating every data point across all three subjects.</p>' +
+          '<div class="row"><button type="button" class="btn" id="repToggle">' +
+            (state.reportOpen ? "Hide summary report" : "View summary report") + '</button>' +
+          '<button type="button" class="btn quiet" id="dlReport">Download HTML</button>' +
+          '<button type="button" class="btn quiet" id="dlCsv">Download CSV</button>' +
+          '<button type="button" class="btn quiet" id="cpCsv">Copy as CSV</button></div>' +
+          '<p class="dl-note" id="dlNote">' + (FRAMED
+            ? "Embedded previews block file downloads &mdash; use <b>View summary report</b> to read it in full here, or open the page in its own tab for the file exports."
+            : "The HTML report opens in a browser and prints to PDF; the CSV opens in Excel.") + '</p>' +
+          (state.reportOpen ? reportInline() : "") +
+          '</div></div>';
 
         return mail + wb + rep;
       }
@@ -879,8 +947,8 @@ table.res tbody tr:first-child td { padding-top: 8px; }
                   { n: "KYC_Screening_Results_BGS-2026-014-A.xlsx", m: "9 KB &middot; encrypted &middot; same password", enc: true }]) +
             '<div class="m-body">' + feBlock([
               { title: "ORDER SUCCESS", rows: [{ id: "BGS_Yp8Kc3RmTn", ref: "BGS-2026-014-A", subject: "李慧敏", doc: "Driver's License Verification", status: "Completed" }] },
-              { type: "clar", rows: [{ subject: "All three subjects — Academic Credential",
-                issue: "Still outstanding from the original order. Send the certificate numbers for column L and we will run them on this thread." }] }
+              { type: "clar", rows: [{ subject: "李慧敏 — Academic Credential (CHESICC / 學信網)",
+                issue: "Still outstanding from the original order. Send the certificate number for column L and we will run it on this thread." }] }
             ]) + '</div>' +
           '</div>' +
           '<div><h4 class="sec-h">The reply that triggered it</h4><div class="card"><div class="card-b"><div class="quote"><div class="qh">Tue 28 Jul, 09:38 &mdash; Matthew Lee</div>' +
@@ -899,7 +967,7 @@ table.res tbody tr:first-child td { padding-top: 8px; }
     EDIT_CELLS.forEach(function (i) { r[EDIT_ROW][i] = ""; });
     return r;
   }
-  var state = { i: 0, rows: freshRows(), pw: "", encrypted: false, sent: false, unlocked: false, touched: false, allCols: false };
+  var state = { i: 0, rows: freshRows(), pw: "", encrypted: false, sent: false, unlocked: false, touched: false, allCols: false, reportOpen: false };
   var lastStep = null, timer = null;
 
   var el = {
@@ -999,13 +1067,30 @@ table.res tbody tr:first-child td { padding-top: 8px; }
     var oh = document.getElementById("openHint");
     if (oh) oh.addEventListener("click", function () { inp.value = state.pw || DESK_PW; tryOpen(); });
 
+    var note = document.getElementById("dlNote");
+    function say(msg) { if (note) note.innerHTML = msg; }
+
+    var rt = document.getElementById("repToggle");
+    if (rt) rt.addEventListener("click", function () { state.reportOpen = !state.reportOpen; render(); });
+
     var dr = document.getElementById("dlReport");
     if (dr) dr.addEventListener("click", function () {
-      download("Fill_Easy_Summary_Report_BGS-2026-014.html", "text/html;charset=utf-8", reportHTML());
+      var ok = download("Fill_Easy_Summary_Report_BGS-2026-014.html", "text/html;charset=utf-8", reportHTML());
+      say(ok ? "Saved <b>Fill_Easy_Summary_Report_BGS-2026-014.html</b> &mdash; open it in a browser and print to PDF. If nothing arrived, this preview is blocking downloads; use <b>View summary report</b>."
+             : "This preview blocks file downloads. Use <b>View summary report</b>, or open the page in its own tab.");
     });
     var dc = document.getElementById("dlCsv");
     if (dc) dc.addEventListener("click", function () {
-      download("Fill_Easy_Summary_Report_BGS-2026-014.csv", "text/csv;charset=utf-8", "﻿" + reportCSV());
+      var ok = download("Fill_Easy_Summary_Report_BGS-2026-014.csv", "text/csv;charset=utf-8", "\ufeff" + reportCSV());
+      say(ok ? "Saved <b>Fill_Easy_Summary_Report_BGS-2026-014.csv</b>. If nothing arrived, this preview is blocking downloads &mdash; use <b>Copy as CSV</b> instead."
+             : "This preview blocks file downloads. Use <b>Copy as CSV</b> instead.");
+    });
+    var cc = document.getElementById("cpCsv");
+    if (cc) cc.addEventListener("click", function () {
+      copyText(reportCSV(), function (ok) {
+        say(ok ? "Copied &mdash; " + TOTAL + " rows on the clipboard, ready to paste into Excel."
+               : "Could not reach the clipboard. Use <b>View summary report</b> and copy from the page.");
+      });
     });
   }
 
