@@ -1,68 +1,66 @@
-# KYC Desk — email agent walkthrough
+# Fill Easy — Individual KYC by email
 
-An interactive, single-file HTML demo of an email-driven KYC agent for PRC counterparty
-due diligence. A compliance analyst writes an ordinary email in plain English; the agent
-reads it, highlights what it understood, and answers in the same thread.
+An interactive, single-file HTML demo of the individual KYC (background screening) flow:
+fill the workbook, encrypt it, email it to the agent, get verification results back — and
+keep talking to the agent in plain English on the same thread.
 
-The demo exists to show one thing clearly: **why a company search and a person search
-end differently.**
+Built from two supplied sources:
 
-| | Person search | Company search |
+- **`KYC_____1.xlsx`** — the `Background_Screening_Orders` template. All 18 bilingual column
+  headers, the row-2 sample data, the mandatory-field rules and the instruction text are
+  reproduced verbatim.
+- **`Fill_Easy_HK_Company_Search_Guide_v2.docx`** — the agent's reply format. The
+  `Fill Easy` / `Automated Notification` bar, the `ORDER SUCCESS` / `PROCESSING (n)` /
+  `NEED CLARIFICATION (n)` sections, the `Request ID | Request | Status` tables, the yellow
+  *Your reply* column and the `Disclaimer.txt` attachment all follow the real emails.
+
+## The flow
+
+| # | Step | What happens |
 |---|---|---|
-| Volume | ~6 records | ~318 records across 8 related tables |
-| Deliverable | A verdict | A dataset |
-| Delivery | Written into the email body | Excel workbook attached |
-| Protection | Nothing leaves the thread | AES-256 encrypted (ECMA-376 agile) |
-| Password | n/a | Generated per file, sent out-of-band on Teams |
-| Lifecycle | Evidence retained in the case file | File and password expire after 14 days |
+| 1 | Fill the template | Complete row 3 of `Background_Screening_Orders`. Mandatory: 中文名 and the 18-digit 身份證號碼. Column Q says which data fields you want. |
+| 2 | Encrypt the file | Set a password. The workbook is locked with AES-256 before it goes near email. |
+| 3 | Attach and send | One email to `agent@ses.fill-easy.com` with the encrypted workbook attached, written in plain language. |
+| 4 | Agent reads it | The agent decrypts the attachment, reads row 3, and highlights the request in the email body. |
+| 5 | Processing reply | Standard Fill Easy notification: one request ID per data field, plus a clarification for the blank academic-credential columns. |
+| 6 | Results returned | `ORDER SUCCESS` with verification outcomes, delivered as an encrypted workbook — same password. |
+| 7 | Reply in plain English | A follow-up reply adds the driving-licence check. No re-upload; the agent carries the subject from the thread. |
 
-Both paths accept plain-English follow-ups in the same thread — including fragments like
-"he" or "the two subsidiaries", which the agent resolves from earlier messages.
+The point of the demo is the split between the two inputs: **the workbook carries the
+structured identifiers, the email body carries the intent**, and the agent merges them. The
+two extra checks in step 4 (professional qualification, bank account) were asked for in
+prose and never appeared in column Q.
+
+## Interactions
+
+- **Step 1** — four cells in row 3 are editable. Type into them and validation updates live,
+  including the 18-digit mainland ID rule. **Fill sample row** completes it for you.
+- **Step 2** — set a password (mismatch is rejected), or press **Use desk password**.
+- **Step 3** — **Send** advances the demo.
+- **Step 6** — the returned workbook opens only against the password you set in step 2.
+- **Next / Back**, the numbered stepper, or the **← →** arrow keys navigate. **◐** switches
+  light and dark; the page follows the OS setting on load.
 
 ## Viewing it
 
-Open `index.html` in a browser. No build step, no dependencies, no network calls — it is
-one self-contained file.
+Open `index.html` in a browser — no build step, no dependencies, no network calls.
 
-Hosted on GitHub Pages: **Settings → Pages → Source: "Deploy from a branch"**, then pick
-this branch with folder `/ (root)`. `index.html` sits at the root, so the site is served
-directly with no extra configuration. `.nojekyll` is present so Pages publishes the files
-as-is instead of running them through Jekyll.
+Hosted on GitHub Pages: **Settings → Pages → Source: "Deploy from a branch"**, then this
+branch with folder `/ (root)`. `index.html` is at the root, so it serves directly.
+`.nojekyll` stops Pages running the files through Jekyll.
 
-## Driving the demo
+## Known gaps
 
-- **Company search / Person search** — top right, switches tracks. Each starts over at step 1.
-- **Next / Back**, the numbered step rail, or the **← →** arrow keys move through the walkthrough.
-- On the company **Deliver** step the attached workbook opens locked. Type the password or
-  press **Paste from Teams**, then click through the sheet tabs. A wrong password is rejected.
-- The **◐** button switches light and dark; the page also follows the OS setting on load.
-
-## Walkthrough steps
-
-**Company search** — Compose → Parse → Confirm scope → Retrieve → Build workbook →
-Encrypt → Deliver and unlock → Converse.
-
-**Person search** — Compose → Parse → Confirm scope → Screen → Answer inline → Converse.
-
-The narration strip at the bottom explains each step, and calls out in red wherever the two
-guides diverge.
-
-## Reading the highlights
-
-On the **Parse** steps the analyst's own sentence is marked up with what the agent extracted.
-Colour encodes the slot category, not emphasis:
-
-- **Subject entity** — who or what is being checked
-- **Identifier** — the value that pins them down (USCC, DOB, national ID, jurisdiction)
-- **Check scope** — which checks were asked for, and over what window
-- **Delivery & deadline** — output format, protection, and when it is due
-
-The agent activity panel on the right mirrors the same slots as structured fields, so you
-can see the sentence and the parse side by side. Nothing was filled in on a form.
-
-## Notes
-
-Every name, company, unified social credit code, case number and address is fabricated for
-the demo, as are the source counts. Email addresses use the reserved `.example` domain. The
-UI is a mockup — there is no mail server, no data source and no encryption actually running
-behind it.
+- **`KYC1` / `KYC2`** appear as the codes the template uses. Their definitions weren't in the
+  supplied documents, so the demo passes them through rather than inventing what they expand to.
+- **Styling reference.** The brief was to mirror the component style of
+  `fill-easy-limited.github.io/prudential-demo-china-login`. That site was unreachable from
+  the build environment (network policy blocks all outbound browsing), so the chrome is built
+  in a form-first idiom — card panels, labelled inputs, numbered stepper, prominent primary
+  button — with a deliberately different palette: petrol `#0B5C63` primary, amber `#8A6108`
+  reserved for encryption state, green `#2C6E49` for verified. The agent notification block is
+  *not* restyled; it reproduces the real template. Point me at that CSS and the chrome can be
+  trued up to it.
+- Subject data (李慧敏, IDs, bank and certificate numbers) is fabricated. The `.example`
+  sender domain is reserved for documentation. There is no mail server, no data source and no
+  encryption actually running behind the UI.

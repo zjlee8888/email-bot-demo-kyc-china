@@ -3,114 +3,116 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>KYC Desk — Email Agent Walkthrough</title>
-<meta name="description" content="Interactive demo: a compliance analyst requests PRC due diligence in plain-English email. The agent highlights what it parsed, then returns a person screening inline or a company file as an encrypted Excel workbook.">
+<title>Fill Easy — Individual KYC by Email</title>
+<meta name="description" content="Interactive demo: fill the Background Screening Orders workbook, encrypt it, email it to the Fill Easy agent, and get verification results back — all in plain language.">
 <meta name="color-scheme" content="light dark">
-<meta name="theme-color" content="#2B5F8E">
+<meta name="theme-color" content="#0B5C63">
 <!-- ARTIFACT:STYLE:BEGIN -->
 <style>
 /* ============================================================
-   Tokens
+   Tokens — petrol primary, amber reserved for encryption state
    ============================================================ */
 :root {
   color-scheme: light dark;
 
-  --paper:      #E9EDF2;
+  --paper:      #ECF1F1;
   --surface:    #FFFFFF;
-  --surface-2:  #F4F6F9;
-  --surface-3:  #E4E9EF;
-  --border:     #D2DAE3;
-  --border-2:   #BFC9D5;
-  --ink:        #131A22;
-  --ink-2:      #46535F;
-  --ink-3:      #6D7A88;
+  --surface-2:  #F4F7F7;
+  --surface-3:  #E3EAEA;
+  --border:     #D5DEDF;
+  --border-2:   #BDCACB;
+  --ink:        #101A1C;
+  --ink-2:      #415356;
+  --ink-3:      #6B7C7F;
 
-  --accent:     #2B5F8E;
-  --accent-2:   #24506F;
-  --accent-soft:#DCE7F1;
+  --brand:      #0B5C63;
+  --brand-2:    #08464C;
+  --brand-soft: #DCEBEC;
 
-  --seal:       #A8342A;
-  --seal-soft:  #F6E3E0;
-  --ok:         #1F6F5C;
-  --ok-soft:    #DCEDE7;
-  --warn:       #9A6410;
-  --warn-soft:  #F6EBD7;
+  --gold:       #8A6108;
+  --gold-soft:  #F7EBD2;
+  --gold-line:  #E5C55A;
+  --ok:         #2C6E49;
+  --ok-soft:    #DEEDE3;
+  --crit:       #A33A31;
+  --crit-soft:  #F7E3E1;
+
+  /* Fill Easy agent notification block */
+  --fe-bar:     #1C1C1C;
+  --fe-bar-tx:  #FFFFFF;
+  --fe-cell:    #FFFFFF;
+  --fe-head:    #F7F8F8;
+  --fe-line:    #DDE1E2;
+  --fe-tx:      #1C1C1C;
+  --fe-mut:     #6E7679;
+  --fe-yellow:  #FFF4C2;
+  --fe-red:     #C0392B;
 
   /* parsed-request slot categories */
-  --slot-entity:#2B5F8E; --slot-entity-bg:#DCE7F1;
-  --slot-id:    #6B3FA0; --slot-id-bg:    #E7DFF2;
-  --slot-scope: #1F6F5C; --slot-scope-bg: #DAEDE6;
-  --slot-out:   #9A6410; --slot-out-bg:   #F7EAD4;
+  --s-subj: #0B5C63; --s-subj-bg: #DCEBEC;
+  --s-id:   #6A4A9C; --s-id-bg:   #E7E0F3;
+  --s-fld:  #2C6E49; --s-fld-bg:  #DEEDE3;
+  --s-sec:  #8A6108; --s-sec-bg:  #F7EBD2;
 
-  --shadow-1: 0 1px 2px rgba(19,26,34,.06), 0 1px 1px rgba(19,26,34,.04);
-  --shadow-2: 0 8px 24px rgba(19,26,34,.10), 0 2px 6px rgba(19,26,34,.06);
+  --sh-1: 0 1px 2px rgba(16,26,28,.07);
+  --sh-2: 0 10px 28px rgba(16,26,28,.12), 0 2px 6px rgba(16,26,28,.06);
 
-  --sans: ui-sans-serif, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans SC", sans-serif;
-  --serif: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, "Songti SC", serif;
+  --sans: ui-sans-serif, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial,
+          "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans SC", sans-serif;
   --mono: ui-monospace, "SF Mono", SFMono-Regular, "Cascadia Mono", Menlo, Consolas, monospace;
 
-  --rail-w: 188px;
-  --list-w: 300px;
-  --trace-w: 330px;
+  --r-sm: 6px; --r: 10px; --r-lg: 14px;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --paper:      #0D1218;
-    --surface:    #151C24;
-    --surface-2:  #1B242E;
-    --surface-3:  #232E39;
-    --border:     #2A3742;
-    --border-2:   #3A4956;
-    --ink:        #E4EAF1;
-    --ink-2:      #A7B4C1;
-    --ink-3:      #7B8896;
-
-    --accent:     #7BA9D4;
-    --accent-2:   #A3C4E3;
-    --accent-soft:#1D2E3E;
-
-    --seal:       #E08D82;
-    --seal-soft:  #34201E;
-    --ok:         #6FC0A8;
-    --ok-soft:    #16302A;
-    --warn:       #D9A55C;
-    --warn-soft:  #322613;
-
-    --slot-entity:#7BA9D4; --slot-entity-bg:#1D2E3E;
-    --slot-id:    #B79BE0; --slot-id-bg:    #262038;
-    --slot-scope: #6FC0A8; --slot-scope-bg: #16302A;
-    --slot-out:   #D9A55C; --slot-out-bg:   #322613;
-
-    --shadow-1: 0 1px 2px rgba(0,0,0,.4);
-    --shadow-2: 0 10px 30px rgba(0,0,0,.5);
+    --paper:#0B1113; --surface:#131B1D; --surface-2:#182225; --surface-3:#202C2F;
+    --border:#273538; --border-2:#38494D; --ink:#E2EAEB; --ink-2:#A5B4B6; --ink-3:#78888B;
+    --brand:#5FAAB1; --brand-2:#8AC6CB; --brand-soft:#123336;
+    --gold:#D5A24A; --gold-soft:#2E2413; --gold-line:#6B551F;
+    --ok:#6BB98C; --ok-soft:#152C20; --crit:#DE8B82; --crit-soft:#331D1B;
+    --fe-bar:#000000; --fe-bar-tx:#FFFFFF;
+    --fe-cell:#131B1D; --fe-head:#182225; --fe-line:#273538; --fe-tx:#E2EAEB; --fe-mut:#8B999C;
+    --fe-yellow:#3A3216; --fe-red:#E08379;
+    --s-subj:#5FAAB1; --s-subj-bg:#123336;
+    --s-id:#AE96DE;   --s-id-bg:#241D33;
+    --s-fld:#6BB98C;  --s-fld-bg:#152C20;
+    --s-sec:#D5A24A;  --s-sec-bg:#2E2413;
+    --sh-1: 0 1px 2px rgba(0,0,0,.45);
+    --sh-2: 0 12px 32px rgba(0,0,0,.55);
   }
 }
-
 :root[data-theme="dark"] {
-  --paper:#0D1218; --surface:#151C24; --surface-2:#1B242E; --surface-3:#232E39;
-  --border:#2A3742; --border-2:#3A4956; --ink:#E4EAF1; --ink-2:#A7B4C1; --ink-3:#7B8896;
-  --accent:#7BA9D4; --accent-2:#A3C4E3; --accent-soft:#1D2E3E;
-  --seal:#E08D82; --seal-soft:#34201E; --ok:#6FC0A8; --ok-soft:#16302A; --warn:#D9A55C; --warn-soft:#322613;
-  --slot-entity:#7BA9D4; --slot-entity-bg:#1D2E3E;
-  --slot-id:#B79BE0; --slot-id-bg:#262038;
-  --slot-scope:#6FC0A8; --slot-scope-bg:#16302A;
-  --slot-out:#D9A55C; --slot-out-bg:#322613;
-  --shadow-1: 0 1px 2px rgba(0,0,0,.4);
-  --shadow-2: 0 10px 30px rgba(0,0,0,.5);
+  --paper:#0B1113; --surface:#131B1D; --surface-2:#182225; --surface-3:#202C2F;
+  --border:#273538; --border-2:#38494D; --ink:#E2EAEB; --ink-2:#A5B4B6; --ink-3:#78888B;
+  --brand:#5FAAB1; --brand-2:#8AC6CB; --brand-soft:#123336;
+  --gold:#D5A24A; --gold-soft:#2E2413; --gold-line:#6B551F;
+  --ok:#6BB98C; --ok-soft:#152C20; --crit:#DE8B82; --crit-soft:#331D1B;
+  --fe-bar:#000000; --fe-bar-tx:#FFFFFF;
+  --fe-cell:#131B1D; --fe-head:#182225; --fe-line:#273538; --fe-tx:#E2EAEB; --fe-mut:#8B999C;
+  --fe-yellow:#3A3216; --fe-red:#E08379;
+  --s-subj:#5FAAB1; --s-subj-bg:#123336;
+  --s-id:#AE96DE;   --s-id-bg:#241D33;
+  --s-fld:#6BB98C;  --s-fld-bg:#152C20;
+  --s-sec:#D5A24A;  --s-sec-bg:#2E2413;
+  --sh-1: 0 1px 2px rgba(0,0,0,.45);
+  --sh-2: 0 12px 32px rgba(0,0,0,.55);
 }
-
 :root[data-theme="light"] {
-  --paper:#E9EDF2; --surface:#FFFFFF; --surface-2:#F4F6F9; --surface-3:#E4E9EF;
-  --border:#D2DAE3; --border-2:#BFC9D5; --ink:#131A22; --ink-2:#46535F; --ink-3:#6D7A88;
-  --accent:#2B5F8E; --accent-2:#24506F; --accent-soft:#DCE7F1;
-  --seal:#A8342A; --seal-soft:#F6E3E0; --ok:#1F6F5C; --ok-soft:#DCEDE7; --warn:#9A6410; --warn-soft:#F6EBD7;
-  --slot-entity:#2B5F8E; --slot-entity-bg:#DCE7F1;
-  --slot-id:#6B3FA0; --slot-id-bg:#E7DFF2;
-  --slot-scope:#1F6F5C; --slot-scope-bg:#DAEDE6;
-  --slot-out:#9A6410; --slot-out-bg:#F7EAD4;
-  --shadow-1: 0 1px 2px rgba(19,26,34,.06), 0 1px 1px rgba(19,26,34,.04);
-  --shadow-2: 0 8px 24px rgba(19,26,34,.10), 0 2px 6px rgba(19,26,34,.06);
+  --paper:#ECF1F1; --surface:#FFFFFF; --surface-2:#F4F7F7; --surface-3:#E3EAEA;
+  --border:#D5DEDF; --border-2:#BDCACB; --ink:#101A1C; --ink-2:#415356; --ink-3:#6B7C7F;
+  --brand:#0B5C63; --brand-2:#08464C; --brand-soft:#DCEBEC;
+  --gold:#8A6108; --gold-soft:#F7EBD2; --gold-line:#E5C55A;
+  --ok:#2C6E49; --ok-soft:#DEEDE3; --crit:#A33A31; --crit-soft:#F7E3E1;
+  --fe-bar:#1C1C1C; --fe-bar-tx:#FFFFFF;
+  --fe-cell:#FFFFFF; --fe-head:#F7F8F8; --fe-line:#DDE1E2; --fe-tx:#1C1C1C; --fe-mut:#6E7679;
+  --fe-yellow:#FFF4C2; --fe-red:#C0392B;
+  --s-subj:#0B5C63; --s-subj-bg:#DCEBEC;
+  --s-id:#6A4A9C;   --s-id-bg:#E7E0F3;
+  --s-fld:#2C6E49;  --s-fld-bg:#DEEDE3;
+  --s-sec:#8A6108;  --s-sec-bg:#F7EBD2;
+  --sh-1: 0 1px 2px rgba(16,26,28,.07);
+  --sh-2: 0 10px 28px rgba(16,26,28,.12), 0 2px 6px rgba(16,26,28,.06);
 }
 
 /* ============================================================
@@ -119,26 +121,19 @@
 * { box-sizing: border-box; }
 html, body { height: 100%; }
 body {
-  margin: 0;
-  background: var(--paper);
-  color: var(--ink);
-  font-family: var(--sans);
-  font-size: 14px;
-  line-height: 1.5;
+  margin: 0; background: var(--paper); color: var(--ink);
+  font-family: var(--sans); font-size: 14px; line-height: 1.55;
   -webkit-font-smoothing: antialiased;
 }
-button { font: inherit; color: inherit; }
-:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 3px; }
-.num { font-variant-numeric: tabular-nums; }
+button, input, select, textarea { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; border-radius: 3px; }
+.mono { font-family: var(--mono); font-variant-numeric: tabular-nums; }
 
 .app {
   display: grid;
-  /* minmax(0,1fr): an auto track cannot shrink below its items' min-content,
-     which would let the brand bar push the whole page into a sideways scroll. */
   grid-template-columns: minmax(0, 1fr);
   grid-template-rows: auto auto minmax(0, 1fr) auto;
-  height: 100dvh;
-  min-height: 0;
+  height: 100dvh; min-height: 0;
 }
 
 /* ============================================================
@@ -146,510 +141,360 @@ button { font: inherit; color: inherit; }
    ============================================================ */
 .brandbar {
   display: flex; align-items: center; gap: 10px 14px; flex-wrap: wrap;
-  padding: 9px 16px;
-  background: var(--surface);
+  padding: 10px 18px; background: var(--surface);
   border-bottom: 1px solid var(--border);
 }
-.mark {
-  display: grid; place-items: center;
-  width: 26px; height: 26px; flex: none;
-  border-radius: 5px;
-  background: var(--accent); color: #fff;
-  font-family: var(--serif); font-size: 14px; font-weight: 600;
-  letter-spacing: .02em;
+.logo {
+  display: grid; place-items: center; width: 28px; height: 28px; flex: none;
+  border-radius: var(--r-sm); background: var(--brand); color: #fff;
+  font-size: 13px; font-weight: 700; letter-spacing: -.02em;
 }
-:root[data-theme="dark"] .mark, :root:not([data-theme]) .mark { }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .mark { color: #0D1218; } }
-:root[data-theme="dark"] .mark { color: #0D1218; }
-:root[data-theme="light"] .mark { color: #fff; }
-
-.brandname { font-weight: 640; letter-spacing: -.01em; min-width: 0; }
+:root[data-theme="dark"] .logo { color: #0B1113; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .logo { color: #0B1113; } }
+.brandname { font-weight: 660; letter-spacing: -.01em; min-width: 0; }
 .brandsub {
   color: var(--ink-3); font-size: 12px;
-  padding-left: 14px; margin-left: 2px;
-  border-left: 1px solid var(--border);
+  padding-left: 14px; border-left: 1px solid var(--border);
 }
 .brandbar .spacer { flex: 1; }
-
-.seg {
-  display: flex; gap: 2px; padding: 2px;
-  background: var(--surface-2);
-  border: 1px solid var(--border);
-  border-radius: 7px;
-}
-.seg button {
-  border: 0; background: transparent; cursor: pointer;
-  padding: 5px 11px; border-radius: 5px;
-  font-size: 12.5px; font-weight: 560; color: var(--ink-2);
-  white-space: nowrap;
-}
-.seg button:hover { color: var(--ink); }
-.seg button[aria-pressed="true"] {
-  background: var(--surface); color: var(--ink);
-  box-shadow: var(--shadow-1);
-}
 .iconbtn {
   border: 1px solid var(--border); background: var(--surface);
-  border-radius: 7px; width: 32px; height: 30px; cursor: pointer;
+  border-radius: var(--r-sm); width: 32px; height: 31px; cursor: pointer;
   display: grid; place-items: center; color: var(--ink-2);
 }
 .iconbtn:hover { background: var(--surface-2); color: var(--ink); }
 
 /* ============================================================
-   Step rail
+   Stepper — this IS a real sequence, so it is numbered
    ============================================================ */
-.railwrap {
-  background: var(--surface);
-  border-bottom: 1px solid var(--border);
-  padding: 0 16px 10px;
-}
-.steprail {
-  display: flex; align-items: stretch; gap: 6px;
-  overflow-x: auto; padding-bottom: 2px;
-  scrollbar-width: thin;
-}
-.stepchip {
-  --c: var(--border-2);
-  flex: 1 1 0; min-width: 118px;
-  display: flex; flex-direction: column; gap: 3px;
-  padding: 8px 10px 9px;
-  border: 0; border-top: 2px solid var(--c);
+.stepwrap { background: var(--surface); border-bottom: 1px solid var(--border); padding: 0 18px 12px; }
+.stepper { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: thin; padding-bottom: 2px; }
+.step {
+  flex: 1 1 0; min-width: 132px;
+  display: flex; align-items: flex-start; gap: 9px;
+  padding: 9px 11px; border: 1px solid transparent; border-radius: var(--r-sm);
   background: transparent; text-align: left; cursor: pointer;
-  border-radius: 0 0 4px 4px;
-  transition: background .15s ease;
 }
-.stepchip:hover { background: var(--surface-2); }
-.stepchip .k {
-  font-family: var(--mono); font-size: 10px; letter-spacing: .06em;
-  color: var(--ink-3);
+.step:hover { background: var(--surface-2); }
+.step .n {
+  width: 21px; height: 21px; flex: none; border-radius: 50%;
+  display: grid; place-items: center;
+  font-size: 11px; font-weight: 700; font-variant-numeric: tabular-nums;
+  border: 1.5px solid var(--border-2); color: var(--ink-3); background: var(--surface);
 }
-.stepchip .t { font-size: 12.5px; font-weight: 560; color: var(--ink-3); line-height: 1.25; }
-.stepchip[data-state="done"] { --c: var(--accent); }
-.stepchip[data-state="done"] .t { color: var(--ink-2); }
-.stepchip[data-state="done"] .k { color: var(--accent); }
-.stepchip[data-state="current"] { --c: var(--accent); background: var(--accent-soft); }
-.stepchip[data-state="current"] .t { color: var(--ink); font-weight: 640; }
-.stepchip[data-state="current"] .k { color: var(--accent); }
+.step .t { font-size: 12.5px; font-weight: 560; color: var(--ink-3); line-height: 1.3; }
+.step[data-state="done"] .n { background: var(--brand); border-color: var(--brand); color: #fff; }
+.step[data-state="done"] .t { color: var(--ink-2); }
+.step[data-state="current"] { background: var(--brand-soft); border-color: var(--brand); }
+.step[data-state="current"] .n { background: var(--brand); border-color: var(--brand); color: #fff; }
+.step[data-state="current"] .t { color: var(--ink); font-weight: 660; }
+:root[data-theme="dark"] .step[data-state="done"] .n,
+:root[data-theme="dark"] .step[data-state="current"] .n { color: #0B1113; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .step[data-state="done"] .n,
+  :root:not([data-theme="light"]) .step[data-state="current"] .n { color: #0B1113; }
+}
 
 /* ============================================================
-   Mail shell
+   Stage
    ============================================================ */
-.shell {
-  display: grid;
-  grid-template-columns: var(--rail-w) var(--list-w) minmax(0, 1fr) var(--trace-w);
-  min-height: 0;
-  background: var(--paper);
-}
-.col { min-width: 0; min-height: 0; overflow: auto; }
+.shell { display: grid; grid-template-columns: minmax(0, 1fr) 336px; min-height: 0; }
+.stage { min-width: 0; min-height: 0; overflow: auto; padding: 20px 22px 40px; }
+.stageinner { max-width: 1000px; }
 
-/* --- folder rail --- */
-.rail { padding: 14px 10px; border-right: 1px solid var(--border); background: var(--surface-2); }
-.compose-cta {
-  width: 100%; display: flex; align-items: center; gap: 8px;
-  padding: 8px 12px; margin-bottom: 14px;
-  border: 1px solid var(--border-2); border-radius: 7px;
-  background: var(--surface); cursor: default;
-  font-size: 13px; font-weight: 560; color: var(--ink-2);
-  box-shadow: var(--shadow-1);
+.side { min-width: 0; min-height: 0; overflow: auto; border-left: 1px solid var(--border); background: var(--surface-2); }
+.sidehead {
+  position: sticky; top: 0; z-index: 2; padding: 13px 15px 11px;
+  background: var(--surface-2); border-bottom: 1px solid var(--border);
 }
-.railgroup { margin-bottom: 16px; }
-.railhead {
-  font-size: 10.5px; font-weight: 640; letter-spacing: .09em; text-transform: uppercase;
-  color: var(--ink-3); padding: 0 8px 6px;
-}
-.folder {
-  display: flex; align-items: center; gap: 8px;
-  padding: 6px 8px; border-radius: 6px;
-  font-size: 13px; color: var(--ink-2);
-}
-.folder .cnt { margin-left: auto; font-size: 11.5px; color: var(--ink-3); font-variant-numeric: tabular-nums; }
-.folder[data-active="true"] { background: var(--accent-soft); color: var(--ink); font-weight: 600; }
-.folder[data-active="true"] .cnt { color: var(--accent); font-weight: 640; }
-.dot { width: 7px; height: 7px; border-radius: 50%; flex: none; background: var(--border-2); }
-.folder[data-active="true"] .dot { background: var(--accent); }
+.sidehead .ti { display: flex; align-items: center; gap: 8px; }
+.sidehead h2 { margin: 0; font-size: 11.5px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-2); }
+.pulse { width: 7px; height: 7px; border-radius: 50%; background: var(--ok); box-shadow: 0 0 0 3px var(--ok-soft); flex: none; }
+.sidehead .sb { margin-top: 5px; font-size: 11.5px; color: var(--ink-3); font-family: var(--mono); word-break: break-word; }
+.sidebody { padding: 15px; display: flex; flex-direction: column; gap: 14px; }
 
-/* --- message list --- */
-.list { border-right: 1px solid var(--border); background: var(--surface); }
-.listhead {
-  position: sticky; top: 0; z-index: 2;
-  display: flex; align-items: baseline; gap: 8px;
-  padding: 12px 14px 10px;
-  background: var(--surface); border-bottom: 1px solid var(--border);
+/* ============================================================
+   Cards + form controls (the login-page component idiom)
+   ============================================================ */
+.card { border: 1px solid var(--border); border-radius: var(--r); background: var(--surface); box-shadow: var(--sh-1); overflow: hidden; margin-bottom: 18px; }
+.card > header {
+  display: flex; align-items: center; gap: 9px; flex-wrap: wrap;
+  padding: 13px 16px; border-bottom: 1px solid var(--border); background: var(--surface-2);
 }
-.listhead h2 { margin: 0; font-size: 14px; font-weight: 640; letter-spacing: -.01em; }
-.listhead .meta { font-size: 11.5px; color: var(--ink-3); margin-left: auto; }
+.card > header h3 { margin: 0; font-size: 14px; font-weight: 660; letter-spacing: -.005em; }
+.card > header .right { margin-left: auto; font-size: 12px; color: var(--ink-3); }
+.card .cb { padding: 16px; }
+.card.gold { border-color: var(--gold-line); }
+.card.gold > header { background: var(--gold-soft); border-bottom-color: var(--gold-line); }
+.card.gold > header h3 { color: var(--gold); }
 
-.msg {
-  display: block; width: 100%; text-align: left;
-  padding: 11px 14px 12px 12px;
-  border: 0; border-bottom: 1px solid var(--border);
-  border-left: 3px solid transparent;
-  background: transparent; cursor: default;
-  animation: slidein .28s ease both;
-}
-.msg[data-open="true"] { background: var(--accent-soft); border-left-color: var(--accent); }
-.msg[data-unread="true"] .subj { font-weight: 680; color: var(--ink); }
-.msg .row1 { display: flex; align-items: baseline; gap: 8px; }
-.msg .from { font-size: 12.5px; font-weight: 600; color: var(--ink-2); }
-.msg[data-unread="true"] .from { color: var(--ink); }
-.msg .time { margin-left: auto; font-size: 11px; color: var(--ink-3); font-variant-numeric: tabular-nums; white-space: nowrap; }
-.msg .subj { font-size: 13px; color: var(--ink-2); margin-top: 2px; }
-.msg .prev {
-  font-size: 12px; color: var(--ink-3); margin-top: 2px;
-  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
-}
-.msg .flags { display: flex; gap: 5px; margin-top: 6px; flex-wrap: wrap; }
+.lede { margin: 0 0 16px; font-size: 14.5px; color: var(--ink-2); max-width: 74ch; }
+.lede strong { color: var(--ink); font-weight: 620; }
 
-.tag {
-  display: inline-flex; align-items: center; gap: 4px;
-  padding: 1px 7px; border-radius: 20px;
-  font-size: 10.5px; font-weight: 640; letter-spacing: .02em;
-  border: 1px solid transparent;
+.field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
+.field label { font-size: 12.5px; font-weight: 600; color: var(--ink-2); }
+.field label .req { color: var(--crit); }
+.field input, .field select, .field textarea {
+  padding: 10px 12px; border: 1px solid var(--border-2); border-radius: var(--r-sm);
+  background: var(--surface); color: var(--ink); font-size: 14px; width: 100%;
 }
-.tag-agent { background: var(--accent-soft); color: var(--accent); }
-.tag-lock  { background: var(--seal-soft); color: var(--seal); }
-.tag-ok    { background: var(--ok-soft); color: var(--ok); }
-.tag-warn  { background: var(--warn-soft); color: var(--warn); }
-.tag-plain { background: var(--surface-3); color: var(--ink-2); }
+.field input:focus, .field textarea:focus { outline: none; border-color: var(--brand); box-shadow: 0 0 0 3px var(--brand-soft); }
+.field .hint { font-size: 11.5px; color: var(--ink-3); }
+.field .err { font-size: 11.5px; color: var(--crit); }
+.field.mono input { font-family: var(--mono); }
+.grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 0 16px; }
 
-/* --- reading pane --- */
-.pane { background: var(--surface); }
-.paneinner { padding: 20px 26px 40px; max-width: 760px; animation: fadein .3s ease both; }
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 7px;
+  border: 1px solid var(--brand); background: var(--brand); color: #fff;
+  padding: 10px 18px; border-radius: var(--r-sm); cursor: pointer;
+  font-size: 13.5px; font-weight: 640;
+}
+.btn:hover { background: var(--brand-2); border-color: var(--brand-2); }
+.btn[disabled] { opacity: .45; cursor: not-allowed; }
+.btn.ghost { background: transparent; color: var(--ink-2); border-color: var(--border-2); }
+.btn.ghost:hover { background: var(--surface-3); color: var(--ink); }
+.btn.sm { padding: 6px 12px; font-size: 12.5px; }
+.btn.block { width: 100%; }
+:root[data-theme="dark"] .btn:not(.ghost) { color: #0B1113; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .btn:not(.ghost) { color: #0B1113; } }
+.btnrow { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
 
-.emailhead { padding-bottom: 14px; border-bottom: 1px solid var(--border); }
-.emailhead h1 {
-  margin: 0 0 12px; font-size: 19px; line-height: 1.3; font-weight: 640;
-  letter-spacing: -.015em; text-wrap: balance;
+.badge {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 2px 9px; border-radius: 20px; font-size: 11px; font-weight: 660;
+  border: 1px solid transparent; white-space: nowrap;
 }
-.idline { display: flex; align-items: flex-start; gap: 10px; }
-.avatar {
-  width: 34px; height: 34px; flex: none; border-radius: 50%;
-  display: grid; place-items: center;
-  font-size: 12px; font-weight: 660; letter-spacing: .02em;
-  background: var(--surface-3); color: var(--ink-2);
+.b-gold { background: var(--gold-soft); color: var(--gold); border-color: var(--gold-line); }
+.b-ok   { background: var(--ok-soft); color: var(--ok); }
+.b-brand{ background: var(--brand-soft); color: var(--brand); }
+.b-crit { background: var(--crit-soft); color: var(--crit); }
+.b-mut  { background: var(--surface-3); color: var(--ink-2); }
+
+/* ============================================================
+   Spreadsheet
+   ============================================================ */
+.xl { border: 1px solid var(--border-2); border-radius: var(--r); overflow: hidden; background: var(--surface); box-shadow: var(--sh-1); }
+.xlbar { display: flex; align-items: center; gap: 9px; flex-wrap: wrap; padding: 9px 13px; background: var(--surface-2); border-bottom: 1px solid var(--border); font-size: 12.5px; }
+.xlbar .fn { font-family: var(--mono); font-size: 11.5px; word-break: break-all; }
+.xltab { display: flex; gap: 3px; padding: 6px 9px 0; background: var(--surface-2); border-bottom: 1px solid var(--border); }
+.xltab span {
+  padding: 5px 13px; border: 1px solid var(--border); border-bottom: 0;
+  border-radius: var(--r-sm) var(--r-sm) 0 0; background: var(--surface);
+  font-size: 11.5px; font-weight: 640; color: var(--ink);
 }
-.avatar[data-kind="agent"] { background: var(--accent); color: var(--surface); }
-:root[data-theme="dark"] .avatar[data-kind="agent"] { color: #0D1218; }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .avatar[data-kind="agent"] { color: #0D1218; } }
+.xlscroll { overflow-x: auto; }
+table.sheet { border-collapse: separate; border-spacing: 0; font-size: 12px; min-width: 100%; }
+table.sheet th, table.sheet td { border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 6px 9px; text-align: left; vertical-align: top; }
+table.sheet thead th.ch {
+  background: var(--surface-3); color: var(--ink-3); font-weight: 640;
+  font-family: var(--mono); font-size: 10.5px; text-align: center; padding: 3px 6px;
+  position: sticky; top: 0; z-index: 3;
+}
+table.sheet thead tr.hdr th {
+  background: var(--brand-soft); color: var(--ink); font-weight: 620;
+  min-width: 132px; max-width: 210px; white-space: normal;
+  position: sticky; top: 20px; z-index: 3;
+}
+table.sheet thead tr.hdr th .en { display: block; font-size: 10.5px; font-weight: 500; color: var(--ink-3); margin-top: 1px; }
+table.sheet thead tr.hdr th .req { color: var(--crit); }
+table.sheet td.rn {
+  background: var(--surface-3); color: var(--ink-3); font-family: var(--mono);
+  font-size: 10.5px; text-align: center; font-weight: 640;
+  position: sticky; left: 0; z-index: 2; min-width: 30px;
+}
+table.sheet th.corner { position: sticky; left: 0; z-index: 4; background: var(--surface-3); min-width: 30px; }
+table.sheet td { background: var(--surface); white-space: nowrap; }
+table.sheet tr.sample td { color: var(--ink-3); font-style: italic; }
+table.sheet td.cell-edit { background: var(--surface); cursor: text; min-width: 132px; outline: none; }
+table.sheet td.cell-edit:focus { box-shadow: inset 0 0 0 2px var(--brand); background: var(--brand-soft); }
+table.sheet td.cell-edit:empty::before { content: attr(data-ph); color: var(--ink-3); opacity: .65; font-style: italic; }
+table.sheet td.bad { box-shadow: inset 0 0 0 2px var(--crit); }
+.xlnote { padding: 10px 13px; font-size: 11.5px; color: var(--ink-3); background: var(--surface-2); border-top: 1px solid var(--border); }
+.xlnote b { color: var(--ink-2); }
+
+.instr { margin: 16px 0 0; padding: 13px 15px; border: 1px dashed var(--border-2); border-radius: var(--r); background: var(--surface-2); font-size: 12.5px; color: var(--ink-2); }
+.instr h4 { margin: 0 0 7px; font-size: 12px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--ink-3); }
+.instr ol { margin: 0; padding-left: 18px; }
+.instr li { margin-bottom: 4px; }
+.instr .cn { color: var(--ink-3); }
+
+/* validation checklist */
+.vlist { display: flex; flex-direction: column; gap: 7px; }
+.vrow { display: flex; align-items: flex-start; gap: 9px; font-size: 12.5px; }
+.vrow .mk {
+  width: 16px; height: 16px; flex: none; margin-top: 1px; border-radius: 50%;
+  display: grid; place-items: center; font-size: 9px; font-weight: 800;
+  background: var(--surface-3); color: var(--ink-3);
+}
+.vrow[data-ok="true"] .mk { background: var(--ok); color: #fff; }
+.vrow[data-ok="false"] .mk { background: var(--crit-soft); color: var(--crit); }
+:root[data-theme="dark"] .vrow[data-ok="true"] .mk { color: #0B1113; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .vrow[data-ok="true"] .mk { color: #0B1113; } }
+.vrow .vt { min-width: 0; }
+.vrow .vs { display: block; color: var(--ink-3); font-size: 11.5px; }
+
+/* ============================================================
+   Mail
+   ============================================================ */
+.mail { border: 1px solid var(--border); border-radius: var(--r); background: var(--surface); box-shadow: var(--sh-1); overflow: hidden; }
+.mailhead { padding: 14px 18px; border-bottom: 1px solid var(--border); }
+.mailhead h1 { margin: 0 0 11px; font-size: 17px; font-weight: 660; letter-spacing: -.012em; text-wrap: balance; }
+.idline { display: flex; align-items: flex-start; gap: 11px; flex-wrap: wrap; }
+.av { width: 33px; height: 33px; flex: none; border-radius: 50%; display: grid; place-items: center; font-size: 11.5px; font-weight: 700; background: var(--surface-3); color: var(--ink-2); }
+.av[data-fe="1"] { background: var(--fe-bar); color: #fff; }
 .idmeta { min-width: 0; flex: 1; }
-.idmeta .nm { font-size: 13.5px; font-weight: 620; }
-.idmeta .ad { font-size: 12px; color: var(--ink-3); font-family: var(--mono); }
-.idmeta .to { font-size: 12px; color: var(--ink-3); margin-top: 2px; }
-.stamp { margin-left: auto; text-align: right; font-size: 11.5px; color: var(--ink-3); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.idmeta .nm { font-size: 13px; font-weight: 640; }
+.idmeta .ad, .idmeta .to { font-size: 11.5px; color: var(--ink-3); font-family: var(--mono); word-break: break-all; }
+.idmeta .to { font-family: var(--sans); margin-top: 2px; }
+.stamp { font-size: 11.5px; color: var(--ink-3); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.mailbody { padding: 16px 18px; font-size: 14px; line-height: 1.65; }
+.mailbody p { margin: 0 0 13px; }
+.mailbody ul { margin: 0 0 13px; padding-left: 20px; }
+.mailbody .sig { color: var(--ink-3); }
 
-.body {
-  font-family: var(--serif);
-  font-size: 15.5px; line-height: 1.68;
-  color: var(--ink);
-  padding: 18px 0 4px;
-  max-width: 64ch;
+/* attachment row */
+.attrow { display: flex; flex-wrap: wrap; gap: 10px; padding: 13px 18px; border-bottom: 1px solid var(--border); background: var(--surface-2); }
+.att { display: flex; align-items: center; gap: 11px; padding: 9px 14px 9px 11px; border: 1px solid var(--border-2); border-radius: var(--r-sm); background: var(--surface); min-width: 250px; }
+.att .fi {
+  width: 31px; height: 37px; flex: none; border-radius: 3px; position: relative;
+  display: grid; place-items: center; font-family: var(--mono); font-size: 8.5px; font-weight: 700; color: #fff;
+  background: var(--ok);
 }
-.body p { margin: 0 0 14px; }
-.body ul, .body ol { margin: 0 0 14px; padding-left: 20px; }
-.body li { margin-bottom: 5px; }
-.body .sig { color: var(--ink-3); font-size: 14px; }
-.body strong { font-weight: 640; }
+.att .fi[data-k="txt"] { background: var(--ink-3); }
+.att .fi[data-k="lock"] { background: var(--gold); }
+:root[data-theme="dark"] .att .fi { color: #0B1113; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .att .fi { color: #0B1113; } }
+.att .fn { font-size: 12.5px; font-weight: 620; word-break: break-all; }
+.att .fm { font-size: 11.5px; color: var(--ink-3); font-variant-numeric: tabular-nums; margin-top: 1px; }
+.att.enc { border-color: var(--gold-line); background: var(--gold-soft); }
 
-/* parsed-request highlights */
-.sl {
-  background: transparent; color: inherit;
-  border-radius: 2px; padding: 1px 0;
-  transition: background .25s ease, box-shadow .25s ease;
+/* the encryption call-out — the thing to notice */
+.encnote {
+  display: flex; align-items: flex-start; gap: 10px;
+  margin: 0 0 14px; padding: 11px 13px;
+  border: 1px solid var(--gold-line); border-left-width: 3px; border-radius: 0 var(--r-sm) var(--r-sm) 0;
+  background: var(--gold-soft); color: var(--ink); font-size: 12.5px; line-height: 1.5;
 }
-.hl .sl {
-  padding: 1px 3px; margin: 0 -1px;
-  box-shadow: inset 0 -2px 0 var(--sc);
-  background: var(--sb);
-}
-.sl[data-slot="entity"] { --sc: var(--slot-entity); --sb: var(--slot-entity-bg); }
-.sl[data-slot="id"]     { --sc: var(--slot-id);     --sb: var(--slot-id-bg); }
-.sl[data-slot="scope"]  { --sc: var(--slot-scope);  --sb: var(--slot-scope-bg); }
-.sl[data-slot="out"]    { --sc: var(--slot-out);    --sb: var(--slot-out-bg); }
+.encnote b { color: var(--gold); }
+.encnote .lk { font-size: 15px; line-height: 1.2; flex: none; }
+
+/* compose */
+.cfield { display: flex; gap: 12px; padding: 10px 18px; border-bottom: 1px solid var(--border); font-size: 13px; align-items: baseline; }
+.cfield .lb { color: var(--ink-3); width: 58px; flex: none; font-size: 12px; }
+.cfield .vl { font-family: var(--mono); font-size: 12.5px; word-break: break-all; }
+.cfield .vl.pl { font-family: var(--sans); font-size: 13.5px; }
+.cfoot { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; padding: 13px 18px; border-top: 1px solid var(--border); background: var(--surface-2); }
+.cfoot .hint { margin-left: auto; font-size: 11.5px; color: var(--ink-3); }
+
+/* NL highlight slots */
+.sl { border-radius: 2px; }
+.hl .sl { padding: 1px 3px; margin: 0 -1px; background: var(--sb); box-shadow: inset 0 -2px 0 var(--sc); }
+.sl[data-s="subj"] { --sc: var(--s-subj); --sb: var(--s-subj-bg); }
+.sl[data-s="id"]   { --sc: var(--s-id);   --sb: var(--s-id-bg); }
+.sl[data-s="fld"]  { --sc: var(--s-fld);  --sb: var(--s-fld-bg); }
+.sl[data-s="sec"]  { --sc: var(--s-sec);  --sb: var(--s-sec-bg); }
 .hl .sl::after {
-  content: attr(data-tag);
-  font-family: var(--mono); font-size: 8.5px; font-weight: 700;
-  letter-spacing: .04em; vertical-align: super;
-  color: var(--sc); margin-left: 2px;
+  content: attr(data-t); font-family: var(--mono); font-size: 8.5px; font-weight: 700;
+  vertical-align: super; color: var(--sc); margin-left: 2px; letter-spacing: .03em;
 }
-
 .legend {
-  display: flex; flex-wrap: wrap; gap: 6px 14px;
-  padding: 10px 12px; margin: 4px 0 16px;
-  border: 1px solid var(--border); border-radius: 8px;
-  background: var(--surface-2);
-  font-size: 11.5px; color: var(--ink-2);
+  display: flex; flex-wrap: wrap; gap: 6px 14px; align-items: center;
+  padding: 10px 13px; margin-bottom: 14px;
+  border: 1px solid var(--border); border-radius: var(--r-sm);
+  background: var(--surface-2); font-size: 11.5px; color: var(--ink-2);
 }
 .legend .li { display: flex; align-items: center; gap: 6px; }
 .legend .sw { width: 12px; height: 12px; border-radius: 3px; flex: none; }
 .legend .hint { margin-left: auto; color: var(--ink-3); }
 
-/* --- cards inside the pane --- */
-.card {
-  border: 1px solid var(--border); border-radius: 10px;
-  background: var(--surface-2);
-  margin: 16px 0;
-  overflow: hidden;
-}
-.card > header {
-  display: flex; align-items: center; gap: 8px;
-  padding: 10px 14px;
-  border-bottom: 1px solid var(--border);
-  background: var(--surface);
-  font-size: 12px; font-weight: 640; letter-spacing: .04em; text-transform: uppercase;
-  color: var(--ink-2);
-}
-.card > header .right { margin-left: auto; text-transform: none; letter-spacing: 0; font-weight: 560; color: var(--ink-3); }
-.card .cbody { padding: 14px; }
-.card.seal { border-color: var(--seal); }
-.card.seal > header { color: var(--seal); background: var(--seal-soft); border-bottom-color: var(--seal); }
+.quoted { border-left: 2px solid var(--border-2); padding-left: 14px; margin: 4px 0 12px; color: var(--ink-3); }
+.quoted .qh { font-size: 11.5px; margin-bottom: 6px; }
 
-.kv { display: grid; grid-template-columns: minmax(120px, auto) 1fr; gap: 7px 16px; font-size: 13px; }
-.kv dt { color: var(--ink-3); }
-.kv dd { margin: 0; color: var(--ink); }
-.kv dd.mono, .mono { font-family: var(--mono); font-size: 12.5px; font-variant-numeric: tabular-nums; }
+/* ============================================================
+   Fill Easy automated notification block (matches the product)
+   ============================================================ */
+.fe { border: 1px solid var(--fe-line); border-radius: 3px; overflow: hidden; background: var(--fe-cell); color: var(--fe-tx); margin: 4px 0 14px; }
+.febar { display: flex; align-items: center; gap: 12px; padding: 15px 20px; background: var(--fe-bar); color: var(--fe-bar-tx); }
+.febar .bn { font-size: 17px; font-weight: 700; letter-spacing: -.01em; }
+.febar .an { margin-left: auto; font-size: 12.5px; }
+.febody { padding: 18px 20px 20px; }
+.fesec { font-size: 13.5px; font-weight: 700; letter-spacing: .02em; margin: 0 0 10px; }
+.fesec .ct { color: var(--fe-mut); font-weight: 600; }
+.fesec.clar { color: var(--fe-red); }
+.fesec.clar .rest { color: var(--fe-tx); font-weight: 400; font-size: 12.5px; letter-spacing: 0; }
+.fesec + .fesec-wrap { margin-top: 0; }
+.fetblwrap { overflow-x: auto; margin-bottom: 20px; }
+table.fetbl { border-collapse: collapse; width: 100%; font-size: 12.5px; min-width: 560px; }
+table.fetbl th, table.fetbl td { border: 1px solid var(--fe-line); padding: 10px 13px; text-align: left; vertical-align: top; }
+table.fetbl thead th { background: var(--fe-head); font-weight: 700; font-size: 12.5px; }
+table.fetbl td.rid { font-weight: 700; font-family: var(--mono); font-size: 11.5px; white-space: nowrap; }
+table.fetbl td .ref { color: var(--fe-mut); font-family: var(--mono); font-size: 11.5px; }
+table.fetbl td .sub { font-weight: 700; }
+table.fetbl td .doc { color: var(--fe-mut); }
+table.fetbl .yl { background: var(--fe-yellow); min-width: 132px; }
+table.fetbl thead th.yl { background: var(--fe-yellow); white-space: nowrap; }
+table.fetbl .ph { color: var(--fe-mut); }
+.fefoot { font-size: 12.5px; color: var(--fe-tx); margin: 0; }
 
-.checks { display: flex; flex-direction: column; gap: 8px; }
-.check { display: flex; align-items: flex-start; gap: 9px; font-size: 13px; }
-.check .bx {
-  width: 15px; height: 15px; flex: none; margin-top: 2px; border-radius: 4px;
-  border: 1.5px solid var(--border-2); display: grid; place-items: center;
-  font-size: 9px; color: transparent;
-}
-.check[data-on="true"] .bx { background: var(--ok); border-color: var(--ok); color: var(--surface); }
-:root[data-theme="dark"] .check[data-on="true"] .bx { color: #0D1218; }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .check[data-on="true"] .bx { color: #0D1218; } }
-.check .sub { display: block; color: var(--ink-3); font-size: 12px; }
-
-/* attachment chip */
-.attachbar { display: flex; flex-wrap: wrap; gap: 10px; padding: 14px 0 4px; border-top: 1px solid var(--border); margin-top: 18px; }
-.attach {
-  display: flex; align-items: center; gap: 11px;
-  padding: 10px 14px 10px 11px;
-  border: 1px solid var(--border-2); border-radius: 9px;
-  background: var(--surface); box-shadow: var(--shadow-1);
-  min-width: 268px;
-}
-.attach .ficon {
-  width: 34px; height: 40px; flex: none; border-radius: 4px;
-  background: var(--ok); color: var(--surface);
-  display: grid; place-items: center;
-  font-family: var(--mono); font-size: 9.5px; font-weight: 700; letter-spacing: .04em;
-  position: relative;
-}
-:root[data-theme="dark"] .attach .ficon { color: #0D1218; }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .attach .ficon { color: #0D1218; } }
-.attach .ficon::after {
-  content: "\1F512"; position: absolute; right: -7px; bottom: -6px;
-  font-size: 13px; line-height: 1;
-  filter: grayscale(1) brightness(.55);
-}
-.attach .fn { font-size: 12.5px; font-weight: 620; word-break: break-all; }
-.attach .fm { font-size: 11.5px; color: var(--ink-3); font-variant-numeric: tabular-nums; }
-
-/* workbook viewer */
-.wb { border: 1px solid var(--border-2); border-radius: 10px; overflow: hidden; background: var(--surface); margin: 16px 0; box-shadow: var(--shadow-1); }
-.wbbar {
-  display: flex; align-items: center; gap: 8px; padding: 8px 12px;
-  background: var(--surface-2); border-bottom: 1px solid var(--border);
-  font-size: 12px; color: var(--ink-2);
-}
-.wbbar .nm { font-family: var(--mono); font-size: 11.5px; word-break: break-all; }
-.wbstage { position: relative; min-height: 232px; }
-.lockscrim {
-  position: absolute; inset: 0; z-index: 3;
-  display: grid; place-items: center; padding: 20px;
-  background: var(--surface-2);
-  text-align: center;
-}
-.lockscrim .lk { font-size: 26px; line-height: 1; filter: grayscale(1); }
-.lockscrim h4 { margin: 10px 0 4px; font-size: 14px; font-weight: 640; }
-.lockscrim p { margin: 0 0 14px; font-size: 12.5px; color: var(--ink-3); max-width: 42ch; }
-.pwrow { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
-.pwrow input {
-  font: inherit; font-family: var(--mono); font-size: 12.5px;
-  padding: 7px 10px; width: 210px;
-  border: 1px solid var(--border-2); border-radius: 7px;
-  background: var(--surface); color: var(--ink);
-}
-.btn {
-  border: 1px solid var(--accent); background: var(--accent); color: var(--surface);
-  padding: 7px 14px; border-radius: 7px; cursor: pointer;
-  font-size: 12.5px; font-weight: 620;
-}
-:root[data-theme="dark"] .btn { color: #0D1218; }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .btn { color: #0D1218; } }
-.btn:hover { background: var(--accent-2); border-color: var(--accent-2); }
-.btn.ghost { background: transparent; color: var(--ink-2); border-color: var(--border-2); }
-.btn.ghost:hover { background: var(--surface-3); color: var(--ink); }
-.pwerr { margin-top: 10px; font-size: 12px; color: var(--seal); min-height: 16px; }
-
-.sheettabs { display: flex; gap: 2px; padding: 6px 8px 0; background: var(--surface-2); border-bottom: 1px solid var(--border); overflow-x: auto; }
-.sheettab {
-  border: 1px solid transparent; border-bottom: 0; background: transparent;
-  padding: 5px 11px; border-radius: 6px 6px 0 0; cursor: pointer;
-  font-size: 11.5px; color: var(--ink-3); white-space: nowrap;
-}
-.sheettab:hover { color: var(--ink); }
-.sheettab[aria-selected="true"] {
-  background: var(--surface); border-color: var(--border); color: var(--ink); font-weight: 620;
-  box-shadow: 0 1px 0 var(--surface);
-}
-.gridwrap { overflow-x: auto; }
-table.grid { border-collapse: collapse; width: 100%; font-size: 12px; font-family: var(--mono); font-variant-numeric: tabular-nums; }
-table.grid th, table.grid td { border: 1px solid var(--border); padding: 5px 9px; text-align: left; white-space: nowrap; }
-table.grid thead th { background: var(--surface-2); color: var(--ink-2); font-weight: 620; position: sticky; top: 0; }
-table.grid td.hz { font-family: var(--sans); white-space: normal; min-width: 180px; }
-table.grid tbody tr:nth-child(even) td { background: var(--surface-2); }
-.gridnote { padding: 8px 12px; font-size: 11.5px; color: var(--ink-3); border-top: 1px solid var(--border); background: var(--surface-2); }
-
-/* inline person result table */
-table.res { border-collapse: collapse; width: 100%; font-size: 13px; font-family: var(--sans); margin: 4px 0 8px; }
-table.res th, table.res td { border-bottom: 1px solid var(--border); padding: 8px 10px; text-align: left; vertical-align: top; }
-table.res thead th { font-size: 11px; text-transform: uppercase; letter-spacing: .06em; color: var(--ink-3); border-bottom-color: var(--border-2); }
-table.res td.v { font-family: var(--mono); font-size: 12px; }
-
-/* compose window */
-.compose { border: 1px solid var(--border-2); border-radius: 10px; overflow: hidden; box-shadow: var(--shadow-2); background: var(--surface); }
-.compose > header {
-  display: flex; align-items: center; gap: 8px; padding: 9px 14px;
-  background: var(--accent); color: var(--surface);
-  font-size: 12.5px; font-weight: 620;
-}
-:root[data-theme="dark"] .compose > header { color: #0D1218; }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .compose > header { color: #0D1218; } }
-.cfield { display: flex; gap: 10px; padding: 9px 14px; border-bottom: 1px solid var(--border); font-size: 13px; }
-.cfield .lb { color: var(--ink-3); width: 54px; flex: none; }
-.cfield .vl { font-family: var(--mono); font-size: 12.5px; }
-.cfield .vl.plain { font-family: var(--sans); font-size: 13px; }
-.cbodyarea { padding: 16px 14px; }
-.cfoot { display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-top: 1px solid var(--border); background: var(--surface-2); }
-.cfoot .hint { margin-left: auto; font-size: 11.5px; color: var(--ink-3); }
-.sendbtn {
-  border: 0; background: var(--accent); color: var(--surface);
-  padding: 7px 18px; border-radius: 7px; font-size: 13px; font-weight: 640; cursor: pointer;
-}
-:root[data-theme="dark"] .sendbtn { color: #0D1218; }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .sendbtn { color: #0D1218; } }
-
-/* quoted thread */
-.quoted {
-  border-left: 2px solid var(--border-2); padding: 2px 0 2px 14px; margin: 6px 0 14px;
-  color: var(--ink-3); font-size: 14px;
-}
-.quoted .qh { font-size: 11.5px; font-family: var(--sans); color: var(--ink-3); margin-bottom: 6px; }
-
-/* --- agent trace --- */
-.trace { border-left: 1px solid var(--border); background: var(--surface-2); }
-.tracehead {
-  position: sticky; top: 0; z-index: 2;
-  padding: 12px 14px 10px; background: var(--surface-2);
-  border-bottom: 1px solid var(--border);
-}
-.tracehead .ti { display: flex; align-items: center; gap: 8px; }
-.tracehead h2 { margin: 0; font-size: 12px; font-weight: 660; letter-spacing: .07em; text-transform: uppercase; color: var(--ink-2); }
-.pulse { width: 7px; height: 7px; border-radius: 50%; background: var(--ok); box-shadow: 0 0 0 3px var(--ok-soft); }
-.tracehead .sb { margin-top: 5px; font-size: 11.5px; color: var(--ink-3); font-family: var(--mono); }
-.tracebody { padding: 14px; display: flex; flex-direction: column; gap: 14px; }
-
-.tsteps { display: flex; flex-direction: column; gap: 0; }
+/* ============================================================
+   Side panel pieces
+   ============================================================ */
+.tsteps { display: flex; flex-direction: column; }
 .tstep { display: flex; gap: 10px; padding-bottom: 12px; position: relative; }
-.tstep:not(:last-child)::before {
-  content: ""; position: absolute; left: 6px; top: 16px; bottom: 0; width: 1px; background: var(--border-2);
-}
-.tstep .bul {
-  width: 13px; height: 13px; flex: none; margin-top: 2px; border-radius: 50%; z-index: 1;
-  border: 2px solid var(--border-2); background: var(--surface-2);
-}
+.tstep:not(:last-child)::before { content: ""; position: absolute; left: 6px; top: 16px; bottom: 0; width: 1px; background: var(--border-2); }
+.tstep .bul { width: 13px; height: 13px; flex: none; margin-top: 2px; border-radius: 50%; z-index: 1; border: 2px solid var(--border-2); background: var(--surface-2); }
 .tstep[data-s="done"] .bul { background: var(--ok); border-color: var(--ok); }
-.tstep[data-s="active"] .bul { background: var(--accent); border-color: var(--accent); animation: breathe 1.6s ease-in-out infinite; }
-.tstep .tx { min-width: 0; }
-.tstep .lbl { font-size: 12.5px; font-weight: 580; color: var(--ink-3); line-height: 1.35; }
+.tstep[data-s="active"] .bul { background: var(--brand); border-color: var(--brand); }
+.tstep .lbl { font-size: 12.5px; font-weight: 570; color: var(--ink-3); line-height: 1.35; }
 .tstep[data-s="done"] .lbl, .tstep[data-s="active"] .lbl { color: var(--ink); }
 .tstep .det { font-size: 11.5px; color: var(--ink-3); font-family: var(--mono); margin-top: 2px; word-break: break-word; }
 
-.tcard { border: 1px solid var(--border); border-radius: 9px; background: var(--surface); overflow: hidden; }
-.tcard > h3 {
-  margin: 0; padding: 8px 11px; font-size: 10.5px; font-weight: 660;
-  letter-spacing: .07em; text-transform: uppercase; color: var(--ink-3);
-  border-bottom: 1px solid var(--border); background: var(--surface-2);
+.pcard { border: 1px solid var(--border); border-radius: var(--r-sm); background: var(--surface); overflow: hidden; }
+.pcard > h3 {
+  margin: 0; padding: 9px 12px; font-size: 10.5px; font-weight: 700; letter-spacing: .07em;
+  text-transform: uppercase; color: var(--ink-3); background: var(--surface-2); border-bottom: 1px solid var(--border);
 }
-.tcard .tc { padding: 11px; }
-.slotrow { display: flex; gap: 8px; padding: 5px 0; border-bottom: 1px dotted var(--border); font-size: 12px; }
-.slotrow:last-child { border-bottom: 0; }
-.slotrow .sk { color: var(--ink-3); font-family: var(--mono); font-size: 11px; flex: none; width: 82px; }
-.slotrow .sv { min-width: 0; word-break: break-word; }
-.slotrow .sv em { font-style: normal; box-shadow: inset 0 -2px 0 var(--sc); background: var(--sb); padding: 0 2px; border-radius: 2px; }
-.slotrow[data-slot="entity"] { --sc: var(--slot-entity); --sb: var(--slot-entity-bg); }
-.slotrow[data-slot="id"]     { --sc: var(--slot-id);     --sb: var(--slot-id-bg); }
-.slotrow[data-slot="scope"]  { --sc: var(--slot-scope);  --sb: var(--slot-scope-bg); }
-.slotrow[data-slot="out"]    { --sc: var(--slot-out);    --sb: var(--slot-out-bg); }
-
-.srcrow { display: flex; align-items: center; gap: 8px; padding: 6px 0; font-size: 12px; border-bottom: 1px dotted var(--border); }
-.srcrow:last-child { border-bottom: 0; }
-.srcrow .sn { min-width: 0; }
-.srcrow .sn .cn { color: var(--ink-3); font-size: 11px; }
-.srcrow .st { margin-left: auto; font-size: 10.5px; font-weight: 640; padding: 1px 7px; border-radius: 20px; white-space: nowrap; }
-.srcrow[data-s="ok"] .st { background: var(--ok-soft); color: var(--ok); }
-.srcrow[data-s="run"] .st { background: var(--accent-soft); color: var(--accent); }
-.srcrow[data-s="wait"] .st { background: var(--surface-3); color: var(--ink-3); }
-.srcrow[data-s="hit"] .st { background: var(--warn-soft); color: var(--warn); }
-
-.meter { height: 5px; border-radius: 3px; background: var(--surface-3); overflow: hidden; margin-top: 9px; }
-.meter i { display: block; height: 100%; background: var(--accent); transition: width .5s ease; }
+.pcard .pb { padding: 11px 12px; font-size: 12.5px; line-height: 1.5; }
+.srow { display: flex; gap: 9px; padding: 5px 0; border-bottom: 1px dotted var(--border); }
+.srow:last-child { border-bottom: 0; }
+.srow .sk { color: var(--ink-3); font-family: var(--mono); font-size: 11px; flex: none; width: 74px; }
+.srow .sv { min-width: 0; word-break: break-word; font-size: 12px; }
+.srow .sv em { font-style: normal; padding: 0 2px; border-radius: 2px; background: var(--sb); box-shadow: inset 0 -2px 0 var(--sc); }
+.srow[data-s="subj"] { --sc: var(--s-subj); --sb: var(--s-subj-bg); }
+.srow[data-s="id"]   { --sc: var(--s-id);   --sb: var(--s-id-bg); }
+.srow[data-s="fld"]  { --sc: var(--s-fld);  --sb: var(--s-fld-bg); }
+.srow[data-s="sec"]  { --sc: var(--s-sec);  --sb: var(--s-sec-bg); }
 
 /* ============================================================
-   Narration strip
+   Narration
    ============================================================ */
-.coach {
-  display: grid; grid-template-columns: minmax(0,1fr) auto;
-  gap: 18px; align-items: center;
-  padding: 12px 16px;
-  background: var(--surface); border-top: 1px solid var(--border);
-}
-.coachtext { min-width: 0; }
-.coachtext .st {
-  font-family: var(--mono); font-size: 10.5px; letter-spacing: .08em;
-  text-transform: uppercase; color: var(--accent); font-weight: 700;
-}
-.coachtext p { margin: 3px 0 0; font-size: 13.5px; line-height: 1.5; max-width: 92ch; }
-.diffnote {
-  margin-top: 8px; padding: 8px 11px;
-  border-left: 3px solid var(--seal); border-radius: 0 6px 6px 0;
-  background: var(--seal-soft); color: var(--ink);
-  font-size: 12.5px; line-height: 1.5;
-}
-.diffnote b { color: var(--seal); }
-.nav { display: flex; align-items: center; gap: 8px; }
-.nav .cnt { font-family: var(--mono); font-size: 12px; color: var(--ink-3); margin-right: 4px; white-space: nowrap; }
-.nav button[disabled] { opacity: .4; cursor: not-allowed; }
+.coach { display: grid; grid-template-columns: minmax(0,1fr) auto; gap: 18px; align-items: center; padding: 13px 18px; background: var(--surface); border-top: 1px solid var(--border); }
+.coach .st { font-family: var(--mono); font-size: 10.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--brand); font-weight: 700; }
+.coach p { margin: 3px 0 0; font-size: 13.5px; line-height: 1.5; max-width: 96ch; }
+.tip { margin-top: 8px; padding: 8px 12px; border-left: 3px solid var(--gold); border-radius: 0 var(--r-sm) var(--r-sm) 0; background: var(--gold-soft); font-size: 12.5px; }
+.tip b { color: var(--gold); }
+.nav { display: flex; align-items: center; gap: 9px; }
+.nav .cnt { font-family: var(--mono); font-size: 12px; color: var(--ink-3); white-space: nowrap; }
 
-@keyframes fadein { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
-@keyframes slidein { from { opacity: 0; transform: translateX(-6px); } to { opacity: 1; transform: none; } }
-@keyframes breathe { 0%,100% { box-shadow: 0 0 0 0 var(--accent-soft); } 50% { box-shadow: 0 0 0 4px var(--accent-soft); } }
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; }
-}
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .001ms !important; transition-duration: .001ms !important; } }
 
 /* ============================================================
    Responsive
    ============================================================ */
-@media (max-width: 1280px) { :root { --rail-w: 0px; --list-w: 268px; --trace-w: 300px; } .rail { display: none; } .shell { grid-template-columns: var(--list-w) minmax(0,1fr) var(--trace-w); } }
-@media (max-width: 1040px) {
+@media (max-width: 1080px) {
   .app { height: auto; min-height: 100dvh; }
   .shell { grid-template-columns: 1fr; }
-  .col { overflow: visible; }
-  .list, .trace { border-left: 0; border-right: 0; border-bottom: 1px solid var(--border); }
-  .trace { order: 3; }
-  .pane { order: 2; }
-  .paneinner { padding: 18px 16px 30px; }
-  .coach { grid-template-columns: 1fr; gap: 10px; }
+  .stage, .side { overflow: visible; }
+  .side { border-left: 0; border-top: 1px solid var(--border); }
+  .coach { grid-template-columns: 1fr; }
   .nav { justify-content: flex-end; }
 }
 @media (max-width: 620px) {
   .brandsub { display: none; }
-  .stepchip { min-width: 96px; }
-  .stepchip .t { font-size: 11.5px; }
-  .body { font-size: 15px; }
+  .stage { padding: 16px 13px 30px; }
+  .step { min-width: 112px; }
+  .febody, .febar { padding-left: 14px; padding-right: 14px; }
 }
 </style>
 <!-- ARTIFACT:STYLE:END -->
@@ -659,14 +504,11 @@ table.res td.v { font-family: var(--mono); font-size: 12px; }
 <div class="app">
 
   <header class="brandbar">
-    <div class="mark">M</div>
-    <div class="brandname">Meridian Trust &middot; KYC Desk</div>
-    <div class="brandsub">Email agent walkthrough &mdash; PRC counterparty due diligence</div>
+    <div class="logo">FE</div>
+    <div class="brandname">Fill Easy &middot; Individual KYC</div>
+    <div class="brandsub">Background screening by email &mdash; China (CN)</div>
     <div class="spacer"></div>
-    <div class="seg" role="group" aria-label="Choose a request type">
-      <button type="button" id="trackCompany" aria-pressed="true">Company search</button>
-      <button type="button" id="trackPerson" aria-pressed="false">Person search</button>
-    </div>
+    <span class="badge b-mut" id="fileState">Template not filled</span>
     <button type="button" class="iconbtn" id="themeBtn" title="Switch light / dark" aria-label="Switch light or dark theme">
       <svg width="15" height="15" viewBox="0 0 16 16" aria-hidden="true" fill="none">
         <circle cx="8" cy="8" r="6.25" stroke="currentColor" stroke-width="1.4"></circle>
@@ -675,59 +517,24 @@ table.res td.v { font-family: var(--mono); font-size: 12px; }
     </button>
   </header>
 
-  <div class="railwrap">
-    <div class="steprail" id="steprail" role="tablist" aria-label="Walkthrough steps"></div>
-  </div>
+  <div class="stepwrap"><div class="stepper" id="stepper" role="tablist" aria-label="Steps"></div></div>
 
   <div class="shell">
-
-    <nav class="col rail" aria-label="Mailboxes">
-      <div class="compose-cta"><span aria-hidden="true">&#9998;</span> New message</div>
-      <div class="railgroup">
-        <div class="railhead">Amelia Chen</div>
-        <div class="folder" id="fInbox" data-active="true"><span class="dot"></span> Inbox <span class="cnt" id="cInbox">2</span></div>
-        <div class="folder" id="fSent"><span class="dot"></span> Sent <span class="cnt" id="cSent">0</span></div>
-        <div class="folder"><span class="dot"></span> Drafts <span class="cnt">1</span></div>
-        <div class="folder"><span class="dot"></span> Archive <span class="cnt">318</span></div>
-      </div>
-      <div class="railgroup">
-        <div class="railhead">Shared</div>
-        <div class="folder"><span class="dot"></span> Onboarding queue <span class="cnt">7</span></div>
-        <div class="folder"><span class="dot"></span> Escalations <span class="cnt">1</span></div>
-      </div>
-      <div class="railgroup">
-        <div class="railhead">Agent</div>
-        <div class="folder"><span class="dot"></span> kyc-agent@ <span class="cnt">&#9679;</span></div>
-      </div>
-    </nav>
-
-    <section class="col list" aria-label="Message list">
-      <div class="listhead">
-        <h2 id="listTitle">Inbox</h2>
-        <span class="meta" id="listMeta"></span>
-      </div>
-      <div id="msglist"></div>
-    </section>
-
-    <section class="col pane" aria-label="Reading pane">
-      <div class="paneinner" id="pane"></div>
-    </section>
-
-    <aside class="col trace" aria-label="Agent activity">
-      <div class="tracehead">
+    <main class="stage" id="stage"><div class="stageinner" id="stageinner"></div></main>
+    <aside class="side" aria-label="Agent activity">
+      <div class="sidehead">
         <div class="ti"><span class="pulse" aria-hidden="true"></span><h2>Agent activity</h2></div>
-        <div class="sb" id="traceSub">idle &middot; watching kyc-agent@</div>
+        <div class="sb" id="sideSub">idle</div>
       </div>
-      <div class="tracebody" id="tracebody"></div>
+      <div class="sidebody" id="sidebody"></div>
     </aside>
-
   </div>
 
   <footer class="coach">
-    <div class="coachtext">
-      <div class="st" id="coachStep">Step 1</div>
+    <div>
+      <div class="st" id="coachStep"></div>
       <p id="coachText"></p>
-      <div class="diffnote" id="coachDiff" hidden></div>
+      <div class="tip" id="coachTip" hidden></div>
     </div>
     <div class="nav">
       <span class="cnt" id="navCount"></span>
@@ -744,931 +551,611 @@ table.res td.v { font-family: var(--mono); font-size: 12px; }
   "use strict";
 
   /* ==========================================================
-     Cast and fixtures
+     Fixtures drawn from the supplied template + guide
      ========================================================== */
-  var ANALYST = { nm: "Amelia Chen", ad: "amelia.chen@meridiantrust.example", ini: "AC" };
-  var AGENT   = { nm: "KYC Desk Agent", ad: "kyc-agent@meridiantrust.example", ini: "KY", kind: "agent" };
+  var AGENT_ADDR = "agent@ses.fill-easy.com";
+  var USER = { nm: "Matthew Lee", ad: "matthew.lee@citic-demo.example", ini: "ML" };
+  var AGENT = { nm: "Fill Easy Agent", ad: AGENT_ADDR, ini: "FA", fe: true };
+  var FILE = "KYC_Background_Screening_Orders.xlsx";
+  var RESULTS_FILE = "KYC_Screening_Results_BGS-2026-014.xlsx";
 
-  var PASSWORD = "Dx7Q-4M2X-R9VT-6KP3";
-  var FILENAME = "KYC_ShanghaiDingxin_91310115MA1K3XYZ7B_2026-07-28.xlsx";
-  var DELTA_FILENAME = "KYC_ShanghaiDingxin_ADDENDUM_HK-parent_2026-07-28.xlsx";
+  /* Column definitions, verbatim from Background_Screening_Orders */
+  var COLS = [
+    { c: "A", cn: "內部參考編號", en: "Internal Reference Number", req: false, w: "" },
+    { c: "B", cn: "地區", en: "Region", req: false },
+    { c: "C", cn: "中文名", en: "Chinese Name", req: true },
+    { c: "D", cn: "中國大陸身份證號碼", en: "Mainland ID Number", req: true },
+    { c: "E", cn: "身分證簽發日期", en: "ID Card Issue Date", req: false },
+    { c: "F", cn: "身分證到期日期", en: "ID Card Expiry Date", req: false },
+    { c: "G", cn: "其他證件驗證", en: "Other Document Number", req: false },
+    { c: "H", cn: "證件類別", en: "Type of Document", req: false },
+    { c: "I", cn: "電話號碼", en: "Mainland Phone Number", req: false },
+    { c: "J", cn: "證件照", en: "Portrait Photo", req: false },
+    { c: "K", cn: "銀行帳號", en: "Mainland Bank Account Number", req: false },
+    { c: "L", cn: "學歷證書編號", en: "Academic Credential Number", req: false },
+    { c: "M", cn: "學位證書編號", en: "Degree Number", req: false },
+    { c: "N", cn: "專業資格編號", en: "Professional Qualification Number", req: false },
+    { c: "O", cn: "駕駛執照編號", en: "Driver's License Number", req: false },
+    { c: "P", cn: "地址", en: "Address", req: false },
+    { c: "Q", cn: "所需數據字段", en: "Requested Data Fields", req: false },
+    { c: "R", cn: "備註", en: "Notes/Comments", req: false }
+  ];
 
-  /* ---------- small builders ---------- */
-  function esc(s) { return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;"); }
+  /* Row 2 — the sample row shipped in the template */
+  var SAMPLE = ["BGS-2025-001", "China - CN", "张三", "110101199001011234", "2016.01.01", "2027.12.12",
+                "12345678", "Passport", "12667788991", "", "1234567890", "12345678", "12345678",
+                "12345678", "1234567", "北京王府大道某某小区xx栋12楼A室", "KYC1 / KYC2", ""];
 
-  function head(o) {
-    return '<div class="emailhead">' +
+  /* Row 3 — what the analyst types in this demo */
+  var FILLED = ["BGS-2026-014", "China - CN", "李慧敏", "310115199204186328", "2018.03.05", "2038.03.05",
+                "E64720915", "Passport", "13905217744", "", "6222021001056783", "", "",
+                "JS20190447", "310115199204186328", "上海市浦东新区世纪大道100号28楼", "KYC1 / KYC2", "New hire — senior role"];
+
+  var EDITABLE = { 2: "李慧敏", 3: "310115199204186328", 13: "JS20190447", 16: "KYC1 / KYC2" };
+
+  /* ==========================================================
+     Small builders
+     ========================================================== */
+  function sl(s, t, text) { return '<span class="sl" data-s="' + s + '" data-t="' + t + '">' + text + '</span>'; }
+
+  function mailHead(o) {
+    return '<div class="mailhead">' +
       '<h1>' + o.subject + '</h1>' +
       '<div class="idline">' +
-        '<div class="avatar"' + (o.from.kind ? ' data-kind="agent"' : '') + '>' + o.from.ini + '</div>' +
-        '<div class="idmeta">' +
-          '<div class="nm">' + o.from.nm + '</div>' +
-          '<div class="ad">' + o.from.ad + '</div>' +
-          '<div class="to">to ' + o.to + '</div>' +
-        '</div>' +
-        '<div class="stamp">' + o.time + (o.extra ? '<br>' + o.extra : '') + '</div>' +
+        '<div class="av"' + (o.from.fe ? ' data-fe="1"' : '') + '>' + o.from.ini + '</div>' +
+        '<div class="idmeta"><div class="nm">' + o.from.nm + '</div><div class="ad">' + o.from.ad + '</div>' +
+        '<div class="to">to ' + o.to + '</div></div>' +
+        '<div class="stamp">' + o.time + '</div>' +
       '</div>' +
     '</div>';
   }
 
+  function attach(list) {
+    return '<div class="attrow">' + list.map(function (a) {
+      return '<div class="att' + (a.enc ? ' enc' : '') + '">' +
+        '<div class="fi" data-k="' + (a.kind || "xlsx") + '">' + (a.kind === "txt" ? "TXT" : a.kind === "lock" ? "XLSX" : "XLSX") + '</div>' +
+        '<div><div class="fn">' + a.n + '</div><div class="fm">' + a.m + '</div></div>' +
+      '</div>';
+    }).join("") + '</div>';
+  }
+
   function legend() {
     return '<div class="legend">' +
-      '<span class="li"><span class="sw" style="background:var(--slot-entity-bg);box-shadow:inset 0 -3px 0 var(--slot-entity)"></span> Subject entity</span>' +
-      '<span class="li"><span class="sw" style="background:var(--slot-id-bg);box-shadow:inset 0 -3px 0 var(--slot-id)"></span> Identifier</span>' +
-      '<span class="li"><span class="sw" style="background:var(--slot-scope-bg);box-shadow:inset 0 -3px 0 var(--slot-scope)"></span> Check scope</span>' +
-      '<span class="li"><span class="sw" style="background:var(--slot-out-bg);box-shadow:inset 0 -3px 0 var(--slot-out)"></span> Delivery &amp; deadline</span>' +
-      '<span class="hint">Highlights are the agent&rsquo;s reading of the sentence &mdash; nothing was filled in on a form.</span>' +
+      '<span class="li"><span class="sw" style="background:var(--s-subj-bg);box-shadow:inset 0 -3px 0 var(--s-subj)"></span> Subject / scope</span>' +
+      '<span class="li"><span class="sw" style="background:var(--s-id-bg);box-shadow:inset 0 -3px 0 var(--s-id)"></span> Attachment &amp; identifiers</span>' +
+      '<span class="li"><span class="sw" style="background:var(--s-fld-bg);box-shadow:inset 0 -3px 0 var(--s-fld)"></span> Requested data fields</span>' +
+      '<span class="li"><span class="sw" style="background:var(--s-sec-bg);box-shadow:inset 0 -3px 0 var(--s-sec)"></span> Encryption &amp; handling</span>' +
+      '<span class="hint">The agent&rsquo;s reading of a plain email &mdash; no form, no fixed syntax.</span>' +
     '</div>';
   }
 
-  function sl(slot, tag, text) {
-    return '<span class="sl" data-slot="' + slot + '" data-tag="' + tag + '">' + text + '</span>';
-  }
-
-  /* ---------- the analyst's free-text requests ---------- */
-  var COMPANY_REQUEST =
-    '<p>Hi &mdash; new counterparty came in from the Shanghai desk this morning and I need the full file before Thursday&rsquo;s credit committee.</p>' +
-    '<p>Can you run a corporate KYC on ' + sl("entity", "ORG", "Shanghai Dingxin Trading Co., Ltd.") + ' &mdash; the Chinese name on their licence is ' +
-    sl("entity", "ORG", "&#19978;&#28023;&#40718;&#26032;&#36152;&#26131;&#26377;&#38480;&#20844;&#21496;") + ' and the unified code they gave us is ' +
-    sl("id", "USCC", "91310115MA1K3XYZ7B") + '.</p>' +
-    '<p>Please cover ' + sl("scope", "CHK", "registration and licence status") + ', ' +
-    sl("scope", "CHK", "the full shareholding chain up to the ultimate beneficial owner") + ', ' +
-    sl("scope", "CHK", "directors and legal representative") + ', ' +
-    sl("scope", "CHK", "any litigation or enforcement records") + ' &mdash; ' +
-    sl("scope", "WIN", "the last five years is fine") + ' &mdash; plus the usual ' +
-    sl("scope", "CHK", "sanctions and adverse media screening") + '.</p>' +
-    '<p>' + sl("out", "FMT", "Send it back as a spreadsheet") + ' so I can drop it straight into the committee pack, and ' +
-    sl("out", "SEC", "please encrypt it") + ' &mdash; it&rsquo;s going to external counsel afterwards. ' +
-    sl("out", "SLA", "Need it by Wednesday close") + ' if at all possible.</p>' +
-    '<p class="sig">Thanks,<br>Amelia<br>Onboarding &amp; Client Due Diligence</p>';
-
-  var PERSON_REQUEST =
-    '<p>Hi &mdash; quick one ahead of the same committee.</p>' +
-    '<p>Can you screen ' + sl("entity", "PER", "Wang Zhiming") + ' (' + sl("entity", "PER", "&#29579;&#24535;&#26126;") + '), ' +
-    sl("id", "DOB", "born 12 April 1979") + ', PRC national, ID ending ' + sl("id", "NID", "&hellip;3417") + '. ' +
-    'He is being put forward as the ' + sl("scope", "ROLE", "legal representative") + ' on the Dingxin file.</p>' +
-    '<p>I just need ' + sl("scope", "CHK", "identity verification") + ', ' +
-    sl("scope", "CHK", "PEP status") + ', ' +
-    sl("scope", "CHK", "sanctions") + ', ' +
-    sl("scope", "CHK", "court and enforcement records") + ' and ' +
-    sl("scope", "CHK", "adverse media") + '.</p>' +
-    '<p>' + sl("out", "FMT", "A short answer in the email is fine") + ' &mdash; ' +
-    sl("out", "SLA", "today if you can") + '.</p>' +
-    '<p class="sig">Thanks,<br>Amelia</p>';
-
-  /* ---------- workbook fixture ---------- */
-  var SHEETS = [
-    { nm: "Summary", rows: 24, cols: ["Field", "Value", "Source", "Retrieved"],
-      data: [
-        ["Legal name (CN)", "上海鼎新贸易有限公司", "NECIPS", "2026-07-28 09:14"],
-        ["Legal name (EN)", "Shanghai Dingxin Trading Co., Ltd.", "NECIPS", "2026-07-28 09:14"],
-        ["USCC", "91310115MA1K3XYZ7B", "NECIPS", "2026-07-28 09:14"],
-        ["Status", "存续 (In business)", "NECIPS", "2026-07-28 09:14"],
-        ["Overall risk", "MEDIUM", "Computed", "2026-07-28 09:31"]
-      ] },
-    { nm: "Registration", rows: 31, cols: ["Field", "Value", "Source", "Retrieved"],
-      data: [
-        ["Established", "2016-03-22", "NECIPS", "2026-07-28 09:14"],
-        ["Registered capital", "RMB 50,000,000", "NECIPS", "2026-07-28 09:14"],
-        ["Paid-in capital", "RMB 18,000,000", "AMR filing", "2026-07-28 09:15"],
-        ["Registered address", "上海市浦东新区…", "NECIPS", "2026-07-28 09:14"],
-        ["Business scope", "Wholesale of non-ferrous metals; import/export", "NECIPS", "2026-07-28 09:14"]
-      ] },
-    { nm: "Shareholders", rows: 12, cols: ["Holder", "Type", "Stake %", "Traced to"],
-      data: [
-        ["鼎远投资（香港）有限公司", "Corporate", "62.00", "HK CR no. 2418…"],
-        ["Wang Zhiming 王志明", "Individual", "23.50", "PRC ID …3417"],
-        ["Shanghai Hengrui Capital LP", "Fund", "14.50", "USCC 91310…"],
-        ["UBO — Wang Zhiming", "Look-through", "58.7 (eff.)", "Chain: HK → BVI → PRC"]
-      ] },
-    { nm: "Officers", rows: 9, cols: ["Name", "Role", "Appointed", "Other seats"],
-      data: [
-        ["Wang Zhiming 王志明", "Legal representative", "2016-03-22", "4"],
-        ["Li Xiuying 李秀英", "Director", "2019-11-04", "1"],
-        ["Chen Haoran 陈浩然", "Supervisor", "2021-06-30", "0"]
-      ] },
-    { nm: "Group", rows: 17, cols: ["Entity", "Relation", "Jurisdiction", "Status"],
-      data: [
-        ["Dingxin Metals (Ningbo) Ltd.", "Subsidiary 100%", "PRC", "In business"],
-        ["Dingxin Logistics Branch", "Branch", "PRC", "In business"],
-        ["Dingyuan Investment (HK) Ltd.", "Parent 62%", "Hong Kong", "Live"]
-      ] },
-    { nm: "Litigation", rows: 43, cols: ["Case no.", "Court", "Role", "Filed", "Amount RMB"],
-      data: [
-        ["(2024)沪0115民初8842", "Pudong New Area PC", "Defendant", "2024-05-19", "1,240,000"],
-        ["(2023)浙027民终3311", "Ningbo IPC", "Plaintiff", "2023-09-02", "760,000"],
-        ["Enforcement 被执行人", "Pudong New Area PC", "Subject", "2024-11-08", "1,240,000"]
-      ] },
-    { nm: "Screening", rows: 8, cols: ["List", "Result", "Match score", "Checked"],
-      data: [
-        ["OFAC SDN / SSI", "No match", "—", "2026-07-28 09:22"],
-        ["EU / UK / UN consolidated", "No match", "—", "2026-07-28 09:22"],
-        ["MOFCOM unreliable entity", "No match", "—", "2026-07-28 09:22"],
-        ["Adverse media (CN + EN)", "2 to review", "0.71", "2026-07-28 09:26"]
-      ] },
-    { nm: "Sources", rows: 26, cols: ["Source", "Query", "Retrieved", "Hash"],
-      data: [
-        ["NECIPS 企业信用信息公示", "USCC exact", "2026-07-28 09:14", "sha256:3f9a…"],
-        ["中国裁判文书网", "Party name + USCC", "2026-07-28 09:19", "sha256:b71c…"],
-        ["失信被执行人名单", "Party name", "2026-07-28 09:20", "sha256:c04e…"]
-      ] }
-  ];
-
-  function sheetTabs(active) {
-    var h = '<div class="sheettabs" role="tablist" aria-label="Workbook sheets">';
-    SHEETS.forEach(function (s, i) {
-      h += '<button type="button" class="sheettab" role="tab" data-sheet="' + i + '" aria-selected="' + (i === active) + '">' + s.nm + '</button>';
+  /* Fill Easy automated notification block */
+  function feBlock(sections) {
+    var h = '<div class="fe"><div class="febar"><span class="bn">Fill Easy</span><span class="an">Automated Notification</span></div><div class="febody">';
+    sections.forEach(function (s) {
+      if (s.type === "clar") {
+        h += '<p class="fesec clar">NEED CLARIFICATION (' + s.rows.length + ') <span class="rest">&mdash; Please review the items below, copy the table into your email and add your answers in the <i>yellow &ldquo;Your reply&rdquo;</i> column.</span></p>' +
+          '<div class="fetblwrap"><table class="fetbl"><thead><tr><th>Request</th><th>Issue (action required)</th><th class="yl">Your reply</th></tr></thead><tbody>' +
+          s.rows.map(function (r) {
+            return '<tr><td><span class="sub">' + r.subject + '</span></td><td>' + r.issue + '</td><td class="yl ph">[Your reply]</td></tr>';
+          }).join("") + '</tbody></table></div>';
+      } else {
+        h += '<p class="fesec">' + s.title + (s.rows ? ' <span class="ct">(' + s.rows.length + ')</span>' : '') + '</p>' +
+          '<div class="fetblwrap"><table class="fetbl"><thead><tr><th>Request ID</th><th>Request</th><th>Status</th></tr></thead><tbody>' +
+          s.rows.map(function (r) {
+            return '<tr><td class="rid">' + r.id + '</td>' +
+              '<td><span class="ref">[' + r.ref + ']</span> <span class="sub">' + r.subject + '</span> <span class="doc">(' + r.doc + ')</span></td>' +
+              '<td>' + r.status + '</td></tr>';
+          }).join("") + '</tbody></table></div>';
+      }
     });
-    return h + '</div>';
+    return h + '<p class="fefoot">You can reply directly to this email with corrections or additional details.</p></div></div>';
   }
 
-  function sheetGrid(i) {
-    var s = SHEETS[i];
-    var h = '<div class="gridwrap"><table class="grid"><thead><tr><th>&nbsp;</th>';
-    s.cols.forEach(function (c) { h += '<th>' + c + '</th>'; });
-    h += '</tr></thead><tbody>';
-    s.data.forEach(function (row, r) {
-      h += '<tr><th>' + (r + 2) + '</th>';
-      row.forEach(function (cell, ci) { h += '<td' + (ci === 0 || ci === 1 ? ' class="hz"' : '') + '>' + cell + '</td>'; });
-      h += '</tr>';
-    });
-    h += '</tbody></table></div>' +
-      '<div class="gridnote">Sheet &ldquo;' + s.nm + '&rdquo; &mdash; ' + s.rows + ' rows, structure locked. Every value carries its source and retrieval time in the adjacent columns.</div>';
-    return h;
-  }
-
-  function workbook(name, unlocked, activeSheet) {
-    var h = '<div class="wb"><div class="wbbar"><span aria-hidden="true">&#128202;</span><span class="nm">' + name + '</span>' +
-      '<span style="margin-left:auto" class="tag ' + (unlocked ? 'tag-ok' : 'tag-lock') + '">' +
-      (unlocked ? 'Open &mdash; AES-256' : 'Password required') + '</span></div>' +
-      '<div class="wbstage">';
-    if (!unlocked) {
-      h += '<div class="lockscrim">' +
-        '<div><div class="lk" aria-hidden="true">&#128274;</div>' +
-        '<h4>This workbook is encrypted</h4>' +
-        '<p>Excel is asking for the open password. It was never sent in this email &mdash; it arrived on a separate channel.</p>' +
-        '<div class="pwrow">' +
-          '<input type="text" id="pwInput" placeholder="Enter password" autocomplete="off" spellcheck="false" aria-label="Workbook password">' +
-          '<button type="button" class="btn" id="pwGo">Open</button>' +
-          '<button type="button" class="btn ghost" id="pwPaste">Paste from Teams</button>' +
-        '</div>' +
-        '<div class="pwerr" id="pwErr" role="status"></div>' +
-        '</div></div>';
-    }
-    h += sheetTabs(activeSheet) + sheetGrid(activeSheet) + '</div></div>';
-    return h;
-  }
-
-  /* ==========================================================
-     Message fixtures
-     ========================================================== */
-  var M = {
-    noise1: { from: "Onboarding Queue", subj: "7 files awaiting first-line review", prev: "Daily digest — 3 corporate, 4 individual. Oldest item is 2 days old.", time: "07:02", unread: false, flags: [] },
-    noise2: { from: "Group Compliance", subj: "Reminder: PRC personal information transfer standard contract", prev: "Effective 1 August, all outbound transfers of PRC personal information must reference the filed standard contract…", time: "Mon", unread: false, flags: [{ c: "tag-plain", t: "Policy" }] },
-
-    coReq:  { from: "Amelia Chen", subj: "New counterparty — Shanghai Dingxin, need full file by Wed", prev: "Hi — new counterparty came in from the Shanghai desk this morning and I need the full file before Thursday’s credit committee…", time: "09:12", unread: false, flags: [{ c: "tag-plain", t: "Sent" }] },
-    coAck:  { from: "KYC Desk Agent", subj: "Re: New counterparty — Shanghai Dingxin, need full file by Wed", prev: "I read your request as a corporate KYC on Shanghai Dingxin Trading Co., Ltd. Here is the scope I am running — reply to correct anything…", time: "09:13", unread: true, flags: [{ c: "tag-agent", t: "Agent" }, { c: "tag-ok", t: "KYC-2481" }] },
-    coDone: { from: "KYC Desk Agent", subj: "Re: New counterparty — Shanghai Dingxin — file attached (encrypted)", prev: "The corporate KYC file is attached as an encrypted workbook. The password is on its way to you separately via Teams…", time: "09:34", unread: true, flags: [{ c: "tag-agent", t: "Agent" }, { c: "tag-lock", t: "Encrypted xlsx" }] },
-    coFup:  { from: "Amelia Chen", subj: "Re: New counterparty — Shanghai Dingxin — file attached (encrypted)", prev: "Got it, opened fine. Two things — can you add the HK parent and pull litigation for the two subsidiaries as well?", time: "10:02", unread: false, flags: [{ c: "tag-plain", t: "Sent" }] },
-    coDelta:{ from: "KYC Desk Agent", subj: "Re: New counterparty — Shanghai Dingxin — addendum attached (encrypted)", prev: "Two follow-ups picked up from your reply. Addendum workbook attached, same password as the original file…", time: "10:19", unread: true, flags: [{ c: "tag-agent", t: "Agent" }, { c: "tag-lock", t: "Encrypted xlsx" }] },
-
-    peReq:  { from: "Amelia Chen", subj: "Screening — Wang Zhiming (legal rep, Dingxin file)", prev: "Hi — quick one ahead of the same committee. Can you screen Wang Zhiming (王志明), born 12 April 1979…", time: "09:41", unread: false, flags: [{ c: "tag-plain", t: "Sent" }] },
-    peAck:  { from: "KYC Desk Agent", subj: "Re: Screening — Wang Zhiming (legal rep, Dingxin file)", prev: "I read your request as an individual screening on Wang Zhiming 王志明. Running identity, PEP, sanctions, court and adverse media…", time: "09:41", unread: true, flags: [{ c: "tag-agent", t: "Agent" }, { c: "tag-ok", t: "KYC-2482" }] },
-    peDone: { from: "KYC Desk Agent", subj: "Re: Screening — Wang Zhiming — cleared with one item to review", prev: "Screening complete. Identity verified, no sanctions match, not a PEP. One enforcement record is linked to a company he represents…", time: "09:48", unread: true, flags: [{ c: "tag-agent", t: "Agent" }, { c: "tag-warn", t: "1 to review" }] },
-    peFup:  { from: "Amelia Chen", subj: "Re: Screening — Wang Zhiming — cleared with one item to review", prev: "Thanks. Is he a PEP anywhere outside the mainland — Hong Kong or Macau in particular?", time: "09:55", unread: false, flags: [{ c: "tag-plain", t: "Sent" }] },
-    peDelta:{ from: "KYC Desk Agent", subj: "Re: Screening — Wang Zhiming — HK/Macau PEP check", prev: "No PEP match in Hong Kong or Macau. Checked SFC licensed persons, HK company directorships and Macau official gazette…", time: "09:57", unread: true, flags: [{ c: "tag-agent", t: "Agent" }] }
-  };
-
-  function msgHTML(key, openKey) {
-    var m = M[key];
-    var h = '<div class="msg" data-key="' + key + '" data-open="' + (key === openKey) + '" data-unread="' + (!!m.unread && key !== openKey) + '">' +
-      '<div class="row1"><span class="from">' + m.from + '</span><span class="time">' + m.time + '</span></div>' +
-      '<div class="subj">' + m.subj + '</div>' +
-      '<div class="prev">' + m.prev + '</div>';
-    if (m.flags.length) {
-      h += '<div class="flags">';
-      m.flags.forEach(function (f) { h += '<span class="tag ' + f.c + '">' + f.t + '</span>'; });
-      h += '</div>';
-    }
-    return h + '</div>';
-  }
-
-  /* ==========================================================
-     Trace panel builders
-     ========================================================== */
   function tsteps(items) {
-    var h = '<div class="tsteps">';
-    items.forEach(function (it) {
-      h += '<div class="tstep" data-s="' + it.s + '"><span class="bul"></span><div class="tx">' +
-        '<div class="lbl">' + it.l + '</div>' +
-        (it.d ? '<div class="det">' + it.d + '</div>' : '') +
-      '</div></div>';
-    });
-    return h + '</div>';
+    return '<div class="tsteps">' + items.map(function (i) {
+      return '<div class="tstep" data-s="' + i.s + '"><span class="bul"></span><div>' +
+        '<div class="lbl">' + i.l + '</div>' + (i.d ? '<div class="det">' + i.d + '</div>' : '') + '</div></div>';
+    }).join("") + '</div>';
   }
 
-  function slotcard(rows, title) {
-    var h = '<div class="tcard"><h3>' + (title || "Parsed request") + '</h3><div class="tc">';
-    rows.forEach(function (r) {
-      h += '<div class="slotrow" data-slot="' + r.k + '"><span class="sk">' + r.n + '</span><span class="sv">' + r.v + '</span></div>';
-    });
-    return h + '</div></div>';
+  function pcard(title, html) { return '<div class="pcard"><h3>' + title + '</h3><div class="pb">' + html + '</div></div>'; }
+
+  function slotcard(title, rows) {
+    return '<div class="pcard"><h3>' + title + '</h3><div class="pb">' + rows.map(function (r) {
+      return '<div class="srow" data-s="' + r.k + '"><span class="sk">' + r.n + '</span><span class="sv">' + r.v + '</span></div>';
+    }).join("") + '</div></div>';
   }
 
-  function srccard(rows, pct, title) {
-    var h = '<div class="tcard"><h3>' + (title || "Sources") + '</h3><div class="tc">';
-    rows.forEach(function (r) {
-      h += '<div class="srcrow" data-s="' + r.s + '"><span class="sn">' + r.n + (r.c ? '<span class="cn"><br>' + r.c + '</span>' : '') + '</span><span class="st">' + r.t + '</span></div>';
-    });
-    if (typeof pct === "number") h += '<div class="meter"><i style="width:' + pct + '%"></i></div>';
-    return h + '</div></div>';
+  /* ==========================================================
+     Spreadsheet
+     ========================================================== */
+  function sheet(opts) {
+    var editable = !!opts.editable;
+    var h = '<div class="xl">' +
+      '<div class="xlbar"><span aria-hidden="true">&#128202;</span><span class="fn">' + FILE + '</span>' +
+      '<span style="margin-left:auto"></span>' +
+      (state.encrypted ? '<span class="badge b-gold">&#128274; Encrypted &middot; AES-256</span>' : '<span class="badge b-mut">Not encrypted</span>') +
+      '</div>' +
+      '<div class="xltab"><span>Background_Screening_Orders</span></div>' +
+      '<div class="xlscroll"><table class="sheet"><thead>' +
+      '<tr><th class="corner ch">&nbsp;</th>' + COLS.map(function (c) { return '<th class="ch">' + c.c + '</th>'; }).join("") + '</tr>' +
+      '<tr class="hdr"><th class="corner">1</th>' + COLS.map(function (c) {
+        return '<th>' + c.cn + (c.req ? ' <span class="req">*</span>' : '') + '<span class="en">' + c.en + '</span></th>';
+      }).join("") + '</tr></thead><tbody>';
+
+    h += '<tr class="sample"><td class="rn">2</td>' + SAMPLE.map(function (v) { return '<td>' + (v || "") + '</td>'; }).join("") + '</tr>';
+
+    h += '<tr><td class="rn">3</td>' + COLS.map(function (c, i) {
+      var val = state.row[i] || "";
+      if (editable && EDITABLE[i] !== undefined) {
+        var bad = (i === 2 && !val) || (i === 3 && val && !/^\d{18}$/.test(val)) || (i === 3 && !val);
+        return '<td class="cell-edit' + (bad && state.touched ? ' bad' : '') + '" contenteditable="true" data-i="' + i + '" data-ph="' + (EDITABLE[i]) + '" spellcheck="false">' + val + '</td>';
+      }
+      return '<td>' + val + '</td>';
+    }).join("") + '</tr>';
+
+    h += '</tbody></table></div>' +
+      '<div class="xlnote"><b>Row 2</b> is the sample data shipped with the template and can be overwritten. ' +
+      (editable ? 'The four highlighted cells in <b>row 3</b> are editable &mdash; type into them, or press <b>Fill sample row</b>.' :
+       'Row 3 holds this request.') + '</div></div>';
+    return h;
   }
 
-  function notecard(title, html) {
-    return '<div class="tcard"><h3>' + title + '</h3><div class="tc" style="font-size:12.5px;line-height:1.5">' + html + '</div></div>';
+  function validation() {
+    var name = (state.row[2] || "").trim();
+    var id = (state.row[3] || "").trim();
+    var fields = (state.row[16] || "").trim();
+    var checks = [
+      { ok: !!name, t: "中文名 / Chinese Name", s: name ? "&#10003; " + name : "Mandatory field — still empty" },
+      { ok: /^\d{18}$/.test(id), t: "中國大陸身份證號碼 / Mainland ID Number", s: !id ? "Mandatory field — still empty" : (/^\d{18}$/.test(id) ? "&#10003; 18 digits" : id.length + " digits — mainland IDs must be 18") },
+      { ok: !!fields, t: "所需數據字段 / Requested Data Fields", s: fields ? "&#10003; " + fields : "No data fields requested for this row" }
+    ];
+    var pass = checks.every(function (c) { return c.ok; });
+    return { pass: pass, html: '<div class="vlist">' + checks.map(function (c) {
+      return '<div class="vrow" data-ok="' + c.ok + '"><span class="mk">' + (c.ok ? "&#10003;" : "!") + '</span>' +
+        '<span class="vt">' + c.t + '<span class="vs">' + c.s + '</span></span></div>';
+    }).join("") + '</div>' };
   }
 
-  var COMPANY_SLOTS = [
-    { k: "entity", n: "subject", v: '<em>Shanghai Dingxin Trading Co., Ltd.</em> / <em>上海鼎新贸易有限公司</em>' },
-    { k: "entity", n: "type", v: '<em>Corporate</em> &rarr; Company Search guide' },
-    { k: "id", n: "uscc", v: '<em>91310115MA1K3XYZ7B</em> &middot; checksum valid' },
-    { k: "id", n: "jurisdiction", v: '<em>PRC &mdash; Shanghai, Pudong</em> (from USCC prefix)' },
-    { k: "scope", n: "checks", v: '<em>registration</em>, <em>UBO chain</em>, <em>officers</em>, <em>litigation</em>, <em>sanctions + media</em>' },
-    { k: "scope", n: "window", v: '<em>5 years</em> &rarr; from 2021-07-28' },
-    { k: "out", n: "format", v: '<em>xlsx</em> (asked for a spreadsheet)' },
-    { k: "out", n: "protection", v: '<em>encrypt</em> &rarr; AES-256, onward disclosure to counsel' },
-    { k: "out", n: "due", v: '<em>Wed 2026-07-29, 17:00 CST</em>' }
-  ];
-
-  var PERSON_SLOTS = [
-    { k: "entity", n: "subject", v: '<em>Wang Zhiming</em> / <em>王志明</em>' },
-    { k: "entity", n: "type", v: '<em>Individual</em> &rarr; Person Search guide' },
-    { k: "id", n: "dob", v: '<em>1979-04-12</em>' },
-    { k: "id", n: "nat. id", v: '<em>…3417</em> &middot; partial, last 4' },
-    { k: "scope", n: "role", v: '<em>legal representative</em> &middot; links to KYC-2481' },
-    { k: "scope", n: "checks", v: '<em>identity</em>, <em>PEP</em>, <em>sanctions</em>, <em>court</em>, <em>adverse media</em>' },
-    { k: "out", n: "format", v: '<em>inline email</em> (asked for a short answer)' },
-    { k: "out", n: "due", v: '<em>today</em> &rarr; 2026-07-28, 18:00 CST' }
-  ];
+  /* ==========================================================
+     The natural-language email
+     ========================================================== */
+  function requestBody() {
+    return '<p>Hi Fill Easy team,</p>' +
+      '<p>Please run ' + sl("subj", "SVC", "background screening") + ' for ' + sl("subj", "N", "the subject in the attached workbook") + ' &mdash; ' +
+      sl("id", "FILE", "Background_Screening_Orders") + ', row 3. She is ' + sl("subj", "REG", "China &mdash; CN") + ', internal ref ' +
+      sl("id", "REF", "BGS-2026-014") + '.</p>' +
+      '<p>I need the data fields marked in column Q (' + sl("fld", "FLD", "KYC1 and KYC2") + '), and on top of that please verify her ' +
+      sl("fld", "FLD", "professional qualification number") + ' and ' + sl("fld", "FLD", "mainland bank account") + '. ' +
+      'Flag it to me if ' + sl("fld", "COND", "the ID card is expired or expires within 12 months") + '.</p>' +
+      '<p>' + sl("sec", "ENC", "The workbook is password-protected") + ' &mdash; ' +
+      sl("sec", "KEY", "same desk password we registered at onboarding") + ', not in this email.</p>' +
+      '<p class="sig">Thanks,<br>Matthew<br>Client Onboarding</p>';
+  }
 
   /* ==========================================================
      Steps
      ========================================================== */
-  function ackBody(kind) {
-    var rows = kind === "company"
-      ? [
-          { on: true, t: "Registration &amp; licence status", s: "NECIPS + Shanghai AMR filings" },
-          { on: true, t: "Shareholding chain to UBO", s: "Look-through incl. HK and offshore layers" },
-          { on: true, t: "Directors, supervisors, legal representative", s: "Plus other seats held" },
-          { on: true, t: "Litigation &amp; enforcement, 2021-07-28 onward", s: "Judgments, enforcement, dishonest-debtor list" },
-          { on: true, t: "Sanctions &amp; adverse media", s: "OFAC, EU, UK, UN, MOFCOM + CN/EN media" }
-        ]
-      : [
-          { on: true, t: "Identity verification", s: "Name, DOB and ID last-4 against registry records" },
-          { on: true, t: "PEP status", s: "PRC domestic and international PEP lists" },
-          { on: true, t: "Sanctions screening", s: "OFAC, EU, UK, UN consolidated" },
-          { on: true, t: "Court &amp; enforcement records", s: "As party and as legal representative" },
-          { on: true, t: "Adverse media", s: "CN and EN sources, last 5 years" }
-        ];
+  var STEPS = [
 
-    var checks = '<div class="checks">';
-    rows.forEach(function (r) {
-      checks += '<div class="check" data-on="' + r.on + '"><span class="bx">&#10003;</span><span>' + r.t + '<span class="sub">' + r.s + '</span></span></div>';
-    });
-    checks += '</div>';
-
-    var isCo = kind === "company";
-    return '<div class="body">' +
-      '<p>I have read your message as ' + (isCo
-        ? 'a <strong>corporate KYC</strong> on Shanghai Dingxin Trading Co., Ltd. (USCC 91310115MA1K3XYZ7B).'
-        : 'an <strong>individual screening</strong> on Wang Zhiming 王志明, born 12 April 1979.') +
-      ' Reply in plain English if any of this is wrong and I will re-run it &mdash; there is no form to fill in.</p>' +
-      '<div class="card"><header>Scope I am running<span class="right">' + (isCo ? 'KYC-2481' : 'KYC-2482') + '</span></header><div class="cbody">' + checks + '</div></div>' +
-      '<div class="card"><header>Delivery</header><div class="cbody"><dl class="kv">' +
-        (isCo
-          ? '<dt>Format</dt><dd>Excel workbook, 8 sheets &mdash; you asked for a spreadsheet</dd>' +
-            '<dt>Protection</dt><dd>AES-256 encrypted, open password required</dd>' +
-            '<dt>Password</dt><dd>Sent separately over Teams, never in this thread</dd>' +
-            '<dt>Retention</dt><dd>Link and file expire 2026-08-11 (14 days)</dd>' +
-            '<dt>Due</dt><dd>Wed 29 Jul, 17:00 CST &mdash; ahead of your committee</dd>'
-          : '<dt>Format</dt><dd>Result written into the email body &mdash; you asked for a short answer</dd>' +
-            '<dt>Attachment</dt><dd>None. Screening outcomes stay in the thread</dd>' +
-            '<dt>Evidence</dt><dd>Held against KYC-2482 in the case file, not exported</dd>' +
-            '<dt>Due</dt><dd>Today, 18:00 CST</dd>') +
-      '</dl></div></div>' +
-      '<p class="sig">KYC Desk Agent<br>Automated &mdash; replies in this thread are read.</p>' +
-    '</div>';
-  }
-
-  var COMPANY_STEPS = [
-
-    { k: "Compose",
-      t: "Write the request",
-      folder: "sent",
-      list: ["noise1", "noise2"],
-      listTitle: "Inbox",
-      narr: "The analyst writes an ordinary email. No template, no request form, no ticket portal — the sentence is the interface.",
-      pane: function () {
-        return '<div class="compose">' +
-          '<header><span aria-hidden="true">&#9998;</span> New message</header>' +
-          '<div class="cfield"><span class="lb">To</span><span class="vl">kyc-agent@meridiantrust.example</span></div>' +
-          '<div class="cfield"><span class="lb">Cc</span><span class="vl">shanghai.desk@meridiantrust.example</span></div>' +
-          '<div class="cfield"><span class="lb">Subject</span><span class="vl plain">New counterparty — Shanghai Dingxin, need full file by Wed</span></div>' +
-          '<div class="cbodyarea"><div class="body">' + COMPANY_REQUEST + '</div></div>' +
-          '<div class="cfoot"><button type="button" class="sendbtn" id="sendFake">Send</button>' +
-          '<span class="hint">Attachments: none &middot; Written like a note to a colleague</span></div>' +
-        '</div>';
+    /* ---------- 1. Fill ---------- */
+    { k: "Fill the template",
+      narr: "Start in the workbook, not the inbox. Only two columns are mandatory — Chinese Name and the 18-digit Mainland ID — and column Q says which data fields you want back.",
+      sub: "waiting · nothing sent yet",
+      stage: function () {
+        var v = validation();
+        return '<p class="lede">Open <strong>' + FILE + '</strong> and complete a row on the <strong>Background_Screening_Orders</strong> sheet. ' +
+          'Row 2 is the sample that ships with the template; your request goes in row 3.</p>' +
+          sheet({ editable: true }) +
+          '<div class="btnrow" style="margin-top:14px">' +
+            '<button type="button" class="btn ghost sm" id="fillSample">Fill sample row</button>' +
+            '<button type="button" class="btn ghost sm" id="clearRow">Clear row</button>' +
+            '<span class="badge ' + (v.pass ? "b-ok" : "b-mut") + '" id="rowBadge">' + (v.pass ? "Row 3 valid" : "Row 3 incomplete") + '</span>' +
+          '</div>' +
+          '<div class="instr"><h4>Instructions from the template</h4><ol>' +
+            '<li>請填寫所有標有 * 的必填項（中文姓名、大陸身份證號碼）<span class="cn"><br>Fill in all mandatory fields marked with * (Chinese Name, Mainland ID Number)</span></li>' +
+            '<li>請確保身份證號碼輸入準確—中國大陸的身份證號碼應爲18位<span class="cn"><br>Ensure ID numbers are entered accurately — they should be 18 digits for mainland China IDs</span></li>' +
+          '</ol></div>';
       },
-      trace: function () {
+      side: function () {
+        var v = validation();
         return tsteps([
-          { s: "wait", l: "Waiting for mail", d: "kyc-agent@ · IMAP idle" },
-          { s: "wait", l: "Classify request" },
-          { s: "wait", l: "Extract slots" },
-          { s: "wait", l: "Select guide" }
-        ]) + notecard("How this works", "The agent watches one mailbox. Anything that lands there is treated as a request — the analyst never leaves their inbox.");
-      },
-      sub: "idle · watching kyc-agent@"
+          { s: "active", l: "Template being filled", d: "Background_Screening_Orders" },
+          { s: "wait", l: "Encrypt workbook" },
+          { s: "wait", l: "Email to agent" },
+          { s: "wait", l: "Agent parses request" },
+          { s: "wait", l: "Results returned" }
+        ]) + pcard("Row 3 validation", v.html);
+      }
     },
 
-    { k: "Parse",
-      t: "Agent reads it",
-      folder: "sent",
-      list: ["coReq"],
-      listTitle: "Sent",
-      open: "coReq",
+    /* ---------- 2. Encrypt ---------- */
+    { k: "Encrypt the file",
+      narr: "The workbook now holds an ID number, a bank account and a home address, so it gets encrypted before it goes anywhere near email. Set a password to lock it.",
+      tip: "<b>Why this step exists.</b> Excel's own AES-256 encryption travels with the file. The password is never typed into the email — the Fill Easy desk already holds it from onboarding.",
+      sub: function () { return state.encrypted ? "workbook encrypted · AES-256" : "waiting · file not yet encrypted"; },
+      stage: function () {
+        if (state.encrypted) {
+          return '<p class="lede">The workbook is encrypted and ready to attach.</p>' +
+            '<div class="card gold"><header><h3>&#128274; Workbook encrypted</h3><span class="right">AES-256 &middot; ECMA-376 agile</span></header><div class="cb">' +
+              '<div class="encnote"><span class="lk">&#128274;</span><div>Opening <b>' + FILE + '</b> now requires the password. Anyone intercepting the email gets a file they cannot read.</div></div>' +
+              '<div class="grid2">' +
+                '<div class="field"><label>File</label><div class="mono" style="font-size:12.5px">' + FILE + '</div></div>' +
+                '<div class="field"><label>Password</label><div class="mono" style="font-size:12.5px">' + state.pw.replace(/./g, "&bull;") + ' <span style="color:var(--ink-3)">(' + state.pw.length + ' characters)</span></div></div>' +
+                '<div class="field"><label>Delivery of the key</label><div style="font-size:13px">Pre-registered desk password &mdash; not sent in the email</div></div>' +
+                '<div class="field"><label>Size</label><div class="mono" style="font-size:12.5px">18 KB</div></div>' +
+              '</div>' +
+              '<div class="btnrow"><button type="button" class="btn ghost sm" id="unencrypt">Change password</button></div>' +
+            '</div></div>' + sheet({ editable: false });
+        }
+        return '<p class="lede">Encrypt the workbook before attaching it. In Excel this is <strong>File &rarr; Info &rarr; Protect Workbook &rarr; Encrypt with Password</strong>.</p>' +
+          '<div class="card"><header><h3>Encrypt with password</h3><span class="right">' + FILE + '</span></header><div class="cb" style="max-width:440px">' +
+            '<div class="field mono"><label for="pw1">Password <span class="req">*</span></label>' +
+              '<input type="text" id="pw1" autocomplete="off" spellcheck="false" placeholder="Enter a password">' +
+              '<span class="hint">Use the desk password already registered with Fill Easy.</span></div>' +
+            '<div class="field mono"><label for="pw2">Confirm password <span class="req">*</span></label>' +
+              '<input type="text" id="pw2" autocomplete="off" spellcheck="false" placeholder="Re-enter the password">' +
+              '<span class="err" id="pwErr"></span></div>' +
+            '<div class="btnrow"><button type="button" class="btn" id="doEnc">Encrypt workbook</button>' +
+            '<button type="button" class="btn ghost" id="genPw">Use desk password</button></div>' +
+          '</div></div>';
+      },
+      side: function () {
+        return tsteps([
+          { s: "done", l: "Template filled", d: (state.row[2] || "—") + " · row 3" },
+          { s: state.encrypted ? "done" : "active", l: "Encrypt workbook", d: state.encrypted ? "AES-256 · locked" : "awaiting password" },
+          { s: "wait", l: "Email to agent" },
+          { s: "wait", l: "Agent parses request" },
+          { s: "wait", l: "Results returned" }
+        ]) + pcard("Why encrypt this file", "Row 3 carries a mainland ID number, a bank account number, a phone number and a residential address. That is exactly the payload worth protecting in transit.");
+      }
+    },
+
+    /* ---------- 3. Send ---------- */
+    { k: "Attach and send",
+      narr: "Attach the locked workbook and write the request the way you would to a colleague. There is no required format — the agent parses natural language.",
+      tip: "<b>Note the attachment chip.</b> It is gold, not green, and carries a lock: that is the demo showing you the file leaving encrypted.",
+      sub: state_sub_pending,
+      stage: function () {
+        return '<p class="lede">One email to <strong>' + AGENT_ADDR + '</strong> with the encrypted workbook attached.</p>' +
+          '<div class="mail">' +
+            '<div class="cfield"><span class="lb">To</span><span class="vl">' + AGENT_ADDR + '</span></div>' +
+            '<div class="cfield"><span class="lb">Subject</span><span class="vl pl">Background screening &mdash; BGS-2026-014 (China)</span></div>' +
+            attach([{ n: FILE, m: "18 KB &middot; encrypted &middot; password required", kind: "lock", enc: true }]) +
+            '<div class="mailbody">' +
+              '<div class="encnote"><span class="lk">&#128274;</span><div><b>Attached file is encrypted.</b> ' + FILE + ' is locked with AES-256. The Fill Easy desk opens it with the password registered at onboarding &mdash; the password is not written anywhere in this email.</div></div>' +
+              requestBody() +
+            '</div>' +
+            '<div class="cfoot"><button type="button" class="btn" id="sendBtn">' + (state.sent ? "Sent &#10003;" : "Send") + '</button>' +
+            '<span class="badge b-gold">&#128274; 1 encrypted attachment</span>' +
+            '<span class="hint">Plain language &middot; no template, no fixed syntax</span></div>' +
+          '</div>';
+      },
+      side: function () {
+        return tsteps([
+          { s: "done", l: "Template filled", d: (state.row[2] || "—") + " · row 3" },
+          { s: "done", l: "Workbook encrypted", d: "AES-256 · 18 KB" },
+          { s: state.sent ? "done" : "active", l: "Email to agent", d: state.sent ? "sent · " + AGENT_ADDR : "composing" },
+          { s: "wait", l: "Agent parses request" },
+          { s: "wait", l: "Results returned" }
+        ]) + pcard("Sender must be whitelisted", "Fill Easy only accepts requests from addresses on the approved sender list. An unrecognised sender is rejected rather than processed.");
+      }
+    },
+
+    /* ---------- 4. Parse ---------- */
+    { k: "Agent reads it",
       hl: true,
-      narr: "The agent reads the free text and marks what it found. Every highlight is a slot it filled: who the subject is, which identifier pins them down, which checks were asked for, and how the answer should come back.",
-      diff: "<b>Where the two guides split.</b> “Shanghai Dingxin Trading Co., Ltd.” plus a unified social credit code routes to the <b>Company Search guide</b>. A personal name with a date of birth would route to Person Search instead — and from here the two paths behave differently.",
-      pane: function () {
-        return head({ from: ANALYST, to: "kyc-agent@meridiantrust.example", subject: "New counterparty — Shanghai Dingxin, need full file by Wed", time: "Tue 28 Jul, 09:12", extra: "Read by agent 09:12:04" }) +
-          legend() +
-          '<div class="body">' + COMPANY_REQUEST + '</div>';
+      narr: "The agent decrypts the attachment, reads row 3, and marks up the sentence. Every highlight is a slot it filled — including the two extra checks asked for in prose that were never in column Q.",
+      tip: "<b>This is the point of the demo.</b> The workbook carries the structured identifiers; the email body carries the intent. The agent merges the two.",
+      sub: "parsing · individual_kyc · 0.95",
+      stage: function () {
+        return mailHead({ from: USER, to: AGENT_ADDR, subject: "Background screening — BGS-2026-014 (China)", time: "Tue 28 Jul, 09:12" }) +
+          attach([{ n: FILE, m: "18 KB &middot; encrypted &middot; opened with desk password", kind: "lock", enc: true }]) +
+          '<div style="padding:16px 0 0">' + legend() + '</div>' +
+          '<div class="mailbody hl" style="padding-left:0;padding-right:0">' + requestBody() + '</div>' +
+          '<div class="card"><header><h3>Attachment read</h3><span class="right">row 3 of Background_Screening_Orders</span></header><div class="cb">' +
+            '<div class="grid2">' +
+              '<div class="field"><label>Internal reference</label><div class="mono" style="font-size:12.5px">' + (state.row[0] || "—") + '</div></div>' +
+              '<div class="field"><label>中文名 / Chinese Name</label><div style="font-size:13.5px">' + (state.row[2] || "—") + '</div></div>' +
+              '<div class="field"><label>身份證號碼 / Mainland ID</label><div class="mono" style="font-size:12.5px">' + (state.row[3] || "—") + ' <span class="badge b-ok">18 digits</span></div></div>' +
+              '<div class="field"><label>所需數據字段 / Requested fields</label><div style="font-size:13.5px">' + (state.row[16] || "—") + '</div></div>' +
+            '</div>' +
+          '</div></div>';
       },
-      trace: function () {
+      side: function () {
         return tsteps([
-          { s: "done", l: "Mail received", d: "msg-id 8c41d2… · 09:12:04" },
-          { s: "done", l: "Classified", d: "corporate_kyc · confidence 0.96" },
-          { s: "done", l: "Slots extracted", d: "9 of 9 required · 0 ambiguous" },
-          { s: "active", l: "Guide selected", d: "Company Search v4.2" }
-        ]) + slotcard(COMPANY_SLOTS);
-      },
-      sub: "parsing · corporate_kyc · 0.96"
+          { s: "done", l: "Mail received", d: "sender whitelisted · 09:12:04" },
+          { s: "done", l: "Attachment decrypted", d: "desk password · AES-256" },
+          { s: "done", l: "Row parsed", d: "1 subject · mandatory fields present" },
+          { s: "active", l: "Request built", d: "6 data fields · 1 condition" },
+          { s: "wait", l: "Results returned" }
+        ]) + slotcard("Parsed request", [
+          { k: "subj", n: "subject", v: '<em>' + (state.row[2] || "—") + '</em> · row 3' },
+          { k: "subj", n: "region", v: '<em>China — CN</em> · automated market' },
+          { k: "id", n: "ref", v: '<em>' + (state.row[0] || "—") + '</em>' },
+          { k: "id", n: "id no.", v: '<em>' + (state.row[3] || "—") + '</em>' },
+          { k: "fld", n: "from Q", v: '<em>KYC1</em>, <em>KYC2</em>' },
+          { k: "fld", n: "from body", v: '<em>professional qualification</em>, <em>bank account</em>' },
+          { k: "fld", n: "condition", v: '<em>flag ID expiry ≤ 12 months</em>' },
+          { k: "sec", n: "security", v: '<em>encrypted in</em> → encrypted out' }
+        ]);
+      }
     },
 
-    { k: "Confirm",
-      t: "Agent confirms scope",
-      folder: "inbox",
-      list: ["coAck", "noise1", "noise2"],
-      listTitle: "Inbox",
-      open: "coAck",
-      narr: "Before spending anything, the agent replies with what it understood. The analyst can correct it in the same plain English — “actually make that ten years” — and the scope updates.",
-      pane: function () {
-        return head({ from: AGENT, to: "Amelia Chen", subject: "Re: New counterparty — Shanghai Dingxin, need full file by Wed", time: "Tue 28 Jul, 09:13", extra: "Auto-reply · KYC-2481" }) + ackBody("company");
+    /* ---------- 5. Acknowledgement ---------- */
+    { k: "Processing reply",
+      narr: "The first reply comes back in the standard Fill Easy notification format: every data field becomes its own request ID, and anything ambiguous is raised as a clarification you answer in the yellow column.",
+      sub: "BGS-2026-014 · 6 processing · 1 clarification",
+      stage: function () {
+        return mailHead({ from: AGENT, to: "Matthew Lee", subject: "Re: Background screening — BGS-2026-014 (China)", time: "Tue 28 Jul, 09:13" }) +
+          attach([{ n: "Disclaimer.txt", m: "743 bytes", kind: "txt" }]) +
+          '<div class="mailbody">' + feBlock([
+            { type: "clar", rows: [
+              { subject: "李慧敏 — Academic Credential", issue: "Columns L and M (Academic Credential Number, Degree Number) are blank, so academic verification cannot run. Please advise how you'd like us to proceed." }
+            ] },
+            { title: "PROCESSING", rows: [
+              { id: "BGS_7hK2xQm4Rt", ref: "BGS-2026-014", subject: "李慧敏", doc: "Mainland ID Verification", status: "Processing" },
+              { id: "BGS_c4Vn8sLpZa", ref: "BGS-2026-014", subject: "李慧敏", doc: "ID Card Validity & Expiry", status: "Processing" },
+              { id: "BGS_Wq3TbY9dEu", ref: "BGS-2026-014", subject: "李慧敏", doc: "Mainland Phone Verification", status: "Processing" },
+              { id: "BGS_Lm6Xz1PkHc", ref: "BGS-2026-014", subject: "李慧敏", doc: "Mainland Bank Account Verification", status: "Processing" },
+              { id: "BGS_Rd9Fj5NwSv", ref: "BGS-2026-014", subject: "李慧敏", doc: "Professional Qualification", status: "Processing" },
+              { id: "BGS_Tz2Gh7BqMx", ref: "BGS-2026-014", subject: "李慧敏", doc: "Address Verification", status: "Processing" }
+            ] }
+          ]) + '</div>';
       },
-      trace: function () {
+      side: function () {
         return tsteps([
-          { s: "done", l: "Guide selected", d: "Company Search v4.2" },
-          { s: "done", l: "Job created", d: "KYC-2481 · due 2026-07-29 17:00" },
-          { s: "done", l: "Scope confirmation sent", d: "reply-to thread · 09:13:11" },
-          { s: "active", l: "Awaiting correction window", d: "proceeds automatically in 60s" }
-        ]) + notecard("Correction is conversational", "A reply of “drop the media screening, add the Ningbo subsidiary” re-parses into the same slots and amends the job. No re-submission.");
-      },
-      sub: "KYC-2481 · scope confirmed"
+          { s: "done", l: "Request built", d: "6 data fields" },
+          { s: "done", l: "Acknowledgement sent", d: "09:13:11 · Disclaimer.txt" },
+          { s: "active", l: "Retrieving", d: "China — automated market · under 5 min" },
+          { s: "wait", l: "Results returned" }
+        ]) + pcard("One request ID per data field", "Each row in the workbook fans out into a request per data field, so a partial failure is visible on its own line rather than sinking the whole order.") +
+        pcard("Clarifications are conversational", "Answer in the yellow <i>Your reply</i> column and send it back. Nothing needs to be re-uploaded.");
+      }
     },
 
-    { k: "Retrieve",
-      t: "Pull the data",
-      folder: "inbox",
-      list: ["coAck", "noise1", "noise2"],
-      listTitle: "Inbox",
-      open: "coAck",
-      narr: "The company guide fans out across PRC registry, court and screening sources. This is the volume problem that makes the two guides diverge: hundreds of rows across eight related tables, not a yes or no.",
-      pane: function () {
-        return head({ from: AGENT, to: "Amelia Chen", subject: "Re: New counterparty — Shanghai Dingxin, need full file by Wed", time: "Tue 28 Jul, 09:13", extra: "Auto-reply · KYC-2481" }) +
-          '<div class="body">' +
-          '<div class="card"><header>Retrieval in progress<span class="right">KYC-2481 · started 09:14</span></header><div class="cbody">' +
-            '<dl class="kv">' +
-              '<dt>Sources queried</dt><dd class="mono">6 of 7</dd>' +
-              '<dt>Records collected</dt><dd class="mono">318</dd>' +
-              '<dt>Entities resolved</dt><dd class="mono">11 (3 offshore layers)</dd>' +
-              '<dt>Items needing review</dt><dd class="mono">2 adverse media, 1 enforcement</dd>' +
-            '</dl>' +
-            '<div class="meter"><i style="width:82%"></i></div>' +
-          '</div></div>' +
-          '<p>You do not need to do anything with this message — the agent updates it in place and sends the file when it is ready.</p>' +
-          '</div>';
+    /* ---------- 6. Results ---------- */
+    { k: "Results returned",
+      narr: "Results come back on the same thread, in the same notification format, with the verification outcomes attached as an encrypted workbook — locked with the same desk password the request arrived under.",
+      tip: "<b>Encrypted in, encrypted out.</b> Because the request arrived encrypted, the response leaves the same way. Unlock it below with the password you set in step 2.",
+      sub: "BGS-2026-014 · complete",
+      stage: function () {
+        var body = mailHead({ from: AGENT, to: "Matthew Lee", subject: "Re: Background screening — BGS-2026-014 (China)", time: "Tue 28 Jul, 09:17" }) +
+          attach([
+            { n: "Disclaimer.txt", m: "743 bytes", kind: "txt" },
+            { n: RESULTS_FILE, m: "24 KB &middot; encrypted &middot; same desk password", kind: "lock", enc: true }
+          ]) +
+          '<div class="mailbody">' + feBlock([
+            { title: "ORDER SUCCESS", rows: [
+              { id: "BGS_7hK2xQm4Rt", ref: "BGS-2026-014", subject: "李慧敏", doc: "Mainland ID Verification", status: "Completed" },
+              { id: "BGS_c4Vn8sLpZa", ref: "BGS-2026-014", subject: "李慧敏", doc: "ID Card Validity & Expiry", status: "Completed" },
+              { id: "BGS_Wq3TbY9dEu", ref: "BGS-2026-014", subject: "李慧敏", doc: "Mainland Phone Verification", status: "Completed" },
+              { id: "BGS_Lm6Xz1PkHc", ref: "BGS-2026-014", subject: "李慧敏", doc: "Mainland Bank Account Verification", status: "Completed" },
+              { id: "BGS_Rd9Fj5NwSv", ref: "BGS-2026-014", subject: "李慧敏", doc: "Professional Qualification", status: "Completed" },
+              { id: "BGS_Tz2Gh7BqMx", ref: "BGS-2026-014", subject: "李慧敏", doc: "Address Verification", status: "Completed" }
+            ] }
+          ]) + '</div>';
+
+        var wb = '<div class="card' + (state.unlocked ? "" : " gold") + '"><header><h3>' + (state.unlocked ? "Results workbook" : "&#128274; Results workbook is encrypted") + '</h3>' +
+          '<span class="right mono" style="font-size:11.5px">' + RESULTS_FILE + '</span></header><div class="cb">';
+        if (!state.unlocked) {
+          wb += '<div class="encnote"><span class="lk">&#128274;</span><div>Excel is asking for the open password. It is the same desk password the request was sent under.</div></div>' +
+            '<div style="max-width:360px"><div class="field mono"><label for="openPw">Password</label>' +
+            '<input type="text" id="openPw" autocomplete="off" spellcheck="false" placeholder="Enter the password"><span class="err" id="openErr"></span></div>' +
+            '<div class="btnrow"><button type="button" class="btn" id="openGo">Open workbook</button>' +
+            '<button type="button" class="btn ghost" id="openHint">Use desk password</button></div></div>';
+        } else {
+          wb += '<div class="xlscroll"><table class="fetbl"><thead><tr><th>Data field</th><th>Result</th><th>Detail</th></tr></thead><tbody>' +
+            '<tr><td>Mainland ID Verification</td><td><span class="badge b-ok">Verified</span></td><td>Name and ID number match the registry record for ' + (state.row[2] || "—") + '.</td></tr>' +
+            '<tr><td>ID Card Validity &amp; Expiry</td><td><span class="badge b-gold">Flagged</span></td><td>Valid, expires 2038-03-05 — outside the 12-month window you asked to be flagged, so no action needed.</td></tr>' +
+            '<tr><td>Mainland Phone Verification</td><td><span class="badge b-ok">Verified</span></td><td>Number is active and registered to the same name.</td></tr>' +
+            '<tr><td>Mainland Bank Account</td><td><span class="badge b-ok">Verified</span></td><td>Account holder name matches; three-element check passed.</td></tr>' +
+            '<tr><td>Professional Qualification</td><td><span class="badge b-ok">Verified</span></td><td>Certificate JS20190447 confirmed as current.</td></tr>' +
+            '<tr><td>Address Verification</td><td><span class="badge b-ok">Verified</span></td><td>Address consistent with the registered residential record.</td></tr>' +
+            '<tr><td>Academic Credential</td><td><span class="badge b-mut">Not run</span></td><td>Columns L and M were blank — raised as a clarification on the previous email.</td></tr>' +
+            '</tbody></table></div>';
+        }
+        wb += '</div></div>';
+        return body + wb;
       },
-      trace: function () {
+      side: function () {
         return tsteps([
-          { s: "done", l: "Job created", d: "KYC-2481" },
-          { s: "active", l: "Retrieving", d: "318 records · 11 entities resolved" },
-          { s: "wait", l: "Build workbook" },
-          { s: "wait", l: "Encrypt &amp; send" }
-        ]) + srccard([
-          { n: "NECIPS 国家企业信用信息公示系统", c: "Registration, capital, status", s: "ok", t: "42 rows" },
-          { n: "Shanghai AMR filings", c: "Annual reports 2021-2025", s: "ok", t: "77 rows" },
-          { n: "Shareholding look-through", c: "PRC → HK → BVI", s: "ok", t: "11 nodes" },
-          { n: "中国裁判文书网", c: "Judgments 2021-2026", s: "ok", t: "38 rows" },
-          { n: "失信被执行人名单", c: "Dishonest debtor list", s: "hit", t: "1 hit" },
-          { n: "Sanctions consolidated", c: "OFAC / EU / UK / UN / MOFCOM", s: "ok", t: "no match" },
-          { n: "Adverse media CN + EN", c: "Last 5 years", s: "run", t: "running" }
-        ], 82);
-      },
-      sub: "KYC-2481 · retrieving · 318 records"
+          { s: "done", l: "Retrieval complete", d: "6 of 6 requested fields" },
+          { s: "done", l: "Results encrypted", d: "same desk password" },
+          { s: "done", l: "Delivered", d: "09:17 · 2 attachments" },
+          { s: state.unlocked ? "done" : "active", l: state.unlocked ? "Workbook opened" : "Awaiting open", d: state.unlocked ? "09:19 · logged" : "password required" }
+        ]) + pcard("Password (demo)", state.pw
+          ? 'You set: <span class="mono">' + state.pw + '</span> — or press <b>Use desk password</b>.'
+          : 'Go back to step 2 and set a password first.');
+      }
     },
 
-    { k: "Build",
-      t: "Build the workbook",
-      folder: "inbox",
-      list: ["coAck", "noise1", "noise2"],
-      listTitle: "Inbox",
-      open: "coAck",
-      narr: "318 records become an eight-sheet workbook. Each value keeps the source it came from and the moment it was retrieved, so the committee pack is auditable a year from now.",
-      diff: "<b>Person search stops here.</b> A screening result is a decision — five lines that belong in the email body. A company file is a dataset, and a dataset needs a spreadsheet the analyst can sort, filter and paste into the pack.",
-      pane: function () {
-        var rows = SHEETS.map(function (s, i) {
-          return '<tr><td class="v">' + (i + 1) + '</td><td>' + s.nm + '</td><td class="v">' + s.rows + '</td><td>' + ["Headline facts and computed risk", "Licence, capital, address, scope", "Full chain with effective stakes", "Directors, supervisor, legal rep", "Subsidiaries, branches, parent", "Judgments and enforcement", "Sanctions and media results", "Query log with content hashes"][i] + '</td></tr>';
-        }).join("");
-        return head({ from: AGENT, to: "Amelia Chen", subject: "Re: New counterparty — Shanghai Dingxin, need full file by Wed", time: "Tue 28 Jul, 09:13", extra: "Auto-reply · KYC-2481" }) +
-          '<div class="body">' +
-          '<div class="card"><header>Workbook composed<span class="right">8 sheets · 170 rows</span></header><div class="cbody">' +
-            '<div class="gridwrap"><table class="res"><thead><tr><th>#</th><th>Sheet</th><th>Rows</th><th>Contents</th></tr></thead><tbody>' + rows + '</tbody></table></div>' +
-          '</div></div>' +
-          '<p>Column widths, freeze panes and number formats are applied so the file opens ready to read rather than ready to fix.</p>' +
-          '</div>';
-      },
-      trace: function () {
-        return tsteps([
-          { s: "done", l: "Retrieval complete", d: "318 records · 7 of 7 sources" },
-          { s: "active", l: "Building workbook", d: "8 sheets · formats + freeze panes" },
-          { s: "wait", l: "Encrypt" },
-          { s: "wait", l: "Send" }
-        ]) + notecard("Provenance travels with the data", "Every sheet carries <span class=\"mono\">Source</span> and <span class=\"mono\">Retrieved</span> columns, and sheet 8 logs each query with a content hash. Re-running later shows exactly what changed.");
-      },
-      sub: "KYC-2481 · building workbook"
-    },
-
-    { k: "Encrypt",
-      t: "Encrypt and password",
-      folder: "inbox",
-      list: ["coAck", "noise1", "noise2"],
-      listTitle: "Inbox",
-      open: "coAck",
-      narr: "The workbook is encrypted before it goes anywhere. The password is generated per file and deliberately sent on a different channel, so intercepting the email is not enough to open the data.",
-      diff: "<b>This step exists only on the company path.</b> The file carries the shareholding chain, a UBO and named officers — PRC personal information heading to external counsel. Encryption plus an out-of-band password is what makes that transfer defensible.",
-      pane: function () {
-        return head({ from: AGENT, to: "Amelia Chen", subject: "Re: New counterparty — Shanghai Dingxin, need full file by Wed", time: "Tue 28 Jul, 09:13", extra: "Auto-reply · KYC-2481" }) +
-          '<div class="body">' +
-          '<div class="card seal"><header><span aria-hidden="true">&#128274;</span> Encryption applied<span class="right">before the message leaves the agent</span></header><div class="cbody">' +
-            '<dl class="kv">' +
-              '<dt>Scheme</dt><dd class="mono">ECMA-376 agile · AES-256-CBC · SHA-512 · 100,000 spins</dd>' +
-              '<dt>Open password</dt><dd class="mono">19 chars, generated per file, never reused</dd>' +
-              '<dt>Workbook structure</dt><dd>Locked — sheets cannot be renamed, moved or unhidden</dd>' +
-              '<dt>Password channel</dt><dd>Teams direct message to the requester only</dd>' +
-              '<dt>Recipient binding</dt><dd>Released to <span class="mono">amelia.chen@</span>; the Cc is not given the password</dd>' +
-              '<dt>Sensitivity label</dt><dd>Confidential — KYC · do not forward externally unlabelled</dd>' +
-              '<dt>Expiry</dt><dd>File and password void after 2026-08-11</dd>' +
-            '</dl>' +
-          '</div></div>' +
-          '<p>The email itself stays unremarkable. Everything sensitive is inside the encrypted container, and the key to that container took a different route.</p>' +
-          '</div>';
-      },
-      trace: function () {
-        return tsteps([
-          { s: "done", l: "Workbook built", d: "8 sheets · 412 KB" },
-          { s: "done", l: "Encrypted", d: "AES-256 · file now 418 KB" },
-          { s: "active", l: "Password issued out-of-band", d: "Teams → amelia.chen@ · 09:33" },
-          { s: "wait", l: "Send reply with attachment" }
-        ]) + notecard("Why not put the password in the email?", "Because then the lock and the key travel together. Splitting them across two channels is the whole point — and it is why the company path needs a delivery step the person path does not.");
-      },
-      sub: "KYC-2481 · encrypted · AES-256"
-    },
-
-    { k: "Deliver",
-      t: "Send, then unlock",
-      folder: "inbox",
-      list: ["coDone", "coAck", "noise1", "noise2"],
-      listTitle: "Inbox",
-      open: "coDone",
-      narr: "The file lands in the analyst's inbox locked. The password arrived on Teams a minute earlier — paste it in below to open the workbook and page through the sheets.",
-      pane: function (st) {
-        return head({ from: AGENT, to: "Amelia Chen", subject: "Re: New counterparty — Shanghai Dingxin — file attached (encrypted)", time: "Tue 28 Jul, 09:34", extra: "KYC-2481 · complete" }) +
-          '<div class="body">' +
-          '<p>The corporate KYC file for <strong>Shanghai Dingxin Trading Co., Ltd.</strong> is attached. It is encrypted — the open password is in your Teams messages, sent at 09:33.</p>' +
-          '<p>Headline: registration current, licence valid, no sanctions match. Two things want your eye — one enforcement record from May 2024 (RMB 1.24m, since satisfied) and two adverse media items on the Ningbo subsidiary. Both are flagged on the <strong>Summary</strong> sheet.</p>' +
-          '<p>Overall risk came out <strong>medium</strong>. Reply here if you want anything re-run or extended.</p>' +
-          '<div class="attachbar">' +
-            '<div class="attach"><div class="ficon">XLSX</div><div><div class="fn">' + FILENAME + '</div><div class="fm">418 KB · encrypted · expires 11 Aug</div></div></div>' +
-          '</div>' +
-          '</div>' +
-          workbook(FILENAME, st.unlocked, st.sheet);
-      },
-      trace: function (st) {
-        return tsteps([
-          { s: "done", l: "Encrypted", d: "AES-256 · 418 KB" },
-          { s: "done", l: "Password delivered", d: "Teams · 09:33 · read receipt" },
-          { s: "done", l: "Reply sent with attachment", d: "09:34:02 · thread KYC-2481" },
-          { s: st.unlocked ? "done" : "active", l: st.unlocked ? "Recipient opened the file" : "Awaiting recipient open", d: st.unlocked ? "09:36 · logged against KYC-2481" : "access is logged when it happens" }
-        ]) +
-        notecard("Password (demo)", 'On a real desk this arrives on Teams. Here it is: <span class="mono">' + PASSWORD + '</span> — or press <b>Paste from Teams</b> on the locked workbook.') +
-        notecard("Still just a mailbox", "The analyst has not opened a single internal tool. Request, confirmation, data and delivery all happened in one email thread.");
-      },
-      sub: function (st) { return st.unlocked ? "KYC-2481 · delivered · opened" : "KYC-2481 · delivered · locked"; }
-    },
-
-    { k: "Converse",
-      t: "Reply in plain English",
-      folder: "inbox",
-      list: ["coDelta", "coFup", "coDone", "coAck"],
-      listTitle: "Inbox",
-      open: "coDelta",
+    /* ---------- 7. Converse ---------- */
+    { k: "Reply in plain English",
       hl: true,
-      narr: "The analyst answers the way they would answer a colleague. The agent highlights the new asks inside the reply, runs only the delta, and sends an addendum workbook under the same password.",
-      diff: "<b>Same conversation, same encryption rule.</b> Any follow-up that produces rows rather than a verdict comes back encrypted too — the guide, not the analyst, decides when a spreadsheet is required.",
-      pane: function () {
-        return head({ from: AGENT, to: "Amelia Chen", subject: "Re: New counterparty — Shanghai Dingxin — addendum attached (encrypted)", time: "Tue 28 Jul, 10:19", extra: "KYC-2481-A · addendum" }) +
-          '<div class="body">' +
-          '<p>Two follow-ups picked up from your reply, both done:</p>' +
-          '<ul>' +
-            '<li><strong>Dingyuan Investment (HK) Ltd.</strong> — full HK Companies Registry extract, directors and shareholding. Live, no charges registered.</li>' +
-            '<li><strong>Litigation for the two subsidiaries</strong> — Ningbo entity has 3 cases (all as plaintiff), the logistics branch none.</li>' +
-          '</ul>' +
-          '<p>Addendum workbook attached, 3 sheets. <strong>Same password as the original file</strong> — I have not issued a new one.</p>' +
-          '<div class="attachbar">' +
-            '<div class="attach"><div class="ficon">XLSX</div><div><div class="fn">' + DELTA_FILENAME + '</div><div class="fm">96 KB · encrypted · same password</div></div></div>' +
-          '</div>' +
-          '<div class="quoted">' +
-            '<div class="qh">On Tue 28 Jul at 10:02, Amelia Chen wrote:</div>' +
-            '<p>Got it, opened fine. Two things — can you add ' + sl("entity", "ORG", "the HK parent") + ' (I think it is ' + sl("entity", "ORG", "Dingyuan Investment") + ') and pull ' +
-            sl("scope", "CHK", "litigation") + ' for ' + sl("entity", "ORG", "the two subsidiaries") + ' as well? ' + sl("out", "SEC", "Same encryption please") + '.</p>' +
-          '</div>' +
+      narr: "Follow-ups are just replies. No new workbook, no re-upload — the agent carries the subject from the thread, highlights the new ask, and returns the extra field.",
+      sub: "BGS-2026-014-A · follow-up complete",
+      stage: function () {
+        return mailHead({ from: AGENT, to: "Matthew Lee", subject: "Re: Background screening — BGS-2026-014 (China)", time: "Tue 28 Jul, 09:41" }) +
+          attach([{ n: "Disclaimer.txt", m: "743 bytes", kind: "txt" },
+                  { n: "KYC_Screening_Results_BGS-2026-014-A.xlsx", m: "9 KB &middot; encrypted &middot; same password", kind: "lock", enc: true }]) +
+          '<div class="mailbody">' + feBlock([
+            { title: "ORDER SUCCESS", rows: [
+              { id: "BGS_Yp8Kc3RmTn", ref: "BGS-2026-014-A", subject: "李慧敏", doc: "Driver's License Verification", status: "Completed" }
+            ] },
+            { type: "clar", rows: [
+              { subject: "李慧敏 — Academic Credential", issue: "Still outstanding from the original order. Send the certificate number for column L and we will run it on this thread." }
+            ] }
+          ]) +
+          '<div class="quoted"><div class="qh">On Tue 28 Jul at 09:38, Matthew Lee wrote:</div>' +
+          '<p>Thanks &mdash; that all looks fine. One more thing: can you also check ' + sl("fld", "FLD", "her driving licence") + '? ' +
+          'The number is in ' + sl("id", "COL", "column O") + ' of the sheet I sent. ' +
+          sl("sec", "ENC", "Same encryption please") + ', and no need to re-run anything else.</p></div>' +
           '</div>';
       },
-      trace: function () {
+      side: function () {
         return tsteps([
           { s: "done", l: "Reply parsed", d: "follow_up · confidence 0.93" },
-          { s: "done", l: "Coreference resolved", d: "“the two subsidiaries” → Ningbo Ltd., Logistics Branch" },
-          { s: "done", l: "Delta job run", d: "KYC-2481-A · 2 sources · 41 records" },
-          { s: "done", l: "Addendum encrypted &amp; sent", d: "same key · 10:19:07" }
-        ]) + slotcard([
-          { k: "entity", n: "add", v: '<em>Dingyuan Investment (HK) Ltd.</em> · matched from partial name' },
-          { k: "entity", n: "refs", v: '<em>the two subsidiaries</em> → resolved from Group sheet' },
-          { k: "scope", n: "checks", v: '<em>litigation</em> only · nothing re-run' },
-          { k: "out", n: "protection", v: '<em>same encryption</em> · key reused, no new password' }
-        ], "Parsed follow-up");
-      },
-      sub: "KYC-2481-A · addendum sent"
+          { s: "done", l: "Subject carried from thread", d: '"her" → ' + (state.row[2] || "—") },
+          { s: "done", l: "Column O read from stored file", d: "no re-upload needed" },
+          { s: "done", l: "Delta result encrypted & sent", d: "09:41 · same key" }
+        ]) + slotcard("Parsed follow-up", [
+          { k: "subj", n: "subject", v: '<em>her</em> → ' + (state.row[2] || "—") + ' (from thread)' },
+          { k: "fld", n: "add", v: '<em>driving licence</em> → column O' },
+          { k: "id", n: "source", v: '<em>column O</em> of the stored workbook' },
+          { k: "sec", n: "security", v: '<em>same encryption</em> · key reused' },
+          { k: "fld", n: "scope", v: 'nothing else re-run' }
+        ]);
+      }
     }
   ];
 
-  var PERSON_STEPS = [
-
-    { k: "Compose",
-      t: "Write the request",
-      folder: "sent",
-      list: ["noise1", "noise2"],
-      listTitle: "Inbox",
-      narr: "Same mailbox, same plain English. Nothing in how the analyst writes signals which guide will run — that is the agent's job to work out.",
-      pane: function () {
-        return '<div class="compose">' +
-          '<header><span aria-hidden="true">&#9998;</span> New message</header>' +
-          '<div class="cfield"><span class="lb">To</span><span class="vl">kyc-agent@meridiantrust.example</span></div>' +
-          '<div class="cfield"><span class="lb">Subject</span><span class="vl plain">Screening — Wang Zhiming (legal rep, Dingxin file)</span></div>' +
-          '<div class="cbodyarea"><div class="body">' + PERSON_REQUEST + '</div></div>' +
-          '<div class="cfoot"><button type="button" class="sendbtn" id="sendFake">Send</button>' +
-          '<span class="hint">Attachments: none</span></div>' +
-        '</div>';
-      },
-      trace: function () {
-        return tsteps([
-          { s: "wait", l: "Waiting for mail", d: "kyc-agent@ · IMAP idle" },
-          { s: "wait", l: "Classify request" },
-          { s: "wait", l: "Extract slots" },
-          { s: "wait", l: "Select guide" }
-        ]) + notecard("One inbox, two guides", "The routing decision is made from the sentence. A personal name and a date of birth pull the Person Search guide; a company name and a unified code pull Company Search.");
-      },
-      sub: "idle · watching kyc-agent@"
-    },
-
-    { k: "Parse",
-      t: "Agent reads it",
-      folder: "sent",
-      list: ["peReq"],
-      listTitle: "Sent",
-      open: "peReq",
-      hl: true,
-      narr: "The same highlighting, a different reading. A personal name, a date of birth and a partial national ID make this an individual screening.",
-      diff: "<b>The fork happens here.</b> Person Search fills the same slot types but reaches a different delivery rule: the answer is a verdict, so it goes in the email body. Company Search fills them and reaches <b>xlsx + encryption</b>.",
-      pane: function () {
-        return head({ from: ANALYST, to: "kyc-agent@meridiantrust.example", subject: "Screening — Wang Zhiming (legal rep, Dingxin file)", time: "Tue 28 Jul, 09:41", extra: "Read by agent 09:41:02" }) +
-          legend() +
-          '<div class="body">' + PERSON_REQUEST + '</div>';
-      },
-      trace: function () {
-        return tsteps([
-          { s: "done", l: "Mail received", d: "msg-id 5b02f7… · 09:41:02" },
-          { s: "done", l: "Classified", d: "individual_screening · confidence 0.94" },
-          { s: "done", l: "Slots extracted", d: "8 of 8 required" },
-          { s: "active", l: "Guide selected", d: "Person Search v3.8" }
-        ]) + slotcard(PERSON_SLOTS);
-      },
-      sub: "parsing · individual_screening · 0.94"
-    },
-
-    { k: "Confirm",
-      t: "Agent confirms scope",
-      folder: "inbox",
-      list: ["peAck", "noise1", "noise2"],
-      listTitle: "Inbox",
-      open: "peAck",
-      narr: "The confirmation looks familiar, but read the delivery block: no attachment, no password, nothing exported. The screening outcome stays inside the thread.",
-      diff: "<b>Delivery differs, not the conversation.</b> Company Search promises an encrypted workbook and a password on Teams. Person Search promises five lines in the reply.",
-      pane: function () {
-        return head({ from: AGENT, to: "Amelia Chen", subject: "Re: Screening — Wang Zhiming (legal rep, Dingxin file)", time: "Tue 28 Jul, 09:41", extra: "Auto-reply · KYC-2482" }) + ackBody("person");
-      },
-      trace: function () {
-        return tsteps([
-          { s: "done", l: "Guide selected", d: "Person Search v3.8" },
-          { s: "done", l: "Job created", d: "KYC-2482 · linked to KYC-2481" },
-          { s: "done", l: "Scope confirmation sent", d: "09:41:18" },
-          { s: "active", l: "Screening" }
-        ]) + notecard("No export, by design", "Bulk personal data leaving the platform is the thing worth controlling. A five-line verdict in an email is not a bulk export — so no file, no encryption, no password to manage.");
-      },
-      sub: "KYC-2482 · screening"
-    },
-
-    { k: "Screen",
-      t: "Run the screening",
-      folder: "inbox",
-      list: ["peAck", "noise1", "noise2"],
-      listTitle: "Inbox",
-      open: "peAck",
-      narr: "Five sources, one subject, a handful of results. This is the volume difference that drives everything downstream — there is no dataset here to hand over.",
-      pane: function () {
-        return head({ from: AGENT, to: "Amelia Chen", subject: "Re: Screening — Wang Zhiming (legal rep, Dingxin file)", time: "Tue 28 Jul, 09:41", extra: "Auto-reply · KYC-2482" }) +
-          '<div class="body">' +
-          '<div class="card"><header>Screening in progress<span class="right">KYC-2482</span></header><div class="cbody">' +
-            '<dl class="kv">' +
-              '<dt>Sources queried</dt><dd class="mono">4 of 5</dd>' +
-              '<dt>Records collected</dt><dd class="mono">6</dd>' +
-              '<dt>Items needing review</dt><dd class="mono">1</dd>' +
-            '</dl>' +
-            '<div class="meter"><i style="width:78%"></i></div>' +
-          '</div></div>' +
-          '<p>Six records against 318 on the company file. That gap is why one comes back as an email and the other as a spreadsheet.</p>' +
-          '</div>';
-      },
-      trace: function () {
-        return tsteps([
-          { s: "done", l: "Job created", d: "KYC-2482" },
-          { s: "active", l: "Screening", d: "6 records · 1 to review" },
-          { s: "wait", l: "Compose verdict" },
-          { s: "wait", l: "Send inline reply" }
-        ]) + srccard([
-          { n: "Identity verification", c: "Name + DOB + ID last-4", s: "ok", t: "verified" },
-          { n: "PEP lists · PRC + international", c: "Domestic, foreign, RCA", s: "ok", t: "no match" },
-          { n: "Sanctions consolidated", c: "OFAC / EU / UK / UN", s: "ok", t: "no match" },
-          { n: "中国裁判文书网", c: "As party and as legal rep", s: "hit", t: "1 linked" },
-          { n: "Adverse media CN + EN", c: "Last 5 years", s: "run", t: "running" }
-        ], 78);
-      },
-      sub: "KYC-2482 · screening · 6 records"
-    },
-
-    { k: "Answer",
-      t: "Answer in the email",
-      folder: "inbox",
-      list: ["peDone", "peAck", "noise1", "noise2"],
-      listTitle: "Inbox",
-      open: "peDone",
-      narr: "The result is written into the body as a short table. Nothing to download, nothing to decrypt, nothing sitting in a downloads folder afterwards.",
-      diff: "<b>Side by side.</b> Company Search: 318 records → 8-sheet workbook → AES-256 → password on Teams → expires in 14 days. Person Search: 6 records → 5 lines in the reply → nothing leaves the thread.",
-      pane: function () {
-        return head({ from: AGENT, to: "Amelia Chen", subject: "Re: Screening — Wang Zhiming — cleared with one item to review", time: "Tue 28 Jul, 09:48", extra: "KYC-2482 · complete" }) +
-          '<div class="body">' +
-          '<p>Screening complete for <strong>Wang Zhiming 王志明</strong>, born 12 April 1979, PRC national.</p>' +
-          '<div class="gridwrap"><table class="res"><thead><tr><th>Check</th><th>Result</th><th>Detail</th></tr></thead><tbody>' +
-            '<tr><td>Identity</td><td class="v">Verified</td><td>Name, DOB and ID last-4 consistent across three registry records</td></tr>' +
-            '<tr><td>PEP</td><td class="v">Not a PEP</td><td>No domestic, foreign or close-associate match</td></tr>' +
-            '<tr><td>Sanctions</td><td class="v">No match</td><td>OFAC, EU, UK, UN consolidated — checked 09:44</td></tr>' +
-            '<tr><td>Court records</td><td class="v">1 to review</td><td>Named as legal representative on the 2024 Dingxin enforcement (RMB 1.24m, satisfied Nov 2024). No personal judgment.</td></tr>' +
-            '<tr><td>Adverse media</td><td class="v">Clear</td><td>No relevant CN or EN coverage in the last five years</td></tr>' +
-          '</tbody></table></div>' +
-          '<p><strong>Assessment:</strong> low risk as an individual. The single item is corporate, already on the Dingxin file, and does not attach to him personally.</p>' +
-          '<p>No attachment on this one — you asked for a short answer, and a screening verdict does not need a spreadsheet. Full evidence sits against KYC-2482 if second line wants it.</p>' +
-          '<p class="sig">KYC Desk Agent</p>' +
-          '</div>';
-      },
-      trace: function () {
-        return tsteps([
-          { s: "done", l: "Screening complete", d: "5 of 5 sources · 6 records" },
-          { s: "done", l: "Verdict composed", d: "low risk · 1 item flagged" },
-          { s: "done", l: "Inline reply sent", d: "09:48:31 · no attachment" },
-          { s: "done", l: "Evidence retained", d: "case file KYC-2482 · not exported" }
-        ]) + notecard("Two guides, one difference that matters", "<b>Person:</b> verdict → email body → no file.<br><b>Company:</b> dataset → xlsx → AES-256 → password out-of-band → 14-day expiry.");
-      },
-      sub: "KYC-2482 · answered inline"
-    },
-
-    { k: "Converse",
-      t: "Reply in plain English",
-      folder: "inbox",
-      list: ["peDelta", "peFup", "peDone", "peAck"],
-      listTitle: "Inbox",
-      open: "peDelta",
-      hl: true,
-      narr: "The follow-up is a fragment — no name, no date of birth, just “he”. The agent carries the subject from the thread and answers in seconds, still with no attachment.",
-      pane: function () {
-        return head({ from: AGENT, to: "Amelia Chen", subject: "Re: Screening — Wang Zhiming — HK/Macau PEP check", time: "Tue 28 Jul, 09:57", extra: "KYC-2482-A" }) +
-          '<div class="body">' +
-          '<p>No PEP match in Hong Kong or Macau.</p>' +
-          '<ul>' +
-            '<li><strong>Hong Kong</strong> — no match on SFC licensed persons, no public-office record, three dormant directorships (all Dingyuan group).</li>' +
-            '<li><strong>Macau</strong> — no match in the official gazette appointment lists.</li>' +
-          '</ul>' +
-          '<p>Assessment is unchanged: low risk. KYC-2482 updated.</p>' +
-          '<div class="quoted">' +
-            '<div class="qh">On Tue 28 Jul at 09:55, Amelia Chen wrote:</div>' +
-            '<p>Thanks. Is ' + sl("entity", "PER", "he") + ' a ' + sl("scope", "CHK", "PEP") + ' anywhere ' + sl("id", "JUR", "outside the mainland") + ' — ' + sl("id", "JUR", "Hong Kong or Macau") + ' in particular?</p>' +
-          '</div>' +
-          '</div>';
-      },
-      trace: function () {
-        return tsteps([
-          { s: "done", l: "Reply parsed", d: "follow_up · confidence 0.91" },
-          { s: "done", l: "Coreference resolved", d: "“he” → Wang Zhiming · from thread KYC-2482" },
-          { s: "done", l: "Delta screening", d: "HK + Macau PEP · 2 sources" },
-          { s: "done", l: "Inline reply sent", d: "09:57:44 · no attachment" }
-        ]) + slotcard([
-          { k: "entity", n: "subject", v: '<em>he</em> → Wang Zhiming (carried from thread)' },
-          { k: "scope", n: "checks", v: '<em>PEP</em> only' },
-          { k: "id", n: "jurisdiction", v: '<em>Hong Kong</em>, <em>Macau</em>' },
-          { k: "out", n: "format", v: 'inline · unchanged from the thread' }
-        ], "Parsed follow-up");
-      },
-      sub: "KYC-2482-A · answered inline"
-    }
-  ];
+  function state_sub_pending() { return state.sent ? "sent · awaiting agent" : "composing · not sent"; }
 
   /* ==========================================================
      State + render
      ========================================================== */
-  var state = { track: "company", i: 0, unlocked: false, sheet: 0 };
+  var state = { i: 0, row: FILLED.slice(), pw: "", encrypted: false, sent: false, unlocked: false, touched: false };
+  var DESK_PW = "FE-Desk-2026-CN";
   var lastKey = null;
-  function steps() { return state.track === "company" ? COMPANY_STEPS : PERSON_STEPS; }
+
+  /* start with the editable cells empty so filling is a real action */
+  Object.keys(EDITABLE).forEach(function (i) { state.row[i] = ""; });
 
   var el = {
-    rail: document.getElementById("steprail"),
-    list: document.getElementById("msglist"),
-    listTitle: document.getElementById("listTitle"),
-    listMeta: document.getElementById("listMeta"),
-    pane: document.getElementById("pane"),
-    trace: document.getElementById("tracebody"),
-    traceSub: document.getElementById("traceSub"),
+    stepper: document.getElementById("stepper"),
+    stage: document.getElementById("stage"),
+    inner: document.getElementById("stageinner"),
+    side: document.getElementById("sidebody"),
+    sideSub: document.getElementById("sideSub"),
     coachStep: document.getElementById("coachStep"),
     coachText: document.getElementById("coachText"),
-    coachDiff: document.getElementById("coachDiff"),
+    coachTip: document.getElementById("coachTip"),
     navCount: document.getElementById("navCount"),
     prev: document.getElementById("prevBtn"),
     next: document.getElementById("nextBtn"),
     restart: document.getElementById("restartBtn"),
-    fInbox: document.getElementById("fInbox"),
-    fSent: document.getElementById("fSent"),
-    cInbox: document.getElementById("cInbox"),
-    cSent: document.getElementById("cSent")
+    fileState: document.getElementById("fileState")
   };
 
   function render() {
-    var S = steps(), s = S[state.i];
+    var s = STEPS[state.i];
 
-    /* step rail */
-    var rail = "";
-    S.forEach(function (st, i) {
-      var stt = i < state.i ? "done" : (i === state.i ? "current" : "todo");
-      rail += '<button type="button" class="stepchip" role="tab" data-i="' + i + '" data-state="' + stt + '" aria-selected="' + (i === state.i) + '">' +
-        '<span class="k">' + String(i + 1).padStart(2, "0") + ' &middot; ' + st.k + '</span>' +
-        '<span class="t">' + st.t + '</span></button>';
-    });
-    el.rail.innerHTML = rail;
+    el.stepper.innerHTML = STEPS.map(function (st, i) {
+      var t = i < state.i ? "done" : (i === state.i ? "current" : "todo");
+      return '<button type="button" class="step" role="tab" data-i="' + i + '" data-state="' + t + '" aria-selected="' + (i === state.i) + '">' +
+        '<span class="n">' + (i + 1) + '</span><span class="t">' + st.k + '</span></button>';
+    }).join("");
 
-    /* folders */
-    var inboxSel = s.folder !== "sent";
-    el.fInbox.setAttribute("data-active", String(inboxSel));
-    el.fSent.setAttribute("data-active", String(!inboxSel));
-    var unread = s.list.filter(function (k) { return M[k].unread && k !== s.open; }).length;
-    el.cInbox.textContent = s.folder === "sent" ? "2" : String(unread || s.list.length);
-    el.cSent.textContent = state.i === 0 ? "0" : "1";
+    el.inner.innerHTML = s.stage();
+    el.inner.classList.toggle("hl", !!s.hl);
+    el.side.innerHTML = s.side();
+    el.sideSub.textContent = typeof s.sub === "function" ? s.sub() : s.sub;
 
-    /* list */
-    el.listTitle.textContent = s.listTitle;
-    el.listMeta.textContent = s.list.length + (s.list.length === 1 ? " message" : " messages");
-    el.list.innerHTML = s.list.map(function (k) { return msgHTML(k, s.open); }).join("");
-
-    /* pane — on a step change reset the scroll container, otherwise the
-       previous step's offset hides the subject line of the next email.
-       In-step re-renders (sheet tabs, unlocking) keep their position. */
-    el.pane.innerHTML = s.pane(state);
-    var key = state.track + ":" + state.i;
-    if (key !== lastKey) {
-      lastKey = key;
-      el.pane.parentElement.scrollTop = 0;
-      el.list.parentElement.scrollTop = 0;
-    }
-    el.pane.classList.toggle("hl", !!s.hl);
-    var bodies = el.pane.querySelectorAll(".body");
-    for (var b = 0; b < bodies.length; b++) bodies[b].classList.toggle("hl", !!s.hl);
-
-    /* trace */
-    el.trace.innerHTML = s.trace(state);
-    el.traceSub.textContent = typeof s.sub === "function" ? s.sub(state) : s.sub;
-
-    /* coach */
-    el.coachStep.textContent = "Step " + (state.i + 1) + " of " + S.length + " · " + (state.track === "company" ? "Company search" : "Person search");
+    el.coachStep.textContent = "Step " + (state.i + 1) + " of " + STEPS.length + " · " + s.k;
     el.coachText.textContent = s.narr;
-    if (s.diff) { el.coachDiff.innerHTML = s.diff; el.coachDiff.hidden = false; }
-    else { el.coachDiff.hidden = true; }
+    if (s.tip) { el.coachTip.innerHTML = s.tip; el.coachTip.hidden = false; } else { el.coachTip.hidden = true; }
 
-    el.navCount.textContent = (state.i + 1) + " / " + S.length;
+    el.navCount.textContent = (state.i + 1) + " / " + STEPS.length;
     el.prev.disabled = state.i === 0;
-    el.next.disabled = state.i === S.length - 1;
+    el.next.disabled = state.i === STEPS.length - 1;
+
+    el.fileState.className = "badge " + (state.encrypted ? "b-gold" : (validation().pass ? "b-ok" : "b-mut"));
+    el.fileState.innerHTML = state.encrypted ? "&#128274; Workbook encrypted" : (validation().pass ? "Row 3 ready" : "Template not filled");
+
+    var key = String(state.i);
+    if (key !== lastKey) { lastKey = key; el.stage.scrollTop = 0; }
 
     wire();
   }
 
-  /* interactions inside freshly rendered content */
   function wire() {
-    var go = document.getElementById("pwGo");
-    var inp = document.getElementById("pwInput");
-    var paste = document.getElementById("pwPaste");
-    var err = document.getElementById("pwErr");
+    /* stepper */
+    Array.prototype.forEach.call(document.querySelectorAll(".step"), function (b) {
+      b.addEventListener("click", function () { state.i = Number(b.getAttribute("data-i")); render(); });
+    });
 
-    function attempt() {
-      if (!inp) return;
-      if (inp.value.trim() === PASSWORD) { state.unlocked = true; render(); }
-      else {
-        err.textContent = inp.value.trim()
-          ? "That password does not open this workbook. It was issued per file — check the Teams message."
-          : "Enter the password from the Teams message, or use Paste from Teams.";
-        inp.focus();
-      }
-    }
-    if (go) go.addEventListener("click", attempt);
-    if (inp) inp.addEventListener("keydown", function (e) { if (e.key === "Enter") attempt(); });
-    if (paste) paste.addEventListener("click", function () { inp.value = PASSWORD; err.textContent = ""; attempt(); });
-
-    var tabs = document.querySelectorAll(".sheettab");
-    for (var i = 0; i < tabs.length; i++) {
-      tabs[i].addEventListener("click", function (e) {
-        state.sheet = Number(e.currentTarget.getAttribute("data-sheet"));
-        render();
+    /* editable spreadsheet cells — update without re-rendering, to keep the caret */
+    Array.prototype.forEach.call(document.querySelectorAll(".cell-edit"), function (td) {
+      td.addEventListener("input", function () {
+        state.row[Number(td.getAttribute("data-i"))] = td.textContent.trim();
+        var v = validation();
+        var badge = document.getElementById("rowBadge");
+        if (badge) { badge.className = "badge " + (v.pass ? "b-ok" : "b-mut"); badge.textContent = v.pass ? "Row 3 valid" : "Row 3 incomplete"; }
+        var panel = el.side.querySelector(".pcard .pb");
+        if (panel) panel.innerHTML = v.html;
+        el.fileState.className = "badge " + (v.pass ? "b-ok" : "b-mut");
+        el.fileState.innerHTML = v.pass ? "Row 3 ready" : "Template not filled";
       });
+      td.addEventListener("blur", function () { state.touched = true; });
+    });
+
+    var fs = document.getElementById("fillSample");
+    if (fs) fs.addEventListener("click", function () {
+      Object.keys(EDITABLE).forEach(function (i) { state.row[i] = FILLED[i]; });
+      state.touched = true; render();
+    });
+    var cr = document.getElementById("clearRow");
+    if (cr) cr.addEventListener("click", function () {
+      Object.keys(EDITABLE).forEach(function (i) { state.row[i] = ""; });
+      state.touched = true; render();
+    });
+
+    /* encryption */
+    var doEnc = document.getElementById("doEnc");
+    if (doEnc) doEnc.addEventListener("click", function () {
+      var a = document.getElementById("pw1").value.trim(), b = document.getElementById("pw2").value.trim();
+      var err = document.getElementById("pwErr");
+      if (!a) { err.textContent = "Enter a password to encrypt the workbook."; return; }
+      if (a !== b) { err.textContent = "The two passwords do not match."; return; }
+      state.pw = a; state.encrypted = true; render();
+    });
+    var gen = document.getElementById("genPw");
+    if (gen) gen.addEventListener("click", function () {
+      document.getElementById("pw1").value = DESK_PW;
+      document.getElementById("pw2").value = DESK_PW;
+      document.getElementById("pwErr").textContent = "";
+    });
+    var un = document.getElementById("unencrypt");
+    if (un) un.addEventListener("click", function () { state.encrypted = false; state.unlocked = false; render(); });
+
+    /* send */
+    var sb = document.getElementById("sendBtn");
+    if (sb) sb.addEventListener("click", function () { state.sent = true; state.i = Math.min(STEPS.length - 1, state.i + 1); render(); });
+
+    /* open results workbook */
+    var og = document.getElementById("openGo"), oi = document.getElementById("openPw"), oe = document.getElementById("openErr");
+    function tryOpen() {
+      if (!oi) return;
+      if (state.pw && oi.value.trim() === state.pw) { state.unlocked = true; render(); }
+      else { oe.textContent = oi.value.trim() ? "That password does not open this workbook." : "Enter the password you set in step 2."; oi.focus(); }
     }
-
-    var send = document.getElementById("sendFake");
-    if (send) send.addEventListener("click", function () { step(1); });
-
-    var chips = document.querySelectorAll(".stepchip");
-    for (var j = 0; j < chips.length; j++) {
-      chips[j].addEventListener("click", function (e) {
-        state.i = Number(e.currentTarget.getAttribute("data-i"));
-        render();
-      });
-    }
+    if (og) og.addEventListener("click", tryOpen);
+    if (oi) oi.addEventListener("keydown", function (e) { if (e.key === "Enter") tryOpen(); });
+    var oh = document.getElementById("openHint");
+    if (oh) oh.addEventListener("click", function () { oi.value = state.pw || DESK_PW; tryOpen(); });
   }
 
-  function step(d) {
-    var S = steps();
-    state.i = Math.max(0, Math.min(S.length - 1, state.i + d));
-    render();
-  }
-
-  function setTrack(t) {
-    state.track = t;
-    state.i = 0; state.unlocked = false; state.sheet = 0;
-    document.getElementById("trackCompany").setAttribute("aria-pressed", String(t === "company"));
-    document.getElementById("trackPerson").setAttribute("aria-pressed", String(t === "person"));
-    render();
-  }
-
+  function step(d) { state.i = Math.max(0, Math.min(STEPS.length - 1, state.i + d)); render(); }
   el.next.addEventListener("click", function () { step(1); });
   el.prev.addEventListener("click", function () { step(-1); });
-  el.restart.addEventListener("click", function () { state.i = 0; state.unlocked = false; state.sheet = 0; render(); });
-  document.getElementById("trackCompany").addEventListener("click", function () { setTrack("company"); });
-  document.getElementById("trackPerson").addEventListener("click", function () { setTrack("person"); });
-
-  document.addEventListener("keydown", function (e) {
-    if (e.target && /^(INPUT|TEXTAREA)$/.test(e.target.tagName)) return;
-    if (e.key === "ArrowRight") { step(1); }
-    else if (e.key === "ArrowLeft") { step(-1); }
+  el.restart.addEventListener("click", function () {
+    state = { i: 0, row: FILLED.slice(), pw: "", encrypted: false, sent: false, unlocked: false, touched: false };
+    Object.keys(EDITABLE).forEach(function (i) { state.row[i] = ""; });
+    lastKey = null; render();
   });
 
-  /* theme toggle */
-  var themeBtn = document.getElementById("themeBtn");
-  themeBtn.addEventListener("click", function () {
-    var root = document.documentElement;
-    var cur = root.getAttribute("data-theme");
+  document.addEventListener("keydown", function (e) {
+    if (e.target && (/^(INPUT|TEXTAREA)$/.test(e.target.tagName) || e.target.isContentEditable)) return;
+    if (e.key === "ArrowRight") step(1);
+    else if (e.key === "ArrowLeft") step(-1);
+  });
+
+  document.getElementById("themeBtn").addEventListener("click", function () {
+    var r = document.documentElement, cur = r.getAttribute("data-theme");
     if (!cur) cur = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
-    root.setAttribute("data-theme", cur === "dark" ? "light" : "dark");
+    r.setAttribute("data-theme", cur === "dark" ? "light" : "dark");
   });
 
   render();
