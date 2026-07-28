@@ -66,9 +66,16 @@ positive, and the declaration stays with the recruit.
 
 Open `index.html` in a browser — no build step, no dependencies, no network calls.
 
-Hosted on GitHub Pages: **Settings → Pages → Source: "Deploy from a branch"**, then this
-branch with folder `/ (root)`. `index.html` is at the root, so it serves directly.
-`.nojekyll` stops Pages running the files through Jekyll.
+To serve it on GitHub Pages: **Settings → Pages → Source: "Deploy from a branch" → Branch:
+`main` → Folder: `/ (root)` → Save.** It then publishes at
+`https://zjlee8888.github.io/email-bot-demo-kyc-china/`, usually within a minute or two.
+
+`index.html` is at the root so it serves directly, and `.nojekyll` stops Pages running the
+files through Jekyll. No build step, so there is nothing to configure beyond that one setting.
+
+There is deliberately no Actions workflow: `actions/configure-pages` cannot create the Pages
+site from this repository (the workflow token gets *"Resource not accessible by integration"*),
+so enabling Pages is a manual one-off either way and the branch source needs no workflow.
 
 ## Known gaps
 
