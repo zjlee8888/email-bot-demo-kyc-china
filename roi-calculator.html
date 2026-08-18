@@ -168,11 +168,30 @@
 
   /* ---------- inputs ---------- */
   .in-h{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:12px}
-  .field{padding:10px 0;border-bottom:1px solid var(--line)}
-  .field:last-child{border-bottom:0}
-  .frow{display:grid;grid-template-columns:minmax(0,1fr) 122px;gap:14px;align-items:center}
-  .field label{font-size:13.5px;color:var(--ink-2)}
-  .field label .hint{display:block;font-size:11.5px;color:var(--muted);margin-top:1px}
+  .controls{display:grid;grid-template-columns:repeat(auto-fill,minmax(212px,1fr));gap:12px 18px;margin-bottom:24px}
+  .ctl{border:1px solid var(--line);border-radius:12px;padding:11px 13px 12px;background:var(--surface);min-width:0}
+  .ctl.lock{background:var(--inset);border-style:dashed}
+  .ctl .lab{display:flex;align-items:center;font-size:12px;color:var(--ink-2);line-height:1.3;margin-bottom:8px;gap:1px}
+  .ctl .val{margin-left:auto;padding-left:8px;font-family:var(--disp);font-weight:700;font-size:12.5px;color:var(--ink);white-space:nowrap;font-variant-numeric:tabular-nums}
+  .chips{display:flex;flex-wrap:wrap;gap:6px}
+  .chip{
+    appearance:none;border:1px solid var(--line-strong);background:var(--surface);color:var(--ink-2);
+    border-radius:999px;padding:4px 11px;font:inherit;font-size:12.5px;font-weight:600;cursor:pointer;
+    font-variant-numeric:tabular-nums;
+  }
+  .chip.on{background:var(--accent);border-color:var(--accent-deep);color:var(--accent-ink);font-weight:700}
+  .stepper{display:flex;align-items:center;gap:6px}
+  .stepper .sbtn{
+    appearance:none;width:27px;height:29px;flex:0 0 auto;border-radius:8px;border:1px solid var(--line-strong);
+    background:var(--surface);color:var(--ink-2);font-size:15px;font-weight:700;cursor:pointer;line-height:1;
+  }
+  .stepper .sbtn:hover{border-color:var(--accent-deep);color:var(--ink)}
+  .lockv{display:flex;align-items:center;gap:8px}
+  .lockv .lv{font-family:var(--disp);font-weight:700;font-size:14px;font-variant-numeric:tabular-nums}
+  .lockv .lk{margin-left:auto;font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:600;border:1px solid var(--line-strong);border-radius:999px;padding:2px 8px}
+  .grid2.half{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .grid2 .sens{margin-top:0;border-top:0;padding-top:0}
+  @media (max-width:920px){.grid2.half{grid-template-columns:1fr}}
   .inwrap{position:relative}
   .inwrap input{
     width:100%;appearance:none;border:1px solid var(--line-strong);border-radius:10px;
@@ -190,7 +209,7 @@
 
   /* ---------- sliders ---------- */
   input[type=range]{
-    appearance:none;-webkit-appearance:none;width:100%;height:22px;margin-top:7px;
+    appearance:none;-webkit-appearance:none;width:100%;height:22px;margin-top:2px;
     background:transparent;cursor:pointer;display:block;
   }
   input[type=range]::-webkit-slider-runnable-track{
@@ -348,18 +367,10 @@
   </p>
   <div class="card">
     <div class="story" id="story-anchor"></div>
-    <div class="grid2">
-      <div>
-        <div class="in-h">Model parameters</div>
-        <div id="in-anchor"></div>
-      </div>
-      <div>
-        <div class="in-h">Derived volumes</div>
-        <div class="deriv" id="d-anchor"></div>
-        <p class="dnote">Value margin converts premium into economic value (VNB-style)<sup class="ref"><a href="#sources">5</a></sup>,
-        so premium and cost benefits can be added without double counting.</p>
-      </div>
-    </div>
+    <div class="in-h">Model parameters</div>
+    <div class="controls" id="in-anchor"></div>
+    <p class="dnote">Value margin converts premium into economic value (VNB-style)<sup class="ref"><a href="#sources">5</a></sup>,
+    so premium and cost benefits can be added without double counting.</p>
   </div>
 </section>
 
@@ -376,18 +387,16 @@
       <label class="switch"><input type="checkbox" checked data-uc="uc1"><span class="knob"></span>Include in combined total</label>
     </div>
     <div class="story" id="story-uc1"></div>
-    <div class="grid2">
-      <div>
-        <div class="in-h">Model assumptions</div>
-        <div id="in-uc1"></div>
-      </div>
+    <div class="in-h">Model assumptions</div>
+    <div class="controls" id="in-uc1"></div>
+    <div class="grid2 half">
       <div>
         <div class="in-h">Value build-up</div>
         <div class="deriv" id="d-uc1"></div>
       </div>
+      <div class="sens" id="sens-uc1"></div>
     </div>
     <div class="tiles" id="t-uc1"></div>
-    <div class="sens" id="sens-uc1"></div>
   </div>
 </section>
 
@@ -404,18 +413,16 @@
       <label class="switch"><input type="checkbox" checked data-uc="uc2"><span class="knob"></span>Include in combined total</label>
     </div>
     <div class="story" id="story-uc2"></div>
-    <div class="grid2">
-      <div>
-        <div class="in-h">Model assumptions</div>
-        <div id="in-uc2"></div>
-      </div>
+    <div class="in-h">Model assumptions</div>
+    <div class="controls" id="in-uc2"></div>
+    <div class="grid2 half">
       <div>
         <div class="in-h">Value build-up</div>
         <div class="deriv" id="d-uc2"></div>
       </div>
+      <div class="sens" id="sens-uc2"></div>
     </div>
     <div class="tiles" id="t-uc2"></div>
-    <div class="sens" id="sens-uc2"></div>
   </div>
 </section>
 
@@ -432,18 +439,16 @@
       <label class="switch"><input type="checkbox" checked data-uc="uc3"><span class="knob"></span>Include in combined total</label>
     </div>
     <div class="story" id="story-uc3"></div>
-    <div class="grid2">
-      <div>
-        <div class="in-h">Model assumptions</div>
-        <div id="in-uc3"></div>
-      </div>
+    <div class="in-h">Model assumptions</div>
+    <div class="controls" id="in-uc3"></div>
+    <div class="grid2 half">
       <div>
         <div class="in-h">Value build-up</div>
         <div class="deriv" id="d-uc3"></div>
       </div>
+      <div class="sens" id="sens-uc3"></div>
     </div>
     <div class="tiles" id="t-uc3"></div>
-    <div class="sens" id="sens-uc3"></div>
   </div>
 </section>
 
@@ -505,48 +510,48 @@
   // def = Sun Life base preset. sc = per-scenario overrides. smin/smax/sstep = slider range.
   const FIELDS = {
     /* anchor */
-    ape:        {sec:'anchor', label:'New business APE', hint:'FY2025 full-year, Sun Life HK', unit:'HK$ B', def:11.8, step:0.1, min:0, smin:1, smax:30, sstep:0.1},
-    avgFyp:     {sec:'anchor', label:'Average first-year premium', hint:'per policy, illustrative', unit:'HK$', def:200000, step:10000, min:1, smin:50000, smax:1000000, sstep:10000},
-    mcvShare:   {sec:'anchor', label:'MCV / cross-border share', hint:'of new business', unit:'%', def:50, step:5, min:0, max:100},
-    vnbMargin:  {sec:'anchor', label:'Value margin on new business', hint:'VNB-style haircut on premium', unit:'%', def:55, step:5, min:0, max:100},
-    staffRate:  {sec:'anchor', label:'Loaded staff cost', hint:'ops / analyst, per hour', unit:'HK$/hr', def:250, step:25, min:0, smin:100, smax:1000, sstep:25},
+    ape:        {sec:'anchor', ctl:'step',   label:'New business APE', unit:'HK$ B', def:11.8, step:0.1, min:0},
+    avgFyp:     {sec:'anchor', ctl:'chips',  label:'Average first-year premium', unit:'HK$', def:200000, step:10000, min:1, opts:[100000,200000,300000,500000]},
+    mcvShare:   {sec:'anchor', ctl:'slider', label:'MCV / cross-border share', unit:'%', def:50, step:5, min:0, max:100},
+    vnbMargin:  {sec:'anchor', ctl:'slider', label:'Value margin on new business', unit:'%', def:55, step:5, min:0, max:100},
+    staffRate:  {sec:'anchor', ctl:'chips',  label:'Loaded staff cost / hour', unit:'HK$/hr', def:250, step:25, min:0, opts:[200,250,350,500]},
 
     /* uc1 */
-    dropoff:    {sec:'uc1', label:'Applications lost to slow underwriting', hint:'drop-off over the weeks-long chain', unit:'%', def:12, step:1, min:0, max:100, smax:30,
+    dropoff:    {sec:'uc1', ctl:'slider', label:'Applications lost to slow underwriting', unit:'%', def:12, step:1, min:0, max:100, smax:30,
                  sc:{conservative:8, aggressive:15}},
-    recovery:   {sec:'uc1', label:'Recovered by same-session issuance', hint:'share of drop-offs saved', unit:'%', def:60, step:5, min:0, max:100,
+    recovery:   {sec:'uc1', ctl:'slider', label:'Recovered by same-session issuance', unit:'%', def:60, step:5, min:0, max:100,
                  sc:{conservative:40, aggressive:75}},
-    nigoNow:    {sec:'uc1', label:'NIGO rework today', hint:'cases not in good order', unit:'%', def:50, step:5, min:0, max:100, smax:80},
-    nigoAfter:  {sec:'uc1', label:'NIGO rework with GovVerify', unit:'%', def:10, step:5, min:0, max:100, smax:50,
+    nigoNow:    {sec:'uc1', ctl:'lock',   label:'NIGO rework today', unit:'%', def:50, step:5, min:0, max:100},
+    nigoAfter:  {sec:'uc1', ctl:'chips',  label:'NIGO rework with GovVerify', unit:'%', def:10, step:5, min:0, max:100, opts:[5,10,20],
                  sc:{conservative:20, aggressive:5}},
-    reworkCost: {sec:'uc1', label:'Cost per rework case', hint:'chasing, re-keying, re-review', unit:'HK$', def:2000, step:250, min:0, smax:10000, sstep:250},
-    hrsNow:     {sec:'uc1', label:'Handling time per case today', hint:'agent + back office', unit:'hrs', def:2, step:0.25, min:0, smax:6, sstep:0.25},
-    hrsAfter:   {sec:'uc1', label:'Handling time with GovVerify', hint:'one tap, straight-through', unit:'hrs', def:0.1, step:0.05, min:0, smax:2, sstep:0.05,
+    reworkCost: {sec:'uc1', ctl:'chips',  label:'Cost per rework case', unit:'HK$', def:2000, step:250, min:0, opts:[1000,2000,3000]},
+    hrsNow:     {sec:'uc1', ctl:'lock',   label:'Handling time per case today', unit:'hrs', def:2, step:0.25, min:0},
+    hrsAfter:   {sec:'uc1', ctl:'lock',   label:'Handling time with GovVerify', unit:'hrs', def:0.1, step:0.05, min:0,
                  sc:{conservative:0.25, aggressive:0.1}},
-    feeOnboard: {sec:'uc1', label:'Fill Easy fee per onboarding pull', hint:'plug in quoted pricing', unit:'HK$', def:500, step:50, min:0, smax:2000, sstep:50},
+    feeOnboard: {sec:'uc1', ctl:'step',   label:'Fill Easy fee per onboarding pull', unit:'HK$', def:500, step:50, min:0},
 
     /* uc2 */
-    claims:     {sec:'uc2', label:'Claims processed per year', hint:'all lines', unit:'', def:25000, step:1000, min:0, smax:100000, sstep:1000},
-    mlShare:    {sec:'uc2', label:'Claims with Mainland hospital bills', unit:'%', def:30, step:5, min:0, max:100},
-    coverage:   {sec:'uc2', label:'Hospitals retrievable at source', hint:'incl. all major Grade 3', unit:'%', def:80, step:5, min:0, max:100},
-    avgClaim:   {sec:'uc2', label:'Average claim size', unit:'HK$', def:30000, step:5000, min:0, smax:200000, sstep:5000},
-    leakage:    {sec:'uc2', label:'Claims leakage today', hint:'overpaid on unverified paper bills', unit:'%', def:10, step:1, min:0, max:100, smax:25,
+    claims:     {sec:'uc2', ctl:'step',   label:'Claims processed per year', unit:'', def:25000, step:1000, min:0},
+    mlShare:    {sec:'uc2', ctl:'slider', label:'Claims with Mainland hospital bills', unit:'%', def:30, step:5, min:0, max:100},
+    coverage:   {sec:'uc2', ctl:'lock',   label:'Hospitals retrievable at source', unit:'%', def:80, step:5, min:0, max:100},
+    avgClaim:   {sec:'uc2', ctl:'step',   label:'Average claim size', unit:'HK$', def:30000, step:5000, min:0},
+    leakage:    {sec:'uc2', ctl:'slider', label:'Claims leakage today', unit:'%', def:10, step:1, min:0, max:100, smax:25,
                  sc:{conservative:6, aggressive:12}},
-    caught:     {sec:'uc2', label:'Leakage caught at source', hint:'share detected by verification', unit:'%', def:50, step:5, min:0, max:100,
+    caught:     {sec:'uc2', ctl:'slider', label:'Leakage caught at source', unit:'%', def:50, step:5, min:0, max:100,
                  sc:{conservative:30, aggressive:70}},
-    procCost:   {sec:'uc2', label:'Manual handling cost per claim', hint:'OCR review + assessor', unit:'HK$', def:200, step:25, min:0, smax:1000, sstep:25},
-    feeClaim:   {sec:'uc2', label:'Fill Easy fee per bill verification', hint:'plug in quoted pricing', unit:'HK$', def:150, step:25, min:0, smax:1000, sstep:25},
+    procCost:   {sec:'uc2', ctl:'chips',  label:'Manual handling cost per claim', unit:'HK$', def:200, step:25, min:0, opts:[100,200,300]},
+    feeClaim:   {sec:'uc2', ctl:'step',   label:'Fill Easy fee per bill verification', unit:'HK$', def:150, step:25, min:0},
 
     /* uc3 */
-    recruits:   {sec:'uc3', label:'Agent recruits per year', hint:'agency channel +50% YoY', unit:'', def:800, step:50, min:0, smax:5000, sstep:50},
-    ahrsNow:    {sec:'uc3', label:'Analyst hours per recruit today', hint:'19 checks gathered by hand', unit:'hrs', def:8, step:0.5, min:0, smax:20, sstep:0.5},
-    ahrsAfter:  {sec:'uc3', label:'Analyst hours with Fill Easy', hint:'one request, evidence attached', unit:'hrs', def:0.5, step:0.25, min:0, smax:4, sstep:0.25},
-    weeksSaved: {sec:'uc3', label:'Weeks of onboarding removed', hint:'from the 6–8-week GL23 chain', unit:'wks', def:5, step:1, min:0, smax:8,
+    recruits:   {sec:'uc3', ctl:'step',   label:'Agent recruits per year', unit:'', def:800, step:50, min:0},
+    ahrsNow:    {sec:'uc3', ctl:'lock',   label:'Analyst hours per recruit today', unit:'hrs', def:8, step:0.5, min:0},
+    ahrsAfter:  {sec:'uc3', ctl:'lock',   label:'Analyst hours with Fill Easy', unit:'hrs', def:0.5, step:0.25, min:0},
+    weeksSaved: {sec:'uc3', ctl:'chips',  label:'Weeks of onboarding removed', unit:'wks', def:5, step:1, min:0, opts:[3,5,7],
                  sc:{conservative:3, aggressive:7}},
-    agentApeWk: {sec:'uc3', label:'New-agent APE per productive week', hint:'early-tenure run-rate', unit:'HK$', def:8000, step:1000, min:0, smax:50000, sstep:1000},
-    activation: {sec:'uc3', label:'Recruits who activate', hint:'write business at all', unit:'%', def:70, step:5, min:0, max:100,
+    agentApeWk: {sec:'uc3', ctl:'step',   label:'New-agent APE per productive week', unit:'HK$', def:8000, step:1000, min:0},
+    activation: {sec:'uc3', ctl:'slider', label:'Recruits who activate', unit:'%', def:70, step:5, min:0, max:100,
                  sc:{conservative:60, aggressive:80}},
-    feeRecruit: {sec:'uc3', label:'Fill Easy fee per recruit screened', hint:'plug in quoted pricing', unit:'HK$', def:800, step:100, min:0, smax:3000, sstep:100}
+    feeRecruit: {sec:'uc3', ctl:'step',   label:'Fill Easy fee per recruit screened', unit:'HK$', def:800, step:100, min:0}
   };
   const UC_KEYS = {
     uc1:['dropoff','recovery','nigoNow','nigoAfter','reworkCost','hrsNow','hrsAfter','feeOnboard','mcvShare','avgFyp'],
@@ -613,60 +618,113 @@
   for (const k in FIELDS) state[k] = FIELDS[k].def;
   const include = {uc1:true, uc2:true, uc3:true};
 
-  /* ---------------- input rendering (number + slider pairs) ---------------- */
+  /* ---------------- input rendering (mixed control types) ---------------- */
+  function fmtVal(k, v){
+    const u = FIELDS[k].unit;
+    if (u === 'HK$')    return money(v);
+    if (u === 'HK$ B')  return 'HK$' + v + 'B';
+    if (u === 'HK$/hr') return money(v) + '/hr';
+    if (u === '%')      return v + '%';
+    if (u === 'hrs')    return v + ' hrs';
+    if (u === 'wks')    return v + ' wks';
+    return count(v);
+  }
   function sliderTrack(el){
     const min = parseFloat(el.min), max = parseFloat(el.max);
     const p = max > min ? ((parseFloat(el.value) - min) / (max - min)) * 100 : 0;
     el.style.setProperty('--track',
       'linear-gradient(90deg, var(--accent) ' + p + '%, var(--inset) ' + p + '%)');
   }
+  function clampTo(k, v){
+    const f = FIELDS[k];
+    if (!isFinite(v)) v = 0;
+    if (f.min != null) v = Math.max(f.min, v);
+    if (f.max != null) v = Math.min(f.max, v);
+    return v;
+  }
   function renderInputs(){
+    const infoBtn = k => TIPS[k] ? '<button type="button" class="info" data-info="' + k + '" aria-label="Explain this assumption">i</button>' : '';
     const bySec = {};
     for (const k in FIELDS) (bySec[FIELDS[k].sec] = bySec[FIELDS[k].sec] || []).push(k);
     for (const sec in bySec){
-      const host = document.getElementById('in-' + sec);
-      host.innerHTML = bySec[sec].map(k => {
+      document.getElementById('in-' + sec).innerHTML = bySec[sec].map(k => {
         const f = FIELDS[k];
-        const smin = f.smin != null ? f.smin : (f.min != null ? f.min : 0);
-        const smax = f.smax != null ? f.smax : (f.max != null ? f.max : 100);
-        const sstep = f.sstep != null ? f.sstep : f.step;
-        return '<div class="field"><div class="frow"><label for="f-' + k + '">' + f.label +
-          (TIPS[k] ? '<button type="button" class="info" data-info="' + k + '" aria-label="Explain this assumption">i</button>' : '') +
-          (f.hint ? '<span class="hint">' + f.hint + '</span>' : '') + '</label>' +
-          '<div class="inwrap"><input type="number" id="f-' + k + '" data-key="' + k + '"' +
-          ' step="' + f.step + '"' +
-          (f.min != null ? ' min="' + f.min + '"' : '') +
-          (f.max != null ? ' max="' + f.max + '"' : '') +
-          (f.unit ? '' : ' class="no-unit"') + '>' +
-          (f.unit ? '<span class="unit">' + f.unit + '</span>' : '') +
-          '</div></div>' +
-          '<input type="range" id="r-' + k + '" data-key="' + k + '" aria-label="' + f.label + '"' +
-          ' min="' + smin + '" max="' + smax + '" step="' + sstep + '">' +
-          '</div>';
+        const lab = '<div class="lab">' + f.label + infoBtn(k) +
+          (f.ctl === 'slider' ? '<span class="val" id="v-' + k + '"></span>' : '') + '</div>';
+        let body = '';
+        if (f.ctl === 'slider'){
+          body = '<input type="range" id="r-' + k + '" data-key="' + k + '" aria-label="' + f.label + '"' +
+            ' min="' + (f.min ?? 0) + '" max="' + (f.smax ?? f.max ?? 100) + '" step="' + f.step + '">';
+        } else if (f.ctl === 'chips'){
+          body = '<div class="chips" id="c-' + k + '">' + f.opts.map(o =>
+            '<button type="button" class="chip" data-key="' + k + '" data-val="' + o + '">' + fmtVal(k, o) + '</button>').join('') + '</div>';
+        } else if (f.ctl === 'step'){
+          body = '<div class="stepper">' +
+            '<button type="button" class="sbtn" data-key="' + k + '" data-stp="-1" aria-label="Decrease">−</button>' +
+            '<div class="inwrap"><input type="number" id="f-' + k + '" data-key="' + k + '" step="' + f.step + '"' +
+            (f.min != null ? ' min="' + f.min + '"' : '') + (f.unit ? '' : ' class="no-unit"') + '>' +
+            (f.unit ? '<span class="unit">' + f.unit + '</span>' : '') + '</div>' +
+            '<button type="button" class="sbtn" data-key="' + k + '" data-stp="1" aria-label="Increase">+</button></div>';
+        } else { /* lock */
+          body = '<div class="lockv"><span class="lv" id="v-' + k + '"></span><span class="lk">Fixed benchmark</span></div>';
+        }
+        return '<div class="ctl' + (f.ctl === 'lock' ? ' lock' : '') + '">' + lab + body + '</div>';
       }).join('');
     }
-    document.querySelectorAll('input[data-key]').forEach(el => {
+    /* sliders */
+    document.querySelectorAll('input[type=range][data-key]').forEach(el => {
       el.addEventListener('input', () => {
+        const k = el.dataset.key;
+        state[k] = clampTo(k, parseFloat(el.value));
+        document.getElementById('v-' + k).textContent = fmtVal(k, state[k]);
+        sliderTrack(el);
+        clearScenarioIfCustom(); recalc();
+      });
+    });
+    /* chips */
+    document.querySelectorAll('.chip[data-key]').forEach(el => {
+      el.addEventListener('click', () => {
+        const k = el.dataset.key;
+        state[k] = clampTo(k, parseFloat(el.dataset.val));
+        syncChips(k);
+        clearScenarioIfCustom(); recalc();
+      });
+    });
+    /* steppers */
+    document.querySelectorAll('.stepper input[data-key]').forEach(el => {
+      el.addEventListener('input', () => {
+        const k = el.dataset.key;
+        state[k] = clampTo(k, parseFloat(el.value));
+        clearScenarioIfCustom(); recalc();
+      });
+    });
+    document.querySelectorAll('.sbtn[data-key]').forEach(el => {
+      el.addEventListener('click', () => {
         const k = el.dataset.key, f = FIELDS[k];
-        let v = parseFloat(el.value);
-        if (!isFinite(v)) v = 0;
-        if (f.min != null) v = Math.max(f.min, v);
-        if (f.max != null) v = Math.min(f.max, v);
-        state[k] = v;
-        // sync the twin control
-        const num = document.getElementById('f-' + k), rng = document.getElementById('r-' + k);
-        if (el === rng) num.value = v; else rng.value = v;
-        sliderTrack(rng);
-        clearScenarioIfCustom();
-        recalc();
+        state[k] = clampTo(k, Math.round((state[k] + f.step * (+el.dataset.stp)) / f.step) * f.step);
+        document.getElementById('f-' + k).value = state[k];
+        clearScenarioIfCustom(); recalc();
       });
     });
   }
+  function syncChips(k){
+    document.querySelectorAll('.chip[data-key="' + k + '"]').forEach(c =>
+      c.classList.toggle('on', parseFloat(c.dataset.val) === state[k]));
+  }
   function pushStateToInputs(){
     for (const k in FIELDS){
-      const num = document.getElementById('f-' + k), rng = document.getElementById('r-' + k);
-      if (num) num.value = state[k];
-      if (rng){ rng.value = state[k]; sliderTrack(rng); }
+      const f = FIELDS[k];
+      if (f.ctl === 'slider'){
+        const rng = document.getElementById('r-' + k);
+        rng.value = state[k]; sliderTrack(rng);
+        document.getElementById('v-' + k).textContent = fmtVal(k, state[k]);
+      } else if (f.ctl === 'chips'){
+        syncChips(k);
+      } else if (f.ctl === 'step'){
+        document.getElementById('f-' + k).value = state[k];
+      } else {
+        document.getElementById('v-' + k).textContent = fmtVal(k, state[k]);
+      }
     }
   }
 
@@ -812,6 +870,7 @@
     const results = [];
     for (const k of UC_KEYS[uc]){
       const f = FIELDS[k];
+      if (f.ctl === 'lock') continue;   // not user-adjustable
       let lo = state[k] * 0.8, hi = state[k] * 1.2;
       if (f.min != null){ lo = Math.max(f.min, lo); hi = Math.max(f.min, hi); }
       if (f.max != null){ lo = Math.min(f.max, lo); hi = Math.min(f.max, hi); }
@@ -991,11 +1050,6 @@
     const s = state, m = compute(s);
     lastModel = m;
     const all = combined(m);
-
-    drows('d-anchor', [
-      {l:'Applications written per year', f:'APE ' + money(s.ape*1e9) + ' ÷ avg FYP ' + money(s.avgFyp), v:count(m.appsTotal)},
-      {l:'MCV / cross-border applications', f:'× ' + s.mcvShare + '% MCV share', v:count(m.mcvApps)}
-    ]);
 
     drows('d-uc1', [
       {l:'MCV applications in scope', f:'from anchor', v:count(m.mcvApps)},
