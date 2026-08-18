@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ROI Model — Fill Easy × GovVerify</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#231815;
+    --surface:#2C211C;
+    --surface-2:#372A23;
+    --inset:#1C120F;
+    --ink:#F6F1EA;
+    --ink-2:#CDC1B7;
+    --muted:#9C8D82;
+    --accent:#FED200;
+    --accent-ink:#231815;
+    --accent-dim:rgba(254,210,0,.55);
+    --line:rgba(246,241,234,.10);
+    --line-strong:rgba(246,241,234,.18);
+    --good:#7ED09A;
+    --sans:'Inter',ui-sans-serif,-apple-system,'Segoe UI',Roboto,'Helvetica Neue',Arial,'PingFang SC','Microsoft YaHei',sans-serif;
+    --disp:'Manrope',var(--sans);
+    --mono:ui-monospace,'SF Mono','Cascadia Mono',Menlo,Consolas,monospace;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--bg);color:var(--ink);font-family:var(--sans);
+    font-size:15px;line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:var(--accent);text-decoration:none}
+  a:hover{text-decoration:underline}
+  .wrap{max-width:1120px;margin:0 auto;padding:0 28px}
+
+  /* ---------- header ---------- */
+  header{padding:44px 0 8px}
+  .brandrow{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+  .logo{
+    width:38px;height:38px;border-radius:50%;background:var(--accent);
+    display:flex;align-items:center;justify-content:center;
+    font-family:var(--disp);font-weight:800;font-size:19px;color:var(--accent-ink);
+  }
+  .brandname{font-family:var(--disp);font-weight:700;font-size:17px;letter-spacing:.01em}
+  .brandname span{color:var(--muted);font-weight:500}
+  .badge{
+    margin-left:auto;display:inline-flex;align-items:center;gap:8px;
+    border:1px solid var(--line-strong);border-radius:999px;padding:6px 14px;
+    font-size:12.5px;color:var(--ink-2);
+  }
+  .badge b{color:var(--accent);font-weight:600}
+  h1{
+    font-family:var(--disp);font-weight:800;font-size:clamp(30px,4.4vw,44px);
+    line-height:1.12;letter-spacing:-.015em;margin:26px 0 12px;max-width:20ch;
+  }
+  h1 em{font-style:normal;color:var(--accent)}
+  .lede{color:var(--ink-2);max-width:66ch;font-size:16px}
+  .lede b{color:var(--ink);font-weight:600}
+
+  /* ---------- scenario bar ---------- */
+  .toolbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:24px 0 6px}
+  .toolbar .lbl{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-right:2px}
+  .seg{display:inline-flex;border:1px solid var(--line-strong);border-radius:999px;overflow:hidden}
+  .seg button{
+    appearance:none;border:0;background:transparent;color:var(--ink-2);
+    font:inherit;font-size:13.5px;font-weight:500;padding:8px 18px;cursor:pointer;
+  }
+  .seg button + button{border-left:1px solid var(--line)}
+  .seg button.on{background:var(--accent);color:var(--accent-ink);font-weight:700}
+  .btn-reset{
+    appearance:none;border:1px solid var(--line-strong);background:transparent;color:var(--ink-2);
+    font:inherit;font-size:13.5px;padding:8px 18px;border-radius:999px;cursor:pointer;
+  }
+  .btn-reset:hover{border-color:var(--accent-dim);color:var(--ink)}
+
+  /* ---------- sticky combined strip ---------- */
+  .sticky{
+    position:sticky;top:0;z-index:50;margin-top:22px;
+    background:rgba(35,24,21,.88);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  .sticky-in{
+    max-width:1120px;margin:0 auto;padding:12px 28px;
+    display:grid;grid-template-columns:repeat(5,1fr);gap:18px;
+  }
+  .mini{min-width:0}
+  .mini .k{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);white-space:nowrap}
+  .mini .v{font-family:var(--disp);font-weight:700;font-size:19px;margin-top:1px;white-space:nowrap}
+  .mini .v.hero{color:var(--accent)}
+
+  /* ---------- sections & cards ---------- */
+  section{padding:44px 0 6px}
+  .eyebrow{
+    display:inline-block;font-size:12px;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--accent);font-weight:600;margin-bottom:10px;
+  }
+  h2{font-family:var(--disp);font-weight:800;font-size:clamp(22px,2.8vw,30px);letter-spacing:-.01em;margin-bottom:8px}
+  .sub{color:var(--ink-2);max-width:70ch;margin-bottom:22px}
+  .card{
+    background:var(--surface);border:1px solid var(--line);border-radius:18px;
+    padding:26px 28px;margin-bottom:18px;
+  }
+  .grid2{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:32px}
+
+  /* ---------- inputs ---------- */
+  .in-h{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:12px}
+  .field{display:grid;grid-template-columns:minmax(0,1fr) 128px;gap:14px;align-items:center;padding:9px 0;border-bottom:1px solid var(--line)}
+  .field:last-child{border-bottom:0}
+  .field label{font-size:13.5px;color:var(--ink-2)}
+  .field label .hint{display:block;font-size:11.5px;color:var(--muted);margin-top:1px}
+  .inwrap{position:relative}
+  .inwrap input{
+    width:100%;appearance:none;border:1px solid var(--line-strong);border-radius:10px;
+    background:var(--inset);color:var(--ink);font:inherit;font-size:14px;font-weight:600;
+    font-variant-numeric:tabular-nums;
+    padding:8px 12px;padding-right:44px;text-align:right;
+  }
+  .inwrap input:focus{outline:none;border-color:var(--accent-dim);box-shadow:0 0 0 3px rgba(254,210,0,.12)}
+  .inwrap .unit{
+    position:absolute;right:11px;top:50%;transform:translateY(-50%);
+    font-size:11.5px;color:var(--muted);pointer-events:none;
+  }
+  .inwrap input.no-unit{padding-right:12px}
+  input[type=number]::-webkit-inner-spin-button{opacity:.35}
+
+  /* ---------- derivation ---------- */
+  .deriv{border-top:1px solid var(--line)}
+  .drow{
+    display:grid;grid-template-columns:minmax(0,1fr) auto;gap:14px;align-items:baseline;
+    padding:9px 0;border-bottom:1px solid var(--line);
+  }
+  .drow .dl{font-size:13.5px;color:var(--ink-2)}
+  .drow .df{display:block;font-family:var(--mono);font-size:11px;color:var(--muted);margin-top:2px}
+  .drow .dv{font-family:var(--disp);font-weight:700;font-size:15px;white-space:nowrap;font-variant-numeric:tabular-nums}
+  .drow.total{border-bottom:0;padding-top:12px}
+  .drow.total .dl{color:var(--ink);font-weight:600}
+  .drow.total .dv{color:var(--accent);font-size:18px}
+  .dnote{font-size:11.5px;color:var(--muted);margin-top:10px}
+
+  /* ---------- result tiles ---------- */
+  .tiles{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-top:20px}
+  .tile{background:var(--surface-2);border:1px solid var(--line);border-radius:14px;padding:14px 16px;min-width:0}
+  .tile .k{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);white-space:nowrap}
+  .tile .v{font-family:var(--disp);font-weight:800;font-size:21px;margin-top:4px;white-space:nowrap;font-variant-numeric:tabular-nums}
+  .tile.hero{background:var(--accent);border-color:var(--accent)}
+  .tile.hero .k{color:rgba(35,24,21,.65)}
+  .tile.hero .v{color:var(--accent-ink)}
+
+  /* ---------- combined chart ---------- */
+  .chart{margin-top:6px}
+  .crow{display:grid;grid-template-columns:190px minmax(0,1fr) 110px;gap:14px;align-items:center;padding:10px 0}
+  .crow .cl{font-size:13.5px;color:var(--ink-2)}
+  .track{height:14px;background:var(--inset);border-radius:4px;position:relative;overflow:hidden}
+  .fill{position:absolute;inset:0 auto 0 0;width:0%;background:var(--accent);border-radius:4px;transition:width .35s ease}
+  .crow .cv{font-family:var(--disp);font-weight:700;font-size:15px;text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+  .caption{font-size:11.5px;color:var(--muted);margin-top:8px}
+
+  /* ---------- sources ---------- */
+  .src{font-size:13px;color:var(--ink-2)}
+  .src ol{margin:10px 0 0 18px}
+  .src li{margin-bottom:8px}
+  footer{padding:36px 0 56px;color:var(--muted);font-size:12.5px;border-top:1px solid var(--line);margin-top:44px}
+  footer .fr{display:flex;gap:16px;flex-wrap:wrap;align-items:center}
+  footer .fr b{color:var(--ink-2);font-weight:600}
+
+  @media (max-width:920px){
+    .grid2{grid-template-columns:1fr}
+    .tiles{grid-template-columns:repeat(2,1fr)}
+    .tile.hero{grid-column:1/-1}
+    .sticky-in{grid-template-columns:repeat(3,1fr);row-gap:8px}
+    .crow{grid-template-columns:1fr;gap:6px}
+    .crow .cv{text-align:left}
+  }
+</style>
+</head>
+<body>
+
+<header class="wrap">
+  <div class="brandrow">
+    <div class="logo">fi</div>
+    <div class="brandname">Fill Easy <span>× GovVerify · Corporate ROI model</span></div>
+    <div class="badge">Preset · <b>Sun Life Hong Kong</b>&nbsp;· FY2025 new business APE HK$11.8B</div>
+  </div>
+  <h1>What the golden source is worth, <em>on your book</em>.</h1>
+  <p class="lede">
+    An interactive model of the annual value of GovVerify across Fill Easy's three corporate product lines —
+    <b>MCV&nbsp;HNW onboarding</b>, <b>claims verification</b> and <b>agency onboarding</b>.
+    Every number below is editable: the model starts from Sun Life Hong Kong's record
+    <b>HK$11.8&nbsp;billion</b> full-year 2025 new business APE and industry benchmarks from the Fill&nbsp;Easy
+    solution brief, and recalculates as you type. All figures are illustrative — plug in your own.
+  </p>
+  <div class="toolbar">
+    <span class="lbl">Scenario</span>
+    <div class="seg" id="scenarioSeg">
+      <button data-sc="conservative">Conservative</button>
+      <button data-sc="base" class="on">Base</button>
+      <button data-sc="aggressive">Aggressive</button>
+    </div>
+    <button class="btn-reset" id="btnReset">↺ Reset to Sun Life preset</button>
+  </div>
+</header>
+
+<div class="sticky">
+  <div class="sticky-in">
+    <div class="mini"><div class="k">Gross annual benefit</div><div class="v" id="s-gross">—</div></div>
+    <div class="mini"><div class="k">Fill Easy fees / yr</div><div class="v" id="s-cost">—</div></div>
+    <div class="mini"><div class="k">Net annual value</div><div class="v hero" id="s-net">—</div></div>
+    <div class="mini"><div class="k">Blended ROI</div><div class="v" id="s-roi">—</div></div>
+    <div class="mini"><div class="k">Payback</div><div class="v" id="s-payback">—</div></div>
+  </div>
+</div>
+
+<!-- ══════════════ ANCHOR ══════════════ -->
+<section class="wrap" id="anchor">
+  <span class="eyebrow">00 · Anchor assumptions</span>
+  <h2>The book the model runs on.</h2>
+  <p class="sub">
+    Shared inputs every use case derives from. The APE anchor is Sun Life Hong Kong's published full-year 2025
+    result — a record HK$11.8B in new business APE, up 46% year on year, with the broker channel up 144%
+    (No.&nbsp;1 in market), bancassurance up 53% and agency up 50%.
+  </p>
+  <div class="card">
+    <div class="grid2">
+      <div>
+        <div class="in-h">Inputs — the book</div>
+        <div id="in-anchor"></div>
+      </div>
+      <div>
+        <div class="in-h">Derived — each line follows from the line above</div>
+        <div class="deriv" id="d-anchor"></div>
+        <p class="dnote">APE ÷ average first-year premium approximates policies written per year; the MCV share
+        scopes use case 01. Value margin converts retained premium into economic value, so premium-side and
+        cost-side benefits can be added without double counting.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ UC1 ══════════════ -->
+<section class="wrap" id="uc1">
+  <span class="eyebrow">01 · Product line</span>
+  <h2>MCV HNW onboarding</h2>
+  <p class="sub">
+    Identity, income and medical capacity verified at source before the client leaves the table — one eID tap and one
+    signed consent replace KYC, FNA, medical and AML self-declaration. Per the brief: end-to-end falls from
+    ~2&nbsp;hours plus 6&nbsp;weeks to ~5&nbsp;minutes; NIGO from ~50% to ~10%.
+  </p>
+  <div class="card">
+    <div class="grid2">
+      <div>
+        <div class="in-h">Assumptions</div>
+        <div id="in-uc1"></div>
+      </div>
+      <div>
+        <div class="in-h">Derivation</div>
+        <div class="deriv" id="d-uc1"></div>
+      </div>
+    </div>
+    <div class="tiles" id="t-uc1"></div>
+  </div>
+</section>
+
+<!-- ══════════════ UC2 ══════════════ -->
+<section class="wrap" id="uc2">
+  <span class="eyebrow">02 · Product line</span>
+  <h2>Claims — bill verification at source</h2>
+  <p class="sub">
+    Itemised hospital invoices retrieved directly from ~80% of Mainland facilities (all major Grade&nbsp;3 hospitals)
+    and delivered to Hong Kong already authenticated — replacing photo-and-OCR with government-verified invoice
+    records, and catching the ~10% claims leakage at the source that issued the bill.
+  </p>
+  <div class="card">
+    <div class="grid2">
+      <div>
+        <div class="in-h">Assumptions</div>
+        <div id="in-uc2"></div>
+      </div>
+      <div>
+        <div class="in-h">Derivation</div>
+        <div class="deriv" id="d-uc2"></div>
+      </div>
+    </div>
+    <div class="tiles" id="t-uc2"></div>
+  </div>
+</section>
+
+<!-- ══════════════ UC3 ══════════════ -->
+<section class="wrap" id="uc3">
+  <span class="eyebrow">03 · Product line</span>
+  <h2>Agency onboarding</h2>
+  <p class="sub">
+    Nineteen due-diligence checks per recruit — IA register, MPFA/SFC/HKMA, credit, bankruptcy, litigation,
+    PEP/sanctions and Mainland primary sources — run as one request with an evidence artefact per query,
+    collapsing 6–8 weeks of hand-gathered GL23 evidence into a 15-minute turnaround.
+  </p>
+  <div class="card">
+    <div class="grid2">
+      <div>
+        <div class="in-h">Assumptions</div>
+        <div id="in-uc3"></div>
+      </div>
+      <div>
+        <div class="in-h">Derivation</div>
+        <div class="deriv" id="d-uc3"></div>
+      </div>
+    </div>
+    <div class="tiles" id="t-uc3"></div>
+  </div>
+</section>
+
+<!-- ══════════════ COMBINED ══════════════ -->
+<section class="wrap" id="combined">
+  <span class="eyebrow">04 · Combined</span>
+  <h2>The whole platform, one consented pull.</h2>
+  <p class="sub">One golden source serving three places it pays. Net annual value by product line:</p>
+  <div class="card">
+    <div class="chart" id="chart"></div>
+    <p class="caption">Net annual value = gross benefit − Fill Easy fees, per product line, on the assumptions above.</p>
+    <div class="tiles" id="t-all"></div>
+  </div>
+</section>
+
+<!-- ══════════════ SOURCES ══════════════ -->
+<section class="wrap" id="sources">
+  <span class="eyebrow">Appendix</span>
+  <h2>Sources &amp; method</h2>
+  <div class="card src">
+    <p><b style="color:var(--ink)">Method.</b> Each product line computes a gross annual benefit from the assumptions shown,
+    subtracts Fill Easy verification fees at the plug-in unit prices, and reports net value, ROI multiple
+    (net&nbsp;÷&nbsp;fees) and payback (months of benefit needed to cover a year of fees). Premium-side benefits are
+    taken at the value-margin haircut, not at face premium.</p>
+    <ol>
+      <li><b>HK$11.8B new business APE, +46% YoY; broker +144% (No. 1 in market), bancassurance +53%, agency +50%, industry +12%</b> —
+        Sun Life Hong Kong press release, <a href="https://www.sunlife.com.hk/en/about-us/newsroom/news-releases/2026/sun-life-hong-kong-achieves-record-breaking-hk-11-8-billion/" target="_blank" rel="noopener">“Sun Life Hong Kong Achieves Record-Breaking HK$11.8 Billion in Full-Year New Business APE in 2025”</a> (April 2026).</li>
+      <li><b>Onboarding benchmarks</b> — Fill Easy solution brief: ~50% NIGO falling to ~10%; ~12% of applications lost to slow
+        underwriting with ~60% recoverable same-session; ~2 hrs agent + back-office effort per case falling to ~5 minutes;
+        HK$2,000 per rework case (illustrative).</li>
+      <li><b>Claims benchmarks</b> — Fill Easy solution brief: ~10% leakage on paper bills re-checked by hand; source retrieval across
+        ~80% of Mainland hospitals incl. all major Grade 3; OCR + assessor review eliminated on straight-through claims.</li>
+      <li><b>Agency benchmarks</b> — Fill Easy solution brief: 19 checks per recruit; 6–8 weeks of GL23 “fit and proper” evidence
+        gathered by hand today; 15-minute turnaround via one request.</li>
+      <li><b>Unit prices</b> — per-verification fees are commercial placeholders. Replace with quoted pricing for a live proposal.</li>
+    </ol>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap fr">
+    <b>Fill Easy 填易 · GovVerify</b>
+    <span>Capture once. Trust everywhere.</span>
+    <span>Illustrative model — calibrate to your book · fill-easy.com</span>
+  </div>
+</footer>
+
+<script>
+(function(){
+  'use strict';
+
+  /* ---------------- field definitions ---------------- */
+  // def = Sun Life base preset. sc = per-scenario overrides.
+  const FIELDS = {
+    /* anchor */
+    ape:        {sec:'anchor', label:'New business APE', hint:'FY2025 full-year, Sun Life HK', unit:'HK$ B', def:11.8, step:0.1, min:0},
+    avgFyp:     {sec:'anchor', label:'Average first-year premium', hint:'per policy, illustrative', unit:'HK$', def:200000, step:10000, min:1},
+    mcvShare:   {sec:'anchor', label:'MCV / cross-border share', hint:'of new business', unit:'%', def:50, step:5, min:0, max:100},
+    vnbMargin:  {sec:'anchor', label:'Value margin on new business', hint:'VNB-style haircut on premium', unit:'%', def:55, step:5, min:0, max:100},
+    staffRate:  {sec:'anchor', label:'Loaded staff cost', hint:'ops / analyst, per hour', unit:'HK$/hr', def:250, step:25, min:0},
+
+    /* uc1 */
+    dropoff:    {sec:'uc1', label:'Applications lost to slow underwriting', hint:'drop-off over the weeks-long chain', unit:'%', def:12, step:1, min:0, max:100,
+                 sc:{conservative:8, aggressive:15}},
+    recovery:   {sec:'uc1', label:'Recovered by same-session issuance', hint:'share of drop-offs saved', unit:'%', def:60, step:5, min:0, max:100,
+                 sc:{conservative:40, aggressive:75}},
+    nigoNow:    {sec:'uc1', label:'NIGO rework today', hint:'cases not in good order', unit:'%', def:50, step:5, min:0, max:100},
+    nigoAfter:  {sec:'uc1', label:'NIGO rework with GovVerify', unit:'%', def:10, step:5, min:0, max:100,
+                 sc:{conservative:20, aggressive:5}},
+    reworkCost: {sec:'uc1', label:'Cost per rework case', hint:'chasing, re-keying, re-review', unit:'HK$', def:2000, step:250, min:0},
+    hrsNow:     {sec:'uc1', label:'Handling time per case today', hint:'agent + back office', unit:'hrs', def:2, step:0.25, min:0},
+    hrsAfter:   {sec:'uc1', label:'Handling time with GovVerify', hint:'one tap, straight-through', unit:'hrs', def:0.1, step:0.05, min:0,
+                 sc:{conservative:0.25, aggressive:0.1}},
+    feeOnboard: {sec:'uc1', label:'Fill Easy fee per onboarding pull', hint:'plug in quoted pricing', unit:'HK$', def:500, step:50, min:0},
+
+    /* uc2 */
+    claims:     {sec:'uc2', label:'Claims processed per year', hint:'all lines', unit:'', def:25000, step:1000, min:0},
+    mlShare:    {sec:'uc2', label:'Claims with Mainland hospital bills', unit:'%', def:30, step:5, min:0, max:100},
+    coverage:   {sec:'uc2', label:'Hospitals retrievable at source', hint:'incl. all major Grade 3', unit:'%', def:80, step:5, min:0, max:100},
+    avgClaim:   {sec:'uc2', label:'Average claim size', unit:'HK$', def:30000, step:5000, min:0},
+    leakage:    {sec:'uc2', label:'Claims leakage today', hint:'overpaid on unverified paper bills', unit:'%', def:10, step:1, min:0, max:100,
+                 sc:{conservative:6, aggressive:12}},
+    caught:     {sec:'uc2', label:'Leakage caught at source', hint:'share detected by verification', unit:'%', def:50, step:5, min:0, max:100,
+                 sc:{conservative:30, aggressive:70}},
+    procCost:   {sec:'uc2', label:'Manual handling cost per claim', hint:'OCR review + assessor', unit:'HK$', def:200, step:25, min:0},
+    feeClaim:   {sec:'uc2', label:'Fill Easy fee per bill verification', hint:'plug in quoted pricing', unit:'HK$', def:150, step:25, min:0},
+
+    /* uc3 */
+    recruits:   {sec:'uc3', label:'Agent recruits per year', hint:'agency channel +50% YoY', unit:'', def:800, step:50, min:0},
+    ahrsNow:    {sec:'uc3', label:'Analyst hours per recruit today', hint:'19 checks gathered by hand', unit:'hrs', def:8, step:0.5, min:0},
+    ahrsAfter:  {sec:'uc3', label:'Analyst hours with Fill Easy', hint:'one request, evidence attached', unit:'hrs', def:0.5, step:0.25, min:0},
+    weeksSaved: {sec:'uc3', label:'Weeks of onboarding removed', hint:'from the 6–8-week GL23 chain', unit:'wks', def:5, step:1, min:0,
+                 sc:{conservative:3, aggressive:7}},
+    agentApeWk: {sec:'uc3', label:'New-agent APE per productive week', hint:'early-tenure run-rate', unit:'HK$', def:8000, step:1000, min:0},
+    activation: {sec:'uc3', label:'Recruits who activate', hint:'write business at all', unit:'%', def:70, step:5, min:0, max:100,
+                 sc:{conservative:60, aggressive:80}},
+    feeRecruit: {sec:'uc3', label:'Fill Easy fee per recruit screened', hint:'plug in quoted pricing', unit:'HK$', def:800, step:100, min:0}
+  };
+
+  /* ---------------- formatting ---------------- */
+  const nf0 = new Intl.NumberFormat('en-HK', {maximumFractionDigits:0});
+  function money(v){
+    const a = Math.abs(v);
+    const s = v < 0 ? '−' : '';
+    if (a >= 1e9) return s + 'HK$' + (a/1e9).toFixed(a < 1e10 ? 2 : 1) + 'B';
+    if (a >= 1e6) return s + 'HK$' + (a/1e6).toFixed(a < 1e7 ? 1 : 0) + 'M';
+    if (a >= 1e3) return s + 'HK$' + (a/1e3).toFixed(0) + 'K';
+    return s + 'HK$' + a.toFixed(0);
+  }
+  function count(v){ return nf0.format(Math.round(v)); }
+  function roiX(net, cost){ return cost > 0 ? (net/cost).toFixed(1) + '×' : '—'; }
+  function payback(gross, cost){
+    if (cost <= 0) return '—';
+    if (gross <= 0) return 'n/a';
+    const m = 12 * cost / gross;
+    return m < 1 ? '<1 mo' : m.toFixed(1) + ' mo';
+  }
+
+  /* ---------------- input rendering ---------------- */
+  const state = {};
+  for (const k in FIELDS) state[k] = FIELDS[k].def;
+
+  function renderInputs(){
+    const bySec = {};
+    for (const k in FIELDS) (bySec[FIELDS[k].sec] = bySec[FIELDS[k].sec] || []).push(k);
+    for (const sec in bySec){
+      const host = document.getElementById('in-' + sec);
+      host.innerHTML = bySec[sec].map(k => {
+        const f = FIELDS[k];
+        return '<div class="field"><label for="f-' + k + '">' + f.label +
+          (f.hint ? '<span class="hint">' + f.hint + '</span>' : '') + '</label>' +
+          '<div class="inwrap"><input type="number" id="f-' + k + '" data-key="' + k + '"' +
+          ' step="' + f.step + '"' +
+          (f.min != null ? ' min="' + f.min + '"' : '') +
+          (f.max != null ? ' max="' + f.max + '"' : '') +
+          (f.unit ? '' : ' class="no-unit"') + '>' +
+          (f.unit ? '<span class="unit">' + f.unit + '</span>' : '') +
+          '</div></div>';
+      }).join('');
+    }
+    document.querySelectorAll('input[data-key]').forEach(el => {
+      el.addEventListener('input', () => {
+        const k = el.dataset.key, f = FIELDS[k];
+        let v = parseFloat(el.value);
+        if (!isFinite(v)) v = 0;
+        if (f.min != null) v = Math.max(f.min, v);
+        if (f.max != null) v = Math.min(f.max, v);
+        state[k] = v;
+        clearScenarioIfCustom();
+        recalc();
+      });
+    });
+  }
+
+  function pushStateToInputs(){
+    for (const k in FIELDS){
+      const el = document.getElementById('f-' + k);
+      if (el) el.value = state[k];
+    }
+  }
+
+  /* ---------------- scenarios ---------------- */
+  let activeScenario = 'base';
+  function applyScenario(sc){
+    activeScenario = sc;
+    for (const k in FIELDS){
+      const f = FIELDS[k];
+      state[k] = (sc !== 'base' && f.sc && f.sc[sc] != null) ? f.sc[sc] : f.def;
+    }
+    pushStateToInputs();
+    markScenario(sc);
+    recalc();
+  }
+  function markScenario(sc){
+    document.querySelectorAll('#scenarioSeg button').forEach(b =>
+      b.classList.toggle('on', b.dataset.sc === sc));
+  }
+  function clearScenarioIfCustom(){
+    // any manual edit = custom; unhighlight the segmented control
+    activeScenario = null;
+    markScenario('');
+  }
+  document.querySelectorAll('#scenarioSeg button').forEach(b =>
+    b.addEventListener('click', () => applyScenario(b.dataset.sc)));
+  document.getElementById('btnReset').addEventListener('click', () => applyScenario('base'));
+
+  /* ---------------- model ---------------- */
+  function compute(){
+    const s = state, pct = v => v/100;
+
+    /* anchor */
+    const appsTotal = s.ape * 1e9 / s.avgFyp;
+    const mcvApps   = appsTotal * pct(s.mcvShare);
+
+    /* uc1 — MCV HNW onboarding */
+    const casesSaved   = mcvApps * pct(s.dropoff) * pct(s.recovery);
+    const premRetained = casesSaved * s.avgFyp;
+    const premValue    = premRetained * pct(s.vnbMargin);
+    const reworkDelta  = Math.max(0, pct(s.nigoNow) - pct(s.nigoAfter));
+    const reworkSaved  = mcvApps * reworkDelta * s.reworkCost;
+    const labourSaved1 = mcvApps * Math.max(0, s.hrsNow - s.hrsAfter) * s.staffRate;
+    const gross1 = premValue + reworkSaved + labourSaved1;
+    const cost1  = mcvApps * s.feeOnboard;
+
+    /* uc2 — claims */
+    const mlClaims   = s.claims * pct(s.mlShare);
+    const verClaims  = mlClaims * pct(s.coverage);
+    const leakSaved  = verClaims * pct(s.leakage) * pct(s.caught) * s.avgClaim;
+    const procSaved  = verClaims * s.procCost;
+    const gross2 = leakSaved + procSaved;
+    const cost2  = verClaims * s.feeClaim;
+
+    /* uc3 — agency onboarding */
+    const analystSaved = s.recruits * Math.max(0, s.ahrsNow - s.ahrsAfter) * s.staffRate;
+    const earlyApe     = s.recruits * pct(s.activation) * s.weeksSaved * s.agentApeWk;
+    const earlyValue   = earlyApe * pct(s.vnbMargin);
+    const gross3 = analystSaved + earlyValue;
+    const cost3  = s.recruits * s.feeRecruit;
+
+    return {
+      appsTotal, mcvApps,
+      uc1:{casesSaved, premRetained, premValue, reworkSaved, labourSaved1, gross:gross1, cost:cost1, net:gross1-cost1},
+      uc2:{mlClaims, verClaims, leakSaved, procSaved, gross:gross2, cost:cost2, net:gross2-cost2},
+      uc3:{analystSaved, earlyApe, earlyValue, gross:gross3, cost:cost3, net:gross3-cost3},
+      all:{gross:gross1+gross2+gross3, cost:cost1+cost2+cost3, net:(gross1-cost1)+(gross2-cost2)+(gross3-cost3)}
+    };
+  }
+
+  /* ---------------- render results ---------------- */
+  function drows(host, rows){
+    document.getElementById(host).innerHTML = rows.map(r =>
+      '<div class="drow' + (r.total ? ' total' : '') + '"><div class="dl">' + r.l +
+      (r.f ? '<span class="df">' + r.f + '</span>' : '') +
+      '</div><div class="dv">' + r.v + '</div></div>').join('');
+  }
+  function tiles(host, m){
+    document.getElementById(host).innerHTML =
+      '<div class="tile"><div class="k">Gross benefit / yr</div><div class="v">' + money(m.gross) + '</div></div>' +
+      '<div class="tile"><div class="k">Fill Easy fees / yr</div><div class="v">' + money(m.cost) + '</div></div>' +
+      '<div class="tile hero"><div class="k">Net annual value</div><div class="v">' + money(m.net) + '</div></div>' +
+      '<div class="tile"><div class="k">ROI multiple</div><div class="v">' + roiX(m.net, m.cost) + '</div></div>' +
+      '<div class="tile"><div class="k">Payback</div><div class="v">' + payback(m.gross, m.cost) + '</div></div>';
+  }
+
+  function recalc(){
+    const s = state, m = compute();
+
+    drows('d-anchor', [
+      {l:'Applications written per year', f:'APE ' + money(s.ape*1e9) + ' ÷ avg FYP ' + money(s.avgFyp), v:count(m.appsTotal)},
+      {l:'MCV / cross-border applications', f:'× ' + s.mcvShare + '% MCV share', v:count(m.mcvApps)}
+    ]);
+
+    drows('d-uc1', [
+      {l:'MCV applications in scope', f:'from anchor', v:count(m.mcvApps)},
+      {l:'Cases lost to slow underwriting', f:'× ' + s.dropoff + '% drop-off', v:count(m.mcvApps*s.dropoff/100)},
+      {l:'Cases recovered same-session', f:'× ' + s.recovery + '% recovery', v:count(m.uc1.casesSaved)},
+      {l:'First-year premium retained', f:'× avg FYP ' + money(s.avgFyp), v:money(m.uc1.premRetained)},
+      {l:'Value of premium retained', f:'× ' + s.vnbMargin + '% value margin', v:money(m.uc1.premValue)},
+      {l:'Rework avoided', f:'NIGO ' + s.nigoNow + '% → ' + s.nigoAfter + '% × ' + money(s.reworkCost) + '/case', v:money(m.uc1.reworkSaved)},
+      {l:'Handling time saved', f:s.hrsNow + ' → ' + s.hrsAfter + ' hrs/case × ' + money(s.staffRate) + '/hr', v:money(m.uc1.labourSaved1)},
+      {l:'Gross annual benefit', v:money(m.uc1.gross), total:true}
+    ]);
+    tiles('t-uc1', m.uc1);
+
+    drows('d-uc2', [
+      {l:'Claims with Mainland hospital bills', f:count(s.claims) + ' claims × ' + s.mlShare + '%', v:count(m.uc2.mlClaims)},
+      {l:'Verifiable at source', f:'× ' + s.coverage + '% hospital coverage', v:count(m.uc2.verClaims)},
+      {l:'Leakage recovered', f:'× ' + s.leakage + '% leakage × ' + s.caught + '% caught × ' + money(s.avgClaim) + ' avg claim', v:money(m.uc2.leakSaved)},
+      {l:'Manual handling eliminated', f:'× ' + money(s.procCost) + ' OCR + assessor cost/claim', v:money(m.uc2.procSaved)},
+      {l:'Gross annual benefit', v:money(m.uc2.gross), total:true}
+    ]);
+    tiles('t-uc2', m.uc2);
+
+    drows('d-uc3', [
+      {l:'Recruits screened per year', v:count(s.recruits)},
+      {l:'Analyst time saved', f:s.ahrsNow + ' → ' + s.ahrsAfter + ' hrs/recruit × ' + money(s.staffRate) + '/hr', v:money(m.uc3.analystSaved)},
+      {l:'Extra productive weeks', f:'× ' + s.activation + '% activate × ' + s.weeksSaved + ' wks earlier', v:count(s.recruits*s.activation/100*s.weeksSaved) + ' wks'},
+      {l:'Early-production APE', f:'× ' + money(s.agentApeWk) + ' APE/week', v:money(m.uc3.earlyApe)},
+      {l:'Value of early production', f:'× ' + s.vnbMargin + '% value margin', v:money(m.uc3.earlyValue)},
+      {l:'Gross annual benefit', v:money(m.uc3.gross), total:true}
+    ]);
+    tiles('t-uc3', m.uc3);
+
+    /* combined bar chart + tiles */
+    const rows = [
+      {l:'01 · MCV HNW onboarding', v:m.uc1.net},
+      {l:'02 · Claims verification', v:m.uc2.net},
+      {l:'03 · Agency onboarding', v:m.uc3.net}
+    ];
+    const max = Math.max(1, ...rows.map(r => r.v));
+    document.getElementById('chart').innerHTML = rows.map(r =>
+      '<div class="crow"><div class="cl">' + r.l + '</div>' +
+      '<div class="track"><div class="fill" style="width:' + Math.max(0, r.v/max*100).toFixed(1) + '%"></div></div>' +
+      '<div class="cv">' + money(r.v) + '</div></div>').join('');
+    tiles('t-all', m.all);
+
+    /* sticky strip */
+    document.getElementById('s-gross').textContent = money(m.all.gross);
+    document.getElementById('s-cost').textContent  = money(m.all.cost);
+    document.getElementById('s-net').textContent   = money(m.all.net);
+    document.getElementById('s-roi').textContent   = roiX(m.all.net, m.all.cost);
+    document.getElementById('s-payback').textContent = payback(m.all.gross, m.all.cost);
+  }
+
+  renderInputs();
+  pushStateToInputs();
+  recalc();
+})();
+</script>
+</body>
+</html>
