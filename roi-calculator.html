@@ -9,19 +9,21 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg:#231815;
-    --surface:#2C211C;
-    --surface-2:#372A23;
-    --inset:#1C120F;
-    --ink:#F6F1EA;
-    --ink-2:#CDC1B7;
-    --muted:#9C8D82;
+    --bg:#FAF7F2;
+    --surface:#FFFFFF;
+    --surface-2:#FBF7EC;
+    --inset:#F1EBE1;
+    --ink:#231815;
+    --ink-2:#5C4E45;
+    --muted:#93857A;
     --accent:#FED200;
+    --accent-deep:#E8BF00;
     --accent-ink:#231815;
-    --accent-dim:rgba(254,210,0,.55);
-    --line:rgba(246,241,234,.10);
-    --line-strong:rgba(246,241,234,.18);
-    --good:#7ED09A;
+    --accent-soft:rgba(254,210,0,.18);
+    --line:rgba(35,24,21,.09);
+    --line-strong:rgba(35,24,21,.20);
+    --sh:0 1px 2px rgba(35,24,21,.05),0 6px 20px rgba(35,24,21,.06);
+    --sh-lg:0 2px 6px rgba(35,24,21,.06),0 14px 40px rgba(35,24,21,.10);
     --sans:'Inter',ui-sans-serif,-apple-system,'Segoe UI',Roboto,'Helvetica Neue',Arial,'PingFang SC','Microsoft YaHei',sans-serif;
     --disp:'Manrope',var(--sans);
     --mono:ui-monospace,'SF Mono','Cascadia Mono',Menlo,Consolas,monospace;
@@ -33,8 +35,8 @@
     font-size:15px;line-height:1.55;
     -webkit-font-smoothing:antialiased;
   }
-  a{color:var(--accent);text-decoration:none}
-  a:hover{text-decoration:underline}
+  a{color:inherit;text-decoration:underline;text-decoration-color:var(--accent-deep);text-underline-offset:2px}
+  a:hover{color:var(--accent-deep)}
   .wrap{max-width:1120px;margin:0 auto;padding:0 28px}
 
   /* ---------- header ---------- */
@@ -49,39 +51,40 @@
   .brandname span{color:var(--muted);font-weight:500}
   .badge{
     margin-left:auto;display:inline-flex;align-items:center;gap:8px;
-    border:1px solid var(--line-strong);border-radius:999px;padding:6px 14px;
-    font-size:12.5px;color:var(--ink-2);
+    background:var(--surface);border:1px solid var(--line);box-shadow:var(--sh);
+    border-radius:999px;padding:6px 14px;font-size:12.5px;color:var(--ink-2);
   }
-  .badge b{color:var(--accent);font-weight:600}
+  .badge b{color:var(--ink);font-weight:700}
   h1{
     font-family:var(--disp);font-weight:800;font-size:clamp(30px,4.4vw,44px);
-    line-height:1.12;letter-spacing:-.015em;margin:26px 0 12px;max-width:20ch;
+    line-height:1.12;letter-spacing:-.015em;margin:26px 0 12px;max-width:22ch;
   }
-  h1 em{font-style:normal;color:var(--accent)}
+  h1 em{font-style:normal;background:linear-gradient(transparent 62%,var(--accent) 62%,var(--accent) 94%,transparent 94%)}
   .lede{color:var(--ink-2);max-width:66ch;font-size:16px}
   .lede b{color:var(--ink);font-weight:600}
 
   /* ---------- scenario bar ---------- */
   .toolbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:24px 0 6px}
   .toolbar .lbl{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-right:2px}
-  .seg{display:inline-flex;border:1px solid var(--line-strong);border-radius:999px;overflow:hidden}
+  .seg{display:inline-flex;background:var(--surface);border:1px solid var(--line);box-shadow:var(--sh);border-radius:999px;overflow:hidden}
   .seg button{
     appearance:none;border:0;background:transparent;color:var(--ink-2);
     font:inherit;font-size:13.5px;font-weight:500;padding:8px 18px;cursor:pointer;
   }
   .seg button + button{border-left:1px solid var(--line)}
   .seg button.on{background:var(--accent);color:var(--accent-ink);font-weight:700}
-  .btn-reset{
-    appearance:none;border:1px solid var(--line-strong);background:transparent;color:var(--ink-2);
-    font:inherit;font-size:13.5px;padding:8px 18px;border-radius:999px;cursor:pointer;
+  .btn{
+    appearance:none;border:1px solid var(--line);background:var(--surface);color:var(--ink-2);
+    box-shadow:var(--sh);font:inherit;font-size:13.5px;padding:8px 18px;border-radius:999px;cursor:pointer;
   }
-  .btn-reset:hover{border-color:var(--accent-dim);color:var(--ink)}
+  .btn:hover{border-color:var(--line-strong);color:var(--ink)}
+  .btn.ok{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);font-weight:700}
 
   /* ---------- sticky combined strip ---------- */
   .sticky{
     position:sticky;top:0;z-index:50;margin-top:22px;
-    background:rgba(35,24,21,.88);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
-    border-bottom:1px solid var(--line);
+    background:rgba(255,255,255,.86);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);box-shadow:0 6px 18px rgba(35,24,21,.05);
   }
   .sticky-in{
     max-width:1120px;margin:0 auto;padding:12px 28px;
@@ -89,43 +92,88 @@
   }
   .mini{min-width:0}
   .mini .k{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);white-space:nowrap}
-  .mini .v{font-family:var(--disp);font-weight:700;font-size:19px;margin-top:1px;white-space:nowrap}
-  .mini .v.hero{color:var(--accent)}
+  .mini .v{font-family:var(--disp);font-weight:700;font-size:19px;margin-top:1px;white-space:nowrap;font-variant-numeric:tabular-nums}
+  .mini .v.hero{background:linear-gradient(transparent 55%,var(--accent) 55%,var(--accent) 92%,transparent 92%)}
 
   /* ---------- sections & cards ---------- */
   section{padding:44px 0 6px}
   .eyebrow{
     display:inline-block;font-size:12px;letter-spacing:.16em;text-transform:uppercase;
-    color:var(--accent);font-weight:600;margin-bottom:10px;
+    color:var(--ink);font-weight:700;margin-bottom:10px;
+    background:var(--accent-soft);border-radius:999px;padding:3px 12px;
   }
   h2{font-family:var(--disp);font-weight:800;font-size:clamp(22px,2.8vw,30px);letter-spacing:-.01em;margin-bottom:8px}
   .sub{color:var(--ink-2);max-width:70ch;margin-bottom:22px}
   .card{
     background:var(--surface);border:1px solid var(--line);border-radius:18px;
-    padding:26px 28px;margin-bottom:18px;
+    box-shadow:var(--sh);padding:26px 28px;margin-bottom:18px;
+    transition:opacity .25s ease;
   }
-  .grid2{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:32px}
+  .card-top{display:flex;align-items:center;justify-content:flex-end;margin:-6px 0 10px}
+  .grid2{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:34px}
+
+  /* excluded state */
+  .card.excluded .grid2,.card.excluded .tiles,.card.excluded .sens{opacity:.35;filter:saturate(.4)}
+
+  /* ---------- toggle switch ---------- */
+  .switch{display:inline-flex;align-items:center;gap:9px;font-size:13px;color:var(--ink-2);cursor:pointer;user-select:none}
+  .switch input{position:absolute;opacity:0;pointer-events:none}
+  .knob{
+    width:38px;height:22px;border-radius:999px;background:var(--inset);
+    border:1px solid var(--line-strong);position:relative;transition:background .2s ease;flex:0 0 auto;
+  }
+  .knob::after{
+    content:'';position:absolute;top:2px;left:2px;width:16px;height:16px;border-radius:50%;
+    background:var(--surface);border:1px solid var(--line-strong);transition:left .2s ease;
+  }
+  .switch input:checked + .knob{background:var(--accent);border-color:var(--accent-deep)}
+  .switch input:checked + .knob::after{left:18px;border-color:var(--accent-deep)}
+  .switch input:focus-visible + .knob{box-shadow:0 0 0 3px var(--accent-soft)}
 
   /* ---------- inputs ---------- */
   .in-h{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:12px}
-  .field{display:grid;grid-template-columns:minmax(0,1fr) 128px;gap:14px;align-items:center;padding:9px 0;border-bottom:1px solid var(--line)}
+  .field{padding:10px 0;border-bottom:1px solid var(--line)}
   .field:last-child{border-bottom:0}
+  .frow{display:grid;grid-template-columns:minmax(0,1fr) 122px;gap:14px;align-items:center}
   .field label{font-size:13.5px;color:var(--ink-2)}
   .field label .hint{display:block;font-size:11.5px;color:var(--muted);margin-top:1px}
   .inwrap{position:relative}
   .inwrap input{
     width:100%;appearance:none;border:1px solid var(--line-strong);border-radius:10px;
-    background:var(--inset);color:var(--ink);font:inherit;font-size:14px;font-weight:600;
+    background:var(--surface);color:var(--ink);font:inherit;font-size:14px;font-weight:600;
     font-variant-numeric:tabular-nums;
-    padding:8px 12px;padding-right:44px;text-align:right;
+    padding:7px 12px;padding-right:44px;text-align:right;
   }
-  .inwrap input:focus{outline:none;border-color:var(--accent-dim);box-shadow:0 0 0 3px rgba(254,210,0,.12)}
+  .inwrap input:focus{outline:none;border-color:var(--accent-deep);box-shadow:0 0 0 3px var(--accent-soft)}
   .inwrap .unit{
     position:absolute;right:11px;top:50%;transform:translateY(-50%);
     font-size:11.5px;color:var(--muted);pointer-events:none;
   }
   .inwrap input.no-unit{padding-right:12px}
-  input[type=number]::-webkit-inner-spin-button{opacity:.35}
+  input[type=number]::-webkit-inner-spin-button{opacity:.4}
+
+  /* ---------- sliders ---------- */
+  input[type=range]{
+    appearance:none;-webkit-appearance:none;width:100%;height:22px;margin-top:7px;
+    background:transparent;cursor:pointer;display:block;
+  }
+  input[type=range]::-webkit-slider-runnable-track{
+    height:6px;border-radius:999px;
+    background:var(--track,linear-gradient(90deg,var(--accent) 0%,var(--inset) 0%));
+  }
+  input[type=range]::-webkit-slider-thumb{
+    -webkit-appearance:none;appearance:none;width:18px;height:18px;border-radius:50%;
+    background:var(--surface);border:2.5px solid var(--ink);margin-top:-6px;
+    box-shadow:0 1px 4px rgba(35,24,21,.25);
+  }
+  input[type=range]::-moz-range-track{height:6px;border-radius:999px;background:var(--inset)}
+  input[type=range]::-moz-range-progress{height:6px;border-radius:999px;background:var(--accent)}
+  input[type=range]::-moz-range-thumb{
+    width:15px;height:15px;border-radius:50%;background:var(--surface);
+    border:2.5px solid var(--ink);box-shadow:0 1px 4px rgba(35,24,21,.25);
+  }
+  input[type=range]:focus{outline:none}
+  input[type=range]:focus-visible::-webkit-slider-thumb{box-shadow:0 0 0 4px var(--accent-soft)}
 
   /* ---------- derivation ---------- */
   .deriv{border-top:1px solid var(--line)}
@@ -138,7 +186,7 @@
   .drow .dv{font-family:var(--disp);font-weight:700;font-size:15px;white-space:nowrap;font-variant-numeric:tabular-nums}
   .drow.total{border-bottom:0;padding-top:12px}
   .drow.total .dl{color:var(--ink);font-weight:600}
-  .drow.total .dv{color:var(--accent);font-size:18px}
+  .drow.total .dv{font-size:18px;background:linear-gradient(transparent 55%,var(--accent) 55%,var(--accent) 92%,transparent 92%)}
   .dnote{font-size:11.5px;color:var(--muted);margin-top:10px}
 
   /* ---------- result tiles ---------- */
@@ -146,18 +194,40 @@
   .tile{background:var(--surface-2);border:1px solid var(--line);border-radius:14px;padding:14px 16px;min-width:0}
   .tile .k{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);white-space:nowrap}
   .tile .v{font-family:var(--disp);font-weight:800;font-size:21px;margin-top:4px;white-space:nowrap;font-variant-numeric:tabular-nums}
-  .tile.hero{background:var(--accent);border-color:var(--accent)}
-  .tile.hero .k{color:rgba(35,24,21,.65)}
+  .tile.hero{background:var(--accent);border-color:var(--accent-deep)}
+  .tile.hero .k{color:rgba(35,24,21,.6)}
   .tile.hero .v{color:var(--accent-ink)}
+
+  /* ---------- sensitivity ---------- */
+  .sens{margin-top:22px;border-top:1px dashed var(--line-strong);padding-top:16px}
+  .sens .in-h{margin-bottom:8px}
+  .srow{display:grid;grid-template-columns:200px minmax(0,1fr) 130px;gap:14px;align-items:center;padding:6px 0}
+  .srow .sl{font-size:12.5px;color:var(--ink-2)}
+  .strack{height:10px;background:var(--inset);border-radius:4px;position:relative;overflow:hidden}
+  .sfill{position:absolute;inset:0 auto 0 0;background:var(--accent);border-radius:4px;transition:width .3s ease}
+  .srow .sv{font-size:12px;color:var(--ink-2);text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+  .sens .dnote{margin-top:6px}
 
   /* ---------- combined chart ---------- */
   .chart{margin-top:6px}
-  .crow{display:grid;grid-template-columns:190px minmax(0,1fr) 110px;gap:14px;align-items:center;padding:10px 0}
-  .crow .cl{font-size:13.5px;color:var(--ink-2)}
+  .crow{display:grid;grid-template-columns:190px minmax(0,1fr) 110px;gap:14px;align-items:center;padding:12px 0;border-radius:10px;cursor:default}
+  .crow:hover{background:var(--surface-2)}
   .track{height:14px;background:var(--inset);border-radius:4px;position:relative;overflow:hidden}
   .fill{position:absolute;inset:0 auto 0 0;width:0%;background:var(--accent);border-radius:4px;transition:width .35s ease}
+  .crow .cl{font-size:13.5px;color:var(--ink-2)}
   .crow .cv{font-family:var(--disp);font-weight:700;font-size:15px;text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+  .crow.off .fill{background:var(--line-strong)}
+  .crow.off .cl,.crow.off .cv{color:var(--muted);text-decoration:line-through}
   .caption{font-size:11.5px;color:var(--muted);margin-top:8px}
+
+  /* tooltip */
+  .tip{
+    position:fixed;z-index:100;pointer-events:none;display:none;
+    background:var(--ink);color:#FBF7EC;border-radius:10px;padding:10px 13px;
+    font-size:12.5px;line-height:1.6;box-shadow:var(--sh-lg);max-width:260px;
+  }
+  .tip b{color:var(--accent);font-weight:700}
+  .tip .tt{font-weight:600;color:#fff;margin-bottom:2px}
 
   /* ---------- sources ---------- */
   .src{font-size:13px;color:var(--ink-2)}
@@ -174,6 +244,8 @@
     .sticky-in{grid-template-columns:repeat(3,1fr);row-gap:8px}
     .crow{grid-template-columns:1fr;gap:6px}
     .crow .cv{text-align:left}
+    .srow{grid-template-columns:1fr;gap:4px}
+    .srow .sv{text-align:left}
   }
 </style>
 </head>
@@ -189,9 +261,9 @@
   <p class="lede">
     An interactive model of the annual value of GovVerify across Fill Easy's three corporate product lines —
     <b>MCV&nbsp;HNW onboarding</b>, <b>claims verification</b> and <b>agency onboarding</b>.
-    Every number below is editable: the model starts from Sun Life Hong Kong's record
+    Every number below is editable — type it or drag it. The model starts from Sun Life Hong Kong's record
     <b>HK$11.8&nbsp;billion</b> full-year 2025 new business APE and industry benchmarks from the Fill&nbsp;Easy
-    solution brief, and recalculates as you type. All figures are illustrative — plug in your own.
+    solution brief, and recalculates as you move. All figures are illustrative — plug in your own.
   </p>
   <div class="toolbar">
     <span class="lbl">Scenario</span>
@@ -200,7 +272,7 @@
       <button data-sc="base" class="on">Base</button>
       <button data-sc="aggressive">Aggressive</button>
     </div>
-    <button class="btn-reset" id="btnReset">↺ Reset to Sun Life preset</button>
+    <button class="btn" id="btnReset">↺ Reset to Sun Life preset</button>
   </div>
 </header>
 
@@ -249,7 +321,10 @@
     signed consent replace KYC, FNA, medical and AML self-declaration. Per the brief: end-to-end falls from
     ~2&nbsp;hours plus 6&nbsp;weeks to ~5&nbsp;minutes; NIGO from ~50% to ~10%.
   </p>
-  <div class="card">
+  <div class="card" id="card-uc1">
+    <div class="card-top">
+      <label class="switch"><input type="checkbox" checked data-uc="uc1"><span class="knob"></span>Include in combined total</label>
+    </div>
     <div class="grid2">
       <div>
         <div class="in-h">Assumptions</div>
@@ -261,6 +336,7 @@
       </div>
     </div>
     <div class="tiles" id="t-uc1"></div>
+    <div class="sens" id="sens-uc1"></div>
   </div>
 </section>
 
@@ -273,7 +349,10 @@
     and delivered to Hong Kong already authenticated — replacing photo-and-OCR with government-verified invoice
     records, and catching the ~10% claims leakage at the source that issued the bill.
   </p>
-  <div class="card">
+  <div class="card" id="card-uc2">
+    <div class="card-top">
+      <label class="switch"><input type="checkbox" checked data-uc="uc2"><span class="knob"></span>Include in combined total</label>
+    </div>
     <div class="grid2">
       <div>
         <div class="in-h">Assumptions</div>
@@ -285,6 +364,7 @@
       </div>
     </div>
     <div class="tiles" id="t-uc2"></div>
+    <div class="sens" id="sens-uc2"></div>
   </div>
 </section>
 
@@ -297,7 +377,10 @@
     PEP/sanctions and Mainland primary sources — run as one request with an evidence artefact per query,
     collapsing 6–8 weeks of hand-gathered GL23 evidence into a 15-minute turnaround.
   </p>
-  <div class="card">
+  <div class="card" id="card-uc3">
+    <div class="card-top">
+      <label class="switch"><input type="checkbox" checked data-uc="uc3"><span class="knob"></span>Include in combined total</label>
+    </div>
     <div class="grid2">
       <div>
         <div class="in-h">Assumptions</div>
@@ -309,6 +392,7 @@
       </div>
     </div>
     <div class="tiles" id="t-uc3"></div>
+    <div class="sens" id="sens-uc3"></div>
   </div>
 </section>
 
@@ -316,11 +400,15 @@
 <section class="wrap" id="combined">
   <span class="eyebrow">04 · Combined</span>
   <h2>The whole platform, one consented pull.</h2>
-  <p class="sub">One golden source serving three places it pays. Net annual value by product line:</p>
+  <p class="sub">One golden source serving three places it pays. Net annual value by product line — hover a bar for the breakdown:</p>
   <div class="card">
     <div class="chart" id="chart"></div>
-    <p class="caption">Net annual value = gross benefit − Fill Easy fees, per product line, on the assumptions above.</p>
+    <p class="caption">Net annual value = gross benefit − Fill Easy fees, per product line, on the assumptions above. Excluded lines are shown muted and left out of the totals.</p>
     <div class="tiles" id="t-all"></div>
+    <div class="toolbar" style="margin:22px 0 0">
+      <button class="btn" id="btnCopy">⧉ Copy summary</button>
+      <button class="btn" id="btnPrint">⎙ Print / save as PDF</button>
+    </div>
   </div>
 </section>
 
@@ -332,7 +420,8 @@
     <p><b style="color:var(--ink)">Method.</b> Each product line computes a gross annual benefit from the assumptions shown,
     subtracts Fill Easy verification fees at the plug-in unit prices, and reports net value, ROI multiple
     (net&nbsp;÷&nbsp;fees) and payback (months of benefit needed to cover a year of fees). Premium-side benefits are
-    taken at the value-margin haircut, not at face premium.</p>
+    taken at the value-margin haircut, not at face premium. Sensitivity bars show how far each line's net value swings
+    when a single driver moves ±20% from its current setting, holding everything else constant.</p>
     <ol>
       <li><b>HK$11.8B new business APE, +46% YoY; broker +144% (No. 1 in market), bancassurance +53%, agency +50%, industry +12%</b> —
         Sun Life Hong Kong press release, <a href="https://www.sunlife.com.hk/en/about-us/newsroom/news-releases/2026/sun-life-hong-kong-achieves-record-breaking-hk-11-8-billion/" target="_blank" rel="noopener">“Sun Life Hong Kong Achieves Record-Breaking HK$11.8 Billion in Full-Year New Business APE in 2025”</a> (April 2026).</li>
@@ -356,57 +445,65 @@
   </div>
 </footer>
 
+<div class="tip" id="tip"></div>
+
 <script>
 (function(){
   'use strict';
 
   /* ---------------- field definitions ---------------- */
-  // def = Sun Life base preset. sc = per-scenario overrides.
+  // def = Sun Life base preset. sc = per-scenario overrides. smin/smax/sstep = slider range.
   const FIELDS = {
     /* anchor */
-    ape:        {sec:'anchor', label:'New business APE', hint:'FY2025 full-year, Sun Life HK', unit:'HK$ B', def:11.8, step:0.1, min:0},
-    avgFyp:     {sec:'anchor', label:'Average first-year premium', hint:'per policy, illustrative', unit:'HK$', def:200000, step:10000, min:1},
+    ape:        {sec:'anchor', label:'New business APE', hint:'FY2025 full-year, Sun Life HK', unit:'HK$ B', def:11.8, step:0.1, min:0, smin:1, smax:30, sstep:0.1},
+    avgFyp:     {sec:'anchor', label:'Average first-year premium', hint:'per policy, illustrative', unit:'HK$', def:200000, step:10000, min:1, smin:50000, smax:1000000, sstep:10000},
     mcvShare:   {sec:'anchor', label:'MCV / cross-border share', hint:'of new business', unit:'%', def:50, step:5, min:0, max:100},
     vnbMargin:  {sec:'anchor', label:'Value margin on new business', hint:'VNB-style haircut on premium', unit:'%', def:55, step:5, min:0, max:100},
-    staffRate:  {sec:'anchor', label:'Loaded staff cost', hint:'ops / analyst, per hour', unit:'HK$/hr', def:250, step:25, min:0},
+    staffRate:  {sec:'anchor', label:'Loaded staff cost', hint:'ops / analyst, per hour', unit:'HK$/hr', def:250, step:25, min:0, smin:100, smax:1000, sstep:25},
 
     /* uc1 */
-    dropoff:    {sec:'uc1', label:'Applications lost to slow underwriting', hint:'drop-off over the weeks-long chain', unit:'%', def:12, step:1, min:0, max:100,
+    dropoff:    {sec:'uc1', label:'Applications lost to slow underwriting', hint:'drop-off over the weeks-long chain', unit:'%', def:12, step:1, min:0, max:100, smax:30,
                  sc:{conservative:8, aggressive:15}},
     recovery:   {sec:'uc1', label:'Recovered by same-session issuance', hint:'share of drop-offs saved', unit:'%', def:60, step:5, min:0, max:100,
                  sc:{conservative:40, aggressive:75}},
-    nigoNow:    {sec:'uc1', label:'NIGO rework today', hint:'cases not in good order', unit:'%', def:50, step:5, min:0, max:100},
-    nigoAfter:  {sec:'uc1', label:'NIGO rework with GovVerify', unit:'%', def:10, step:5, min:0, max:100,
+    nigoNow:    {sec:'uc1', label:'NIGO rework today', hint:'cases not in good order', unit:'%', def:50, step:5, min:0, max:100, smax:80},
+    nigoAfter:  {sec:'uc1', label:'NIGO rework with GovVerify', unit:'%', def:10, step:5, min:0, max:100, smax:50,
                  sc:{conservative:20, aggressive:5}},
-    reworkCost: {sec:'uc1', label:'Cost per rework case', hint:'chasing, re-keying, re-review', unit:'HK$', def:2000, step:250, min:0},
-    hrsNow:     {sec:'uc1', label:'Handling time per case today', hint:'agent + back office', unit:'hrs', def:2, step:0.25, min:0},
-    hrsAfter:   {sec:'uc1', label:'Handling time with GovVerify', hint:'one tap, straight-through', unit:'hrs', def:0.1, step:0.05, min:0,
+    reworkCost: {sec:'uc1', label:'Cost per rework case', hint:'chasing, re-keying, re-review', unit:'HK$', def:2000, step:250, min:0, smax:10000, sstep:250},
+    hrsNow:     {sec:'uc1', label:'Handling time per case today', hint:'agent + back office', unit:'hrs', def:2, step:0.25, min:0, smax:6, sstep:0.25},
+    hrsAfter:   {sec:'uc1', label:'Handling time with GovVerify', hint:'one tap, straight-through', unit:'hrs', def:0.1, step:0.05, min:0, smax:2, sstep:0.05,
                  sc:{conservative:0.25, aggressive:0.1}},
-    feeOnboard: {sec:'uc1', label:'Fill Easy fee per onboarding pull', hint:'plug in quoted pricing', unit:'HK$', def:500, step:50, min:0},
+    feeOnboard: {sec:'uc1', label:'Fill Easy fee per onboarding pull', hint:'plug in quoted pricing', unit:'HK$', def:500, step:50, min:0, smax:2000, sstep:50},
 
     /* uc2 */
-    claims:     {sec:'uc2', label:'Claims processed per year', hint:'all lines', unit:'', def:25000, step:1000, min:0},
+    claims:     {sec:'uc2', label:'Claims processed per year', hint:'all lines', unit:'', def:25000, step:1000, min:0, smax:100000, sstep:1000},
     mlShare:    {sec:'uc2', label:'Claims with Mainland hospital bills', unit:'%', def:30, step:5, min:0, max:100},
     coverage:   {sec:'uc2', label:'Hospitals retrievable at source', hint:'incl. all major Grade 3', unit:'%', def:80, step:5, min:0, max:100},
-    avgClaim:   {sec:'uc2', label:'Average claim size', unit:'HK$', def:30000, step:5000, min:0},
-    leakage:    {sec:'uc2', label:'Claims leakage today', hint:'overpaid on unverified paper bills', unit:'%', def:10, step:1, min:0, max:100,
+    avgClaim:   {sec:'uc2', label:'Average claim size', unit:'HK$', def:30000, step:5000, min:0, smax:200000, sstep:5000},
+    leakage:    {sec:'uc2', label:'Claims leakage today', hint:'overpaid on unverified paper bills', unit:'%', def:10, step:1, min:0, max:100, smax:25,
                  sc:{conservative:6, aggressive:12}},
     caught:     {sec:'uc2', label:'Leakage caught at source', hint:'share detected by verification', unit:'%', def:50, step:5, min:0, max:100,
                  sc:{conservative:30, aggressive:70}},
-    procCost:   {sec:'uc2', label:'Manual handling cost per claim', hint:'OCR review + assessor', unit:'HK$', def:200, step:25, min:0},
-    feeClaim:   {sec:'uc2', label:'Fill Easy fee per bill verification', hint:'plug in quoted pricing', unit:'HK$', def:150, step:25, min:0},
+    procCost:   {sec:'uc2', label:'Manual handling cost per claim', hint:'OCR review + assessor', unit:'HK$', def:200, step:25, min:0, smax:1000, sstep:25},
+    feeClaim:   {sec:'uc2', label:'Fill Easy fee per bill verification', hint:'plug in quoted pricing', unit:'HK$', def:150, step:25, min:0, smax:1000, sstep:25},
 
     /* uc3 */
-    recruits:   {sec:'uc3', label:'Agent recruits per year', hint:'agency channel +50% YoY', unit:'', def:800, step:50, min:0},
-    ahrsNow:    {sec:'uc3', label:'Analyst hours per recruit today', hint:'19 checks gathered by hand', unit:'hrs', def:8, step:0.5, min:0},
-    ahrsAfter:  {sec:'uc3', label:'Analyst hours with Fill Easy', hint:'one request, evidence attached', unit:'hrs', def:0.5, step:0.25, min:0},
-    weeksSaved: {sec:'uc3', label:'Weeks of onboarding removed', hint:'from the 6–8-week GL23 chain', unit:'wks', def:5, step:1, min:0,
+    recruits:   {sec:'uc3', label:'Agent recruits per year', hint:'agency channel +50% YoY', unit:'', def:800, step:50, min:0, smax:5000, sstep:50},
+    ahrsNow:    {sec:'uc3', label:'Analyst hours per recruit today', hint:'19 checks gathered by hand', unit:'hrs', def:8, step:0.5, min:0, smax:20, sstep:0.5},
+    ahrsAfter:  {sec:'uc3', label:'Analyst hours with Fill Easy', hint:'one request, evidence attached', unit:'hrs', def:0.5, step:0.25, min:0, smax:4, sstep:0.25},
+    weeksSaved: {sec:'uc3', label:'Weeks of onboarding removed', hint:'from the 6–8-week GL23 chain', unit:'wks', def:5, step:1, min:0, smax:8,
                  sc:{conservative:3, aggressive:7}},
-    agentApeWk: {sec:'uc3', label:'New-agent APE per productive week', hint:'early-tenure run-rate', unit:'HK$', def:8000, step:1000, min:0},
+    agentApeWk: {sec:'uc3', label:'New-agent APE per productive week', hint:'early-tenure run-rate', unit:'HK$', def:8000, step:1000, min:0, smax:50000, sstep:1000},
     activation: {sec:'uc3', label:'Recruits who activate', hint:'write business at all', unit:'%', def:70, step:5, min:0, max:100,
                  sc:{conservative:60, aggressive:80}},
-    feeRecruit: {sec:'uc3', label:'Fill Easy fee per recruit screened', hint:'plug in quoted pricing', unit:'HK$', def:800, step:100, min:0}
+    feeRecruit: {sec:'uc3', label:'Fill Easy fee per recruit screened', hint:'plug in quoted pricing', unit:'HK$', def:800, step:100, min:0, smax:3000, sstep:100}
   };
+  const UC_KEYS = {
+    uc1:['dropoff','recovery','nigoNow','nigoAfter','reworkCost','hrsNow','hrsAfter','feeOnboard','mcvShare','avgFyp'],
+    uc2:['claims','mlShare','coverage','avgClaim','leakage','caught','procCost','feeClaim'],
+    uc3:['recruits','ahrsNow','ahrsAfter','weeksSaved','agentApeWk','activation','feeRecruit']
+  };
+  const UC_NAMES = {uc1:'01 · MCV HNW onboarding', uc2:'02 · Claims verification', uc3:'03 · Agency onboarding'};
 
   /* ---------------- formatting ---------------- */
   const nf0 = new Intl.NumberFormat('en-HK', {maximumFractionDigits:0});
@@ -420,17 +517,27 @@
   }
   function count(v){ return nf0.format(Math.round(v)); }
   function roiX(net, cost){ return cost > 0 ? (net/cost).toFixed(1) + '×' : '—'; }
-  function payback(gross, cost){
-    if (cost <= 0) return '—';
-    if (gross <= 0) return 'n/a';
-    const m = 12 * cost / gross;
+  function paybackMonths(gross, cost){
+    if (cost <= 0 || gross <= 0) return NaN;
+    return 12 * cost / gross;
+  }
+  function fmtPayback(m){
+    if (!isFinite(m)) return '—';
     return m < 1 ? '<1 mo' : m.toFixed(1) + ' mo';
   }
 
-  /* ---------------- input rendering ---------------- */
+  /* ---------------- state ---------------- */
   const state = {};
   for (const k in FIELDS) state[k] = FIELDS[k].def;
+  const include = {uc1:true, uc2:true, uc3:true};
 
+  /* ---------------- input rendering (number + slider pairs) ---------------- */
+  function sliderTrack(el){
+    const min = parseFloat(el.min), max = parseFloat(el.max);
+    const p = max > min ? ((parseFloat(el.value) - min) / (max - min)) * 100 : 0;
+    el.style.setProperty('--track',
+      'linear-gradient(90deg, var(--accent) ' + p + '%, var(--inset) ' + p + '%)');
+  }
   function renderInputs(){
     const bySec = {};
     for (const k in FIELDS) (bySec[FIELDS[k].sec] = bySec[FIELDS[k].sec] || []).push(k);
@@ -438,7 +545,10 @@
       const host = document.getElementById('in-' + sec);
       host.innerHTML = bySec[sec].map(k => {
         const f = FIELDS[k];
-        return '<div class="field"><label for="f-' + k + '">' + f.label +
+        const smin = f.smin != null ? f.smin : (f.min != null ? f.min : 0);
+        const smax = f.smax != null ? f.smax : (f.max != null ? f.max : 100);
+        const sstep = f.sstep != null ? f.sstep : f.step;
+        return '<div class="field"><div class="frow"><label for="f-' + k + '">' + f.label +
           (f.hint ? '<span class="hint">' + f.hint + '</span>' : '') + '</label>' +
           '<div class="inwrap"><input type="number" id="f-' + k + '" data-key="' + k + '"' +
           ' step="' + f.step + '"' +
@@ -446,7 +556,10 @@
           (f.max != null ? ' max="' + f.max + '"' : '') +
           (f.unit ? '' : ' class="no-unit"') + '>' +
           (f.unit ? '<span class="unit">' + f.unit + '</span>' : '') +
-          '</div></div>';
+          '</div></div>' +
+          '<input type="range" id="r-' + k + '" data-key="' + k + '" aria-label="' + f.label + '"' +
+          ' min="' + smin + '" max="' + smax + '" step="' + sstep + '">' +
+          '</div>';
       }).join('');
     }
     document.querySelectorAll('input[data-key]').forEach(el => {
@@ -457,16 +570,20 @@
         if (f.min != null) v = Math.max(f.min, v);
         if (f.max != null) v = Math.min(f.max, v);
         state[k] = v;
+        // sync the twin control
+        const num = document.getElementById('f-' + k), rng = document.getElementById('r-' + k);
+        if (el === rng) num.value = v; else rng.value = v;
+        sliderTrack(rng);
         clearScenarioIfCustom();
         recalc();
       });
     });
   }
-
   function pushStateToInputs(){
     for (const k in FIELDS){
-      const el = document.getElementById('f-' + k);
-      if (el) el.value = state[k];
+      const num = document.getElementById('f-' + k), rng = document.getElementById('r-' + k);
+      if (num) num.value = state[k];
+      if (rng){ rng.value = state[k]; sliderTrack(rng); }
     }
   }
 
@@ -487,7 +604,6 @@
       b.classList.toggle('on', b.dataset.sc === sc));
   }
   function clearScenarioIfCustom(){
-    // any manual edit = custom; unhighlight the segmented control
     activeScenario = null;
     markScenario('');
   }
@@ -495,11 +611,19 @@
     b.addEventListener('click', () => applyScenario(b.dataset.sc)));
   document.getElementById('btnReset').addEventListener('click', () => applyScenario('base'));
 
-  /* ---------------- model ---------------- */
-  function compute(){
-    const s = state, pct = v => v/100;
+  /* ---------------- include toggles ---------------- */
+  document.querySelectorAll('.switch input[data-uc]').forEach(el => {
+    el.addEventListener('change', () => {
+      include[el.dataset.uc] = el.checked;
+      document.getElementById('card-' + el.dataset.uc).classList.toggle('excluded', !el.checked);
+      recalc();
+    });
+  });
 
-    /* anchor */
+  /* ---------------- model ---------------- */
+  function compute(s){
+    const pct = v => v/100;
+
     const appsTotal = s.ape * 1e9 / s.avgFyp;
     const mcvApps   = appsTotal * pct(s.mcvShare);
 
@@ -532,29 +656,189 @@
       appsTotal, mcvApps,
       uc1:{casesSaved, premRetained, premValue, reworkSaved, labourSaved1, gross:gross1, cost:cost1, net:gross1-cost1},
       uc2:{mlClaims, verClaims, leakSaved, procSaved, gross:gross2, cost:cost2, net:gross2-cost2},
-      uc3:{analystSaved, earlyApe, earlyValue, gross:gross3, cost:cost3, net:gross3-cost3},
-      all:{gross:gross1+gross2+gross3, cost:cost1+cost2+cost3, net:(gross1-cost1)+(gross2-cost2)+(gross3-cost3)}
+      uc3:{analystSaved, earlyApe, earlyValue, gross:gross3, cost:cost3, net:gross3-cost3}
     };
   }
+  function combined(m){
+    let gross = 0, cost = 0;
+    for (const uc of ['uc1','uc2','uc3']){
+      if (include[uc]){ gross += m[uc].gross; cost += m[uc].cost; }
+    }
+    return {gross, cost, net: gross - cost};
+  }
 
-  /* ---------------- render results ---------------- */
+  /* ---------------- tweened value display ---------------- */
+  const tweens = new Map();
+  function setVal(el, target, fmt){
+    if (!isFinite(target)){ tweens.delete(el); el.textContent = fmt(target); el.dataset.v = ''; return; }
+    const from = parseFloat(el.dataset.v);
+    el.dataset.v = target;
+    if (!isFinite(from) || from === target){ el.textContent = fmt(target); return; }
+    const start = performance.now(), dur = 260;
+    tweens.set(el, start);
+    (function frame(now){
+      if (tweens.get(el) !== start) return;      // superseded by a newer tween
+      const t = Math.min(1, (now - start) / dur);
+      const e = 1 - Math.pow(1 - t, 3);          // ease-out cubic
+      el.textContent = fmt(from + (target - from) * e);
+      if (t < 1) requestAnimationFrame(frame); else tweens.delete(el);
+    })(start);
+  }
+  function setText(el, s){ tweens.delete(el); el.dataset.v = ''; el.textContent = s; }
+
+  /* ---------------- result tiles (stable DOM, tweened values) ---------------- */
+  const TILE_DEFS = [
+    {key:'gross', k:'Gross benefit / yr'},
+    {key:'cost',  k:'Fill Easy fees / yr'},
+    {key:'net',   k:'Net annual value', hero:true},
+    {key:'roi',   k:'ROI multiple'},
+    {key:'pb',    k:'Payback'}
+  ];
+  function ensureTiles(hostId){
+    const host = document.getElementById(hostId);
+    if (!host.childElementCount){
+      host.innerHTML = TILE_DEFS.map(t =>
+        '<div class="tile' + (t.hero ? ' hero' : '') + '"><div class="k">' + t.k +
+        '</div><div class="v" data-slot="' + t.key + '">—</div></div>').join('');
+    }
+    return host;
+  }
+  function tiles(hostId, m){
+    const host = ensureTiles(hostId);
+    const slot = k => host.querySelector('[data-slot="' + k + '"]');
+    setVal(slot('gross'), m.gross, money);
+    setVal(slot('cost'),  m.cost,  money);
+    setVal(slot('net'),   m.net,   money);
+    if (m.cost > 0) setVal(slot('roi'), m.net / m.cost, v => v.toFixed(1) + '×');
+    else setText(slot('roi'), '—');
+    const pb = paybackMonths(m.gross, m.cost);
+    if (isFinite(pb)) setVal(slot('pb'), pb, fmtPayback); else setText(slot('pb'), '—');
+  }
+
+  /* ---------------- derivation rows ---------------- */
   function drows(host, rows){
     document.getElementById(host).innerHTML = rows.map(r =>
       '<div class="drow' + (r.total ? ' total' : '') + '"><div class="dl">' + r.l +
       (r.f ? '<span class="df">' + r.f + '</span>' : '') +
       '</div><div class="dv">' + r.v + '</div></div>').join('');
   }
-  function tiles(host, m){
-    document.getElementById(host).innerHTML =
-      '<div class="tile"><div class="k">Gross benefit / yr</div><div class="v">' + money(m.gross) + '</div></div>' +
-      '<div class="tile"><div class="k">Fill Easy fees / yr</div><div class="v">' + money(m.cost) + '</div></div>' +
-      '<div class="tile hero"><div class="k">Net annual value</div><div class="v">' + money(m.net) + '</div></div>' +
-      '<div class="tile"><div class="k">ROI multiple</div><div class="v">' + roiX(m.net, m.cost) + '</div></div>' +
-      '<div class="tile"><div class="k">Payback</div><div class="v">' + payback(m.gross, m.cost) + '</div></div>';
+
+  /* ---------------- sensitivity ---------------- */
+  function sensitivity(uc){
+    const base = compute(state)[uc].net;
+    const results = [];
+    for (const k of UC_KEYS[uc]){
+      const f = FIELDS[k];
+      let lo = state[k] * 0.8, hi = state[k] * 1.2;
+      if (f.min != null){ lo = Math.max(f.min, lo); hi = Math.max(f.min, hi); }
+      if (f.max != null){ lo = Math.min(f.max, lo); hi = Math.min(f.max, hi); }
+      const sLo = Object.assign({}, state, {[k]: lo});
+      const sHi = Object.assign({}, state, {[k]: hi});
+      const nLo = compute(sLo)[uc].net, nHi = compute(sHi)[uc].net;
+      const swing = Math.abs(nHi - nLo);
+      if (swing > 0) results.push({k, label: f.label, lo: Math.min(nLo,nHi) - base, hi: Math.max(nLo,nHi) - base, swing});
+    }
+    results.sort((a,b) => b.swing - a.swing);
+    return results.slice(0, 3);
+  }
+  function renderSens(uc){
+    const rows = sensitivity(uc);
+    const maxSwing = Math.max(1, ...rows.map(r => r.swing));
+    document.getElementById('sens-' + uc).innerHTML =
+      '<div class="in-h">Sensitivity — what moves this number</div>' +
+      rows.map(r =>
+        '<div class="srow"><div class="sl">' + r.label + '</div>' +
+        '<div class="strack"><div class="sfill" style="width:' + (r.swing/maxSwing*100).toFixed(1) + '%"></div></div>' +
+        '<div class="sv">' + money(r.lo) + ' … +' + money(r.hi).replace('−','') + '</div></div>').join('') +
+      '<p class="dnote">Net-value swing when each driver moves ±20% from its current setting, everything else held constant.</p>';
   }
 
+  /* ---------------- combined chart (stable DOM + tooltip) ---------------- */
+  const tip = document.getElementById('tip');
+  let lastModel = null;
+  function ensureChart(){
+    const host = document.getElementById('chart');
+    if (host.childElementCount) return host;
+    host.innerHTML = ['uc1','uc2','uc3'].map(uc =>
+      '<div class="crow" data-uc="' + uc + '"><div class="cl">' + UC_NAMES[uc] + '</div>' +
+      '<div class="track"><div class="fill"></div></div>' +
+      '<div class="cv" data-slot="v">—</div></div>').join('');
+    host.querySelectorAll('.crow').forEach(row => {
+      row.addEventListener('mousemove', e => {
+        if (!lastModel) return;
+        const uc = row.dataset.uc, m = lastModel[uc];
+        tip.innerHTML = '<div class="tt">' + UC_NAMES[uc] + (include[uc] ? '' : ' (excluded)') + '</div>' +
+          'Gross benefit: <b>' + money(m.gross) + '</b><br>' +
+          'Fill Easy fees: <b>' + money(m.cost) + '</b><br>' +
+          'Net value: <b>' + money(m.net) + '</b> · ROI ' + roiX(m.net, m.cost);
+        tip.style.display = 'block';
+        const pad = 14, w = tip.offsetWidth, h = tip.offsetHeight;
+        let x = e.clientX + pad, y = e.clientY + pad;
+        if (x + w > innerWidth - 8)  x = e.clientX - w - pad;
+        if (y + h > innerHeight - 8) y = e.clientY - h - pad;
+        tip.style.left = x + 'px'; tip.style.top = y + 'px';
+      });
+      row.addEventListener('mouseleave', () => { tip.style.display = 'none'; });
+    });
+    return host;
+  }
+  function renderChart(m){
+    const host = ensureChart();
+    const max = Math.max(1, m.uc1.net, m.uc2.net, m.uc3.net);
+    host.querySelectorAll('.crow').forEach(row => {
+      const uc = row.dataset.uc;
+      row.classList.toggle('off', !include[uc]);
+      row.querySelector('.fill').style.width = Math.max(0, m[uc].net / max * 100).toFixed(1) + '%';
+      setVal(row.querySelector('[data-slot="v"]'), m[uc].net, money);
+    });
+  }
+
+  /* ---------------- copy summary / print ---------------- */
+  function summaryText(m, all){
+    const s = state;
+    const L = [];
+    L.push('Fill Easy × GovVerify — Corporate ROI model (illustrative)');
+    L.push('Preset: Sun Life Hong Kong · FY2025 new business APE HK$' + s.ape + 'B');
+    L.push('Book: ' + count(m.appsTotal) + ' applications/yr · ' + s.mcvShare + '% MCV · avg FYP ' + money(s.avgFyp) + ' · value margin ' + s.vnbMargin + '%');
+    L.push('');
+    for (const uc of ['uc1','uc2','uc3']){
+      const x = m[uc];
+      L.push(UC_NAMES[uc] + (include[uc] ? '' : ' — EXCLUDED'));
+      L.push('  Gross ' + money(x.gross) + ' · Fees ' + money(x.cost) + ' · Net ' + money(x.net) +
+             ' · ROI ' + roiX(x.net, x.cost) + ' · Payback ' + fmtPayback(paybackMonths(x.gross, x.cost)));
+    }
+    L.push('');
+    L.push('COMBINED: Gross ' + money(all.gross) + ' · Fees ' + money(all.cost) + ' · Net ' + money(all.net) +
+           ' · ROI ' + roiX(all.net, all.cost) + ' · Payback ' + fmtPayback(paybackMonths(all.gross, all.cost)));
+    L.push('');
+    L.push('All figures illustrative — calibrate to your book. fill-easy.com');
+    return L.join('\n');
+  }
+  const btnCopy = document.getElementById('btnCopy');
+  btnCopy.addEventListener('click', () => {
+    const m = compute(state);
+    const text = summaryText(m, combined(m));
+    const done = ok => {
+      btnCopy.textContent = ok ? '✓ Copied' : '✗ Copy failed';
+      btnCopy.classList.toggle('ok', ok);
+      setTimeout(() => { btnCopy.textContent = '⧉ Copy summary'; btnCopy.classList.remove('ok'); }, 1600);
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(text).then(() => done(true), () => done(false));
+    } else {
+      const ta = document.createElement('textarea');
+      ta.value = text; document.body.appendChild(ta); ta.select();
+      let ok = false; try { ok = document.execCommand('copy'); } catch(e){}
+      ta.remove(); done(ok);
+    }
+  });
+  document.getElementById('btnPrint').addEventListener('click', () => window.print());
+
+  /* ---------------- master recalc ---------------- */
   function recalc(){
-    const s = state, m = compute();
+    const s = state, m = compute(s);
+    lastModel = m;
+    const all = combined(m);
 
     drows('d-anchor', [
       {l:'Applications written per year', f:'APE ' + money(s.ape*1e9) + ' ÷ avg FYP ' + money(s.avgFyp), v:count(m.appsTotal)},
@@ -572,6 +856,7 @@
       {l:'Gross annual benefit', v:money(m.uc1.gross), total:true}
     ]);
     tiles('t-uc1', m.uc1);
+    renderSens('uc1');
 
     drows('d-uc2', [
       {l:'Claims with Mainland hospital bills', f:count(s.claims) + ' claims × ' + s.mlShare + '%', v:count(m.uc2.mlClaims)},
@@ -581,6 +866,7 @@
       {l:'Gross annual benefit', v:money(m.uc2.gross), total:true}
     ]);
     tiles('t-uc2', m.uc2);
+    renderSens('uc2');
 
     drows('d-uc3', [
       {l:'Recruits screened per year', v:count(s.recruits)},
@@ -591,26 +877,19 @@
       {l:'Gross annual benefit', v:money(m.uc3.gross), total:true}
     ]);
     tiles('t-uc3', m.uc3);
+    renderSens('uc3');
 
-    /* combined bar chart + tiles */
-    const rows = [
-      {l:'01 · MCV HNW onboarding', v:m.uc1.net},
-      {l:'02 · Claims verification', v:m.uc2.net},
-      {l:'03 · Agency onboarding', v:m.uc3.net}
-    ];
-    const max = Math.max(1, ...rows.map(r => r.v));
-    document.getElementById('chart').innerHTML = rows.map(r =>
-      '<div class="crow"><div class="cl">' + r.l + '</div>' +
-      '<div class="track"><div class="fill" style="width:' + Math.max(0, r.v/max*100).toFixed(1) + '%"></div></div>' +
-      '<div class="cv">' + money(r.v) + '</div></div>').join('');
-    tiles('t-all', m.all);
+    renderChart(m);
+    tiles('t-all', all);
 
-    /* sticky strip */
-    document.getElementById('s-gross').textContent = money(m.all.gross);
-    document.getElementById('s-cost').textContent  = money(m.all.cost);
-    document.getElementById('s-net').textContent   = money(m.all.net);
-    document.getElementById('s-roi').textContent   = roiX(m.all.net, m.all.cost);
-    document.getElementById('s-payback').textContent = payback(m.all.gross, m.all.cost);
+    setVal(document.getElementById('s-gross'), all.gross, money);
+    setVal(document.getElementById('s-cost'),  all.cost,  money);
+    setVal(document.getElementById('s-net'),   all.net,   money);
+    if (all.cost > 0) setVal(document.getElementById('s-roi'), all.net/all.cost, v => v.toFixed(1) + '×');
+    else setText(document.getElementById('s-roi'), '—');
+    const pb = paybackMonths(all.gross, all.cost);
+    if (isFinite(pb)) setVal(document.getElementById('s-payback'), pb, fmtPayback);
+    else setText(document.getElementById('s-payback'), '—');
   }
 
   renderInputs();
