@@ -233,6 +233,9 @@
   .src{font-size:13px;color:var(--ink-2)}
   .src ol{margin:10px 0 0 18px}
   .src li{margin-bottom:8px}
+  sup.ref{font-size:10px;line-height:0;vertical-align:super}
+  sup.ref a{color:var(--muted);text-decoration:none;font-weight:600}
+  sup.ref a:hover{color:var(--accent-deep)}
   footer{padding:36px 0 56px;color:var(--muted);font-size:12.5px;border-top:1px solid var(--line);margin-top:44px}
   footer .fr{display:flex;gap:16px;flex-wrap:wrap;align-items:center}
   footer .fr b{color:var(--ink-2);font-weight:600}
@@ -255,15 +258,17 @@
   <div class="brandrow">
     <div class="logo">fi</div>
     <div class="brandname">Fill Easy <span>× GovVerify · Corporate ROI model</span></div>
-    <div class="badge">Preset · <b>Sun Life Hong Kong</b>&nbsp;· FY2025 new business APE HK$11.8B</div>
+    <div class="badge">Base case · <b>Sun Life Hong Kong</b>&nbsp;· FY2025 new business APE HK$11.8B<sup class="ref"><a href="#sources">1</a></sup></div>
   </div>
-  <h1>What the golden source is worth, <em>on your book</em>.</h1>
+  <h1>Verified data at source: an estimated <em><span id="h1-net">HK$279M</span></em> of annual value at stake.</h1>
   <p class="lede">
-    An interactive model of the annual value of GovVerify across Fill Easy's three corporate product lines —
-    <b>MCV&nbsp;HNW onboarding</b>, <b>claims verification</b> and <b>agency onboarding</b>.
-    Every number below is editable — type it or drag it. The model starts from Sun Life Hong Kong's record
-    <b>HK$11.8&nbsp;billion</b> full-year 2025 new business APE and industry benchmarks from the Fill&nbsp;Easy
-    solution brief, and recalculates as you move. All figures are illustrative — plug in your own.
+    This model sizes the value creation potential of deploying GovVerify across three corporate use cases —
+    <b>high-net-worth MCV onboarding</b>, <b>medical claims verification</b> and <b>agency recruitment due
+    diligence</b>. The base case is calibrated to Sun Life Hong Kong's published FY2025 new business
+    performance<sup class="ref"><a href="#sources">1</a></sup> and to operational benchmarks drawn from the
+    Fill&nbsp;Easy solution brief<sup class="ref"><a href="#sources">2</a></sup>. Every assumption is adjustable —
+    type or drag — and all estimates recalculate in real time. Figures are directional, intended to frame a pilot
+    business case rather than substitute for an actuarial valuation.
   </p>
   <div class="toolbar">
     <span class="lbl">Scenario</span>
@@ -278,35 +283,38 @@
 
 <div class="sticky">
   <div class="sticky-in">
-    <div class="mini"><div class="k">Gross annual benefit</div><div class="v" id="s-gross">—</div></div>
-    <div class="mini"><div class="k">Fill Easy fees / yr</div><div class="v" id="s-cost">—</div></div>
+    <div class="mini"><div class="k">Gross value pool</div><div class="v" id="s-gross">—</div></div>
+    <div class="mini"><div class="k">Program cost / yr</div><div class="v" id="s-cost">—</div></div>
     <div class="mini"><div class="k">Net annual value</div><div class="v hero" id="s-net">—</div></div>
-    <div class="mini"><div class="k">Blended ROI</div><div class="v" id="s-roi">—</div></div>
-    <div class="mini"><div class="k">Payback</div><div class="v" id="s-payback">—</div></div>
+    <div class="mini"><div class="k">Return multiple</div><div class="v" id="s-roi">—</div></div>
+    <div class="mini"><div class="k">Payback period</div><div class="v" id="s-payback">—</div></div>
   </div>
 </div>
 
 <!-- ══════════════ ANCHOR ══════════════ -->
 <section class="wrap" id="anchor">
-  <span class="eyebrow">00 · Anchor assumptions</span>
-  <h2>The book the model runs on.</h2>
+  <span class="eyebrow">Exhibit 1 · Model foundation</span>
+  <h2>The model is anchored on published FY2025 new business volumes.</h2>
   <p class="sub">
-    Shared inputs every use case derives from. The APE anchor is Sun Life Hong Kong's published full-year 2025
-    result — a record HK$11.8B in new business APE, up 46% year on year, with the broker channel up 144%
-    (No.&nbsp;1 in market), bancassurance up 53% and agency up 50%.
+    Five shared parameters drive all three use cases. The anchor is Sun Life Hong Kong's record FY2025 new
+    business APE of HK$11.8 billion, up 46 percent year on year — with broker up 144 percent (ranked No.&nbsp;1
+    in market), bancassurance up 53 percent and agency up 50 percent, against industry growth of 12
+    percent<sup class="ref"><a href="#sources">1</a></sup>. Average case size and the MCV share of new business
+    translate the APE anchor into addressable application volumes.
   </p>
   <div class="card">
     <div class="grid2">
       <div>
-        <div class="in-h">Inputs — the book</div>
+        <div class="in-h">Model parameters</div>
         <div id="in-anchor"></div>
       </div>
       <div>
-        <div class="in-h">Derived — each line follows from the line above</div>
+        <div class="in-h">Derived volumes — each line follows from the line above</div>
         <div class="deriv" id="d-anchor"></div>
-        <p class="dnote">APE ÷ average first-year premium approximates policies written per year; the MCV share
-        scopes use case 01. Value margin converts retained premium into economic value, so premium-side and
-        cost-side benefits can be added without double counting.</p>
+        <p class="dnote">APE divided by average first-year premium approximates policies written per year; the MCV
+        share defines the addressable volume for use case 1. The value margin converts retained premium into
+        economic value on a VNB-style basis<sup class="ref"><a href="#sources">5</a></sup>, allowing premium-side
+        and cost-side benefits to be aggregated without double counting.</p>
       </div>
     </div>
   </div>
@@ -314,12 +322,16 @@
 
 <!-- ══════════════ UC1 ══════════════ -->
 <section class="wrap" id="uc1">
-  <span class="eyebrow">01 · Product line</span>
-  <h2>MCV HNW onboarding</h2>
+  <span class="eyebrow">Use case 1 · MCV HNW onboarding</span>
+  <h2>Same-session issuance converts underwriting drop-off into retained premium.</h2>
   <p class="sub">
-    Identity, income and medical capacity verified at source before the client leaves the table — one eID tap and one
-    signed consent replace KYC, FNA, medical and AML self-declaration. Per the brief: end-to-end falls from
-    ~2&nbsp;hours plus 6&nbsp;weeks to ~5&nbsp;minutes; NIGO from ~50% to ~10%.
+    Today, onboarding a Mainland Chinese visitor runs four regulated checks — KYC, financial needs analysis,
+    medical underwriting and AML screening — on self-declaration and manual document chasing, extending the chain
+    to as long as six weeks against an average visitor stay of ~3&nbsp;days<sup class="ref"><a href="#sources">2</a></sup>.
+    Source verification via a single consented eID pull compresses this to a single session. The value pool has
+    three components: first-year premium retained from applications that would otherwise lapse in underwriting;
+    rework eliminated as not-in-good-order (NIGO) rates fall from ~50 to ~10 percent; and handling time released
+    across agency and operations<sup class="ref"><a href="#sources">2</a></sup>.
   </p>
   <div class="card" id="card-uc1">
     <div class="card-top">
@@ -327,11 +339,11 @@
     </div>
     <div class="grid2">
       <div>
-        <div class="in-h">Assumptions</div>
+        <div class="in-h">Model assumptions</div>
         <div id="in-uc1"></div>
       </div>
       <div>
-        <div class="in-h">Derivation</div>
+        <div class="in-h">Value build-up</div>
         <div class="deriv" id="d-uc1"></div>
       </div>
     </div>
@@ -342,12 +354,16 @@
 
 <!-- ══════════════ UC2 ══════════════ -->
 <section class="wrap" id="uc2">
-  <span class="eyebrow">02 · Product line</span>
-  <h2>Claims — bill verification at source</h2>
+  <span class="eyebrow">Use case 2 · Claims verification</span>
+  <h2>Verification at source addresses claims leakage and assessment cost in parallel.</h2>
   <p class="sub">
-    Itemised hospital invoices retrieved directly from ~80% of Mainland facilities (all major Grade&nbsp;3 hospitals)
-    and delivered to Hong Kong already authenticated — replacing photo-and-OCR with government-verified invoice
-    records, and catching the ~10% claims leakage at the source that issued the bill.
+    Mainland medical claims are currently adjudicated from photographs of stamped paper invoices, read by OCR and
+    re-checked by assessors, with authenticity never confirmed at source; industry experience suggests leakage of
+    approximately 10 percent on this basis<sup class="ref"><a href="#sources">3</a></sup>. Retrieving the itemised
+    invoice record directly from the issuing hospital — coverage of ~80 percent of Mainland facilities, including
+    all major Grade&nbsp;3 hospitals<sup class="ref"><a href="#sources">3</a></sup> — delivers an authenticated
+    record into the claims workflow. The value pool combines recovered leakage with the elimination of manual
+    handling on straight-through claims.
   </p>
   <div class="card" id="card-uc2">
     <div class="card-top">
@@ -355,11 +371,11 @@
     </div>
     <div class="grid2">
       <div>
-        <div class="in-h">Assumptions</div>
+        <div class="in-h">Model assumptions</div>
         <div id="in-uc2"></div>
       </div>
       <div>
-        <div class="in-h">Derivation</div>
+        <div class="in-h">Value build-up</div>
         <div class="deriv" id="d-uc2"></div>
       </div>
     </div>
@@ -370,12 +386,15 @@
 
 <!-- ══════════════ UC3 ══════════════ -->
 <section class="wrap" id="uc3">
-  <span class="eyebrow">03 · Product line</span>
-  <h2>Agency onboarding</h2>
+  <span class="eyebrow">Use case 3 · Agency recruitment due diligence</span>
+  <h2>Automated screening accelerates recruit time-to-production.</h2>
   <p class="sub">
-    Nineteen due-diligence checks per recruit — IA register, MPFA/SFC/HKMA, credit, bankruptcy, litigation,
-    PEP/sanctions and Mainland primary sources — run as one request with an evidence artefact per query,
-    collapsing 6–8 weeks of hand-gathered GL23 evidence into a 15-minute turnaround.
+    GL23 "fit and proper" evidence — nineteen checks per recruit across the IA register, MPFA, SFC, HKMA, credit,
+    bankruptcy, litigation, PEP/sanctions and Mainland primary sources — is assembled by hand today, extending
+    agency onboarding to six to eight weeks<sup class="ref"><a href="#sources">4</a></sup>. Running the same
+    checks as a single request with an evidence artefact per query reduces turnaround to minutes. The value pool
+    combines released analyst capacity with the earlier production of new agents — a lever of particular relevance
+    to a channel growing at 50 percent year on year<sup class="ref"><a href="#sources">1</a></sup>.
   </p>
   <div class="card" id="card-uc3">
     <div class="card-top">
@@ -383,11 +402,11 @@
     </div>
     <div class="grid2">
       <div>
-        <div class="in-h">Assumptions</div>
+        <div class="in-h">Model assumptions</div>
         <div id="in-uc3"></div>
       </div>
       <div>
-        <div class="in-h">Derivation</div>
+        <div class="in-h">Value build-up</div>
         <div class="deriv" id="d-uc3"></div>
       </div>
     </div>
@@ -398,12 +417,17 @@
 
 <!-- ══════════════ COMBINED ══════════════ -->
 <section class="wrap" id="combined">
-  <span class="eyebrow">04 · Combined</span>
-  <h2>The whole platform, one consented pull.</h2>
-  <p class="sub">One golden source serving three places it pays. Net annual value by product line — hover a bar for the breakdown:</p>
+  <span class="eyebrow">Exhibit 2 · Aggregate impact</span>
+  <h2>The three value pools are additive on a single consent rail.</h2>
+  <p class="sub">
+    Because all three use cases draw on the same consented data infrastructure, they can be captured sequentially
+    from a single integration, with onboarding typically the lead use case by value. Net annual value by use case —
+    hover a bar for the underlying build:
+  </p>
   <div class="card">
     <div class="chart" id="chart"></div>
-    <p class="caption">Net annual value = gross benefit − Fill Easy fees, per product line, on the assumptions above. Excluded lines are shown muted and left out of the totals.</p>
+    <p class="caption">Net annual value = gross value pool less program cost, per use case, on the assumptions above.
+    Excluded use cases are shown muted and omitted from totals. Source: model output; illustrative assumptions per Exhibit 1 and use cases 1–3.</p>
     <div class="tiles" id="t-all"></div>
     <div class="toolbar" style="margin:22px 0 0">
       <button class="btn" id="btnCopy">⧉ Copy summary</button>
@@ -415,24 +439,36 @@
 <!-- ══════════════ SOURCES ══════════════ -->
 <section class="wrap" id="sources">
   <span class="eyebrow">Appendix</span>
-  <h2>Sources &amp; method</h2>
+  <h2>Methodology, notes and references</h2>
   <div class="card src">
-    <p><b style="color:var(--ink)">Method.</b> Each product line computes a gross annual benefit from the assumptions shown,
-    subtracts Fill Easy verification fees at the plug-in unit prices, and reports net value, ROI multiple
-    (net&nbsp;÷&nbsp;fees) and payback (months of benefit needed to cover a year of fees). Premium-side benefits are
-    taken at the value-margin haircut, not at face premium. Sensitivity bars show how far each line's net value swings
-    when a single driver moves ±20% from its current setting, holding everything else constant.</p>
+    <p><b style="color:var(--ink)">Methodology.</b> The model follows a driver-based approach. For each use case, a
+    gross annual value pool is built from the stated assumptions, program cost is applied at the plug-in unit
+    prices, and three economics are reported: net annual value (gross less cost), return multiple (net value per
+    dollar of program cost) and payback period (months of gross value required to cover one year of program cost).
+    Premium-side benefits are recognised at the value margin rather than at face premium, consistent with a
+    value-of-new-business treatment. Sensitivity exhibits show the swing in each use case's net value when a
+    single driver moves ±20 percent from its current setting, all else held constant. Base, conservative and
+    aggressive scenarios flex the principal benefit-side drivers only; volumes and unit prices are held at their
+    stated values.</p>
     <ol>
-      <li><b>HK$11.8B new business APE, +46% YoY; broker +144% (No. 1 in market), bancassurance +53%, agency +50%, industry +12%</b> —
-        Sun Life Hong Kong press release, <a href="https://www.sunlife.com.hk/en/about-us/newsroom/news-releases/2026/sun-life-hong-kong-achieves-record-breaking-hk-11-8-billion/" target="_blank" rel="noopener">“Sun Life Hong Kong Achieves Record-Breaking HK$11.8 Billion in Full-Year New Business APE in 2025”</a> (April 2026).</li>
-      <li><b>Onboarding benchmarks</b> — Fill Easy solution brief: ~50% NIGO falling to ~10%; ~12% of applications lost to slow
-        underwriting with ~60% recoverable same-session; ~2 hrs agent + back-office effort per case falling to ~5 minutes;
-        HK$2,000 per rework case (illustrative).</li>
-      <li><b>Claims benchmarks</b> — Fill Easy solution brief: ~10% leakage on paper bills re-checked by hand; source retrieval across
-        ~80% of Mainland hospitals incl. all major Grade 3; OCR + assessor review eliminated on straight-through claims.</li>
-      <li><b>Agency benchmarks</b> — Fill Easy solution brief: 19 checks per recruit; 6–8 weeks of GL23 “fit and proper” evidence
-        gathered by hand today; 15-minute turnaround via one request.</li>
-      <li><b>Unit prices</b> — per-verification fees are commercial placeholders. Replace with quoted pricing for a live proposal.</li>
+      <li><b>Sun Life Hong Kong FY2025 new business performance</b> — new business APE of HK$11.8 billion, up 46 percent
+        year on year; broker channel up 144 percent (ranked No. 1 in market), bancassurance up 53 percent, agency up
+        50 percent, against industry growth of 12 percent.
+        <a href="https://www.sunlife.com.hk/en/about-us/newsroom/news-releases/2026/sun-life-hong-kong-achieves-record-breaking-hk-11-8-billion/" target="_blank" rel="noopener">“Sun Life Hong Kong Achieves Record-Breaking HK$11.8 Billion in Full-Year New Business APE in 2025,”</a>
+        Sun Life Hong Kong press release, April 2026.</li>
+      <li><b>Onboarding benchmarks</b> — Fill Easy solution brief (2026): NIGO rates of ~50 percent falling to ~10 percent
+        post-deployment; ~12 percent of applications lost to protracted underwriting, of which ~60 percent recoverable
+        through same-session issuance; per-case handling effort of ~2 hours falling to ~5 minutes; HK$2,000 per rework
+        case (illustrative); average Mainland visitor stay of 3.1 days against a multi-week onboarding chain.</li>
+      <li><b>Claims benchmarks</b> — Fill Easy solution brief (2026): leakage of ~10 percent on manually re-checked paper
+        bills; source retrieval across ~80 percent of Mainland hospitals, including all major Grade 3 facilities;
+        elimination of OCR and assessor review on straight-through claims.</li>
+      <li><b>Agency recruitment benchmarks</b> — Fill Easy solution brief (2026): nineteen due-diligence checks per
+        recruit; six to eight weeks of GL23 “fit and proper” evidence gathered manually today; turnaround of
+        approximately 15 minutes when run as a single request.</li>
+      <li><b>Value margin</b> — applied as a VNB-style conversion of first-year premium into economic value; the 55
+        percent base setting is illustrative and should be calibrated to the insurer's reported new business margin.
+        Per-verification unit prices are commercial placeholders, to be replaced with quoted pricing in a live proposal.</li>
     </ol>
   </div>
 </section>
@@ -441,7 +477,7 @@
   <div class="wrap fr">
     <b>Fill Easy 填易 · GovVerify</b>
     <span>Capture once. Trust everywhere.</span>
-    <span>Illustrative model — calibrate to your book · fill-easy.com</span>
+    <span>Directional estimates for discussion purposes — to be calibrated to the insurer's book · fill-easy.com</span>
   </div>
 </footer>
 
@@ -503,7 +539,7 @@
     uc2:['claims','mlShare','coverage','avgClaim','leakage','caught','procCost','feeClaim'],
     uc3:['recruits','ahrsNow','ahrsAfter','weeksSaved','agentApeWk','activation','feeRecruit']
   };
-  const UC_NAMES = {uc1:'01 · MCV HNW onboarding', uc2:'02 · Claims verification', uc3:'03 · Agency onboarding'};
+  const UC_NAMES = {uc1:'Use case 1 · MCV HNW onboarding', uc2:'Use case 2 · Claims verification', uc3:'Use case 3 · Agency due diligence'};
 
   /* ---------------- formatting ---------------- */
   const nf0 = new Intl.NumberFormat('en-HK', {maximumFractionDigits:0});
@@ -688,11 +724,11 @@
 
   /* ---------------- result tiles (stable DOM, tweened values) ---------------- */
   const TILE_DEFS = [
-    {key:'gross', k:'Gross benefit / yr'},
-    {key:'cost',  k:'Fill Easy fees / yr'},
+    {key:'gross', k:'Gross value pool'},
+    {key:'cost',  k:'Program cost / yr'},
     {key:'net',   k:'Net annual value', hero:true},
-    {key:'roi',   k:'ROI multiple'},
-    {key:'pb',    k:'Payback'}
+    {key:'roi',   k:'Return multiple'},
+    {key:'pb',    k:'Payback period'}
   ];
   function ensureTiles(hostId){
     const host = document.getElementById(hostId);
@@ -745,12 +781,12 @@
     const rows = sensitivity(uc);
     const maxSwing = Math.max(1, ...rows.map(r => r.swing));
     document.getElementById('sens-' + uc).innerHTML =
-      '<div class="in-h">Sensitivity — what moves this number</div>' +
+      '<div class="in-h">Sensitivity of net value to key drivers (±20%)</div>' +
       rows.map(r =>
         '<div class="srow"><div class="sl">' + r.label + '</div>' +
         '<div class="strack"><div class="sfill" style="width:' + (r.swing/maxSwing*100).toFixed(1) + '%"></div></div>' +
         '<div class="sv">' + money(r.lo) + ' … +' + money(r.hi).replace('−','') + '</div></div>').join('') +
-      '<p class="dnote">Net-value swing when each driver moves ±20% from its current setting, everything else held constant.</p>';
+      '<p class="dnote">Swing in this use case\'s net annual value when each driver moves ±20 percent from its current setting, all else held constant. The three most material drivers are shown.</p>';
   }
 
   /* ---------------- combined chart (stable DOM + tooltip) ---------------- */
@@ -797,21 +833,21 @@
   function summaryText(m, all){
     const s = state;
     const L = [];
-    L.push('Fill Easy × GovVerify — Corporate ROI model (illustrative)');
-    L.push('Preset: Sun Life Hong Kong · FY2025 new business APE HK$' + s.ape + 'B');
-    L.push('Book: ' + count(m.appsTotal) + ' applications/yr · ' + s.mcvShare + '% MCV · avg FYP ' + money(s.avgFyp) + ' · value margin ' + s.vnbMargin + '%');
+    L.push('Fill Easy × GovVerify — Corporate ROI model (directional estimates)');
+    L.push('Base case: Sun Life Hong Kong · FY2025 new business APE HK$' + s.ape + 'B (press release, Apr 2026)');
+    L.push('Book: ' + count(m.appsTotal) + ' applications p.a. · ' + s.mcvShare + '% MCV share · avg first-year premium ' + money(s.avgFyp) + ' · value margin ' + s.vnbMargin + '%');
     L.push('');
     for (const uc of ['uc1','uc2','uc3']){
       const x = m[uc];
-      L.push(UC_NAMES[uc] + (include[uc] ? '' : ' — EXCLUDED'));
-      L.push('  Gross ' + money(x.gross) + ' · Fees ' + money(x.cost) + ' · Net ' + money(x.net) +
-             ' · ROI ' + roiX(x.net, x.cost) + ' · Payback ' + fmtPayback(paybackMonths(x.gross, x.cost)));
+      L.push(UC_NAMES[uc] + (include[uc] ? '' : ' — EXCLUDED FROM TOTALS'));
+      L.push('  Gross value pool ' + money(x.gross) + ' · Program cost ' + money(x.cost) + ' · Net annual value ' + money(x.net) +
+             ' · Return ' + roiX(x.net, x.cost) + ' · Payback ' + fmtPayback(paybackMonths(x.gross, x.cost)));
     }
     L.push('');
-    L.push('COMBINED: Gross ' + money(all.gross) + ' · Fees ' + money(all.cost) + ' · Net ' + money(all.net) +
-           ' · ROI ' + roiX(all.net, all.cost) + ' · Payback ' + fmtPayback(paybackMonths(all.gross, all.cost)));
+    L.push('AGGREGATE: Gross value pool ' + money(all.gross) + ' · Program cost ' + money(all.cost) + ' · Net annual value ' + money(all.net) +
+           ' · Return ' + roiX(all.net, all.cost) + ' · Payback ' + fmtPayback(paybackMonths(all.gross, all.cost)));
     L.push('');
-    L.push('All figures illustrative — calibrate to your book. fill-easy.com');
+    L.push('Directional estimates for discussion purposes; to be calibrated to the insurer\'s book. fill-easy.com');
     return L.join('\n');
   }
   const btnCopy = document.getElementById('btnCopy');
@@ -853,7 +889,7 @@
       {l:'Value of premium retained', f:'× ' + s.vnbMargin + '% value margin', v:money(m.uc1.premValue)},
       {l:'Rework avoided', f:'NIGO ' + s.nigoNow + '% → ' + s.nigoAfter + '% × ' + money(s.reworkCost) + '/case', v:money(m.uc1.reworkSaved)},
       {l:'Handling time saved', f:s.hrsNow + ' → ' + s.hrsAfter + ' hrs/case × ' + money(s.staffRate) + '/hr', v:money(m.uc1.labourSaved1)},
-      {l:'Gross annual benefit', v:money(m.uc1.gross), total:true}
+      {l:'Gross annual value pool', v:money(m.uc1.gross), total:true}
     ]);
     tiles('t-uc1', m.uc1);
     renderSens('uc1');
@@ -863,7 +899,7 @@
       {l:'Verifiable at source', f:'× ' + s.coverage + '% hospital coverage', v:count(m.uc2.verClaims)},
       {l:'Leakage recovered', f:'× ' + s.leakage + '% leakage × ' + s.caught + '% caught × ' + money(s.avgClaim) + ' avg claim', v:money(m.uc2.leakSaved)},
       {l:'Manual handling eliminated', f:'× ' + money(s.procCost) + ' OCR + assessor cost/claim', v:money(m.uc2.procSaved)},
-      {l:'Gross annual benefit', v:money(m.uc2.gross), total:true}
+      {l:'Gross annual value pool', v:money(m.uc2.gross), total:true}
     ]);
     tiles('t-uc2', m.uc2);
     renderSens('uc2');
@@ -874,7 +910,7 @@
       {l:'Extra productive weeks', f:'× ' + s.activation + '% activate × ' + s.weeksSaved + ' wks earlier', v:count(s.recruits*s.activation/100*s.weeksSaved) + ' wks'},
       {l:'Early-production APE', f:'× ' + money(s.agentApeWk) + ' APE/week', v:money(m.uc3.earlyApe)},
       {l:'Value of early production', f:'× ' + s.vnbMargin + '% value margin', v:money(m.uc3.earlyValue)},
-      {l:'Gross annual benefit', v:money(m.uc3.gross), total:true}
+      {l:'Gross annual value pool', v:money(m.uc3.gross), total:true}
     ]);
     tiles('t-uc3', m.uc3);
     renderSens('uc3');
@@ -882,6 +918,7 @@
     renderChart(m);
     tiles('t-all', all);
 
+    setVal(document.getElementById('h1-net'), all.net, money);
     setVal(document.getElementById('s-gross'), all.gross, money);
     setVal(document.getElementById('s-cost'),  all.cost,  money);
     setVal(document.getElementById('s-net'),   all.net,   money);
