@@ -113,7 +113,43 @@
   .grid2{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:34px}
 
   /* excluded state */
-  .card.excluded .grid2,.card.excluded .tiles,.card.excluded .sens{opacity:.35;filter:saturate(.4)}
+  .card.excluded .grid2,.card.excluded .tiles,.card.excluded .sens,.card.excluded .story{opacity:.35;filter:saturate(.4)}
+
+  /* ---------- how-it-works steps ---------- */
+  .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:4px}
+  .step{background:var(--surface);border:1px solid var(--line);border-radius:16px;box-shadow:var(--sh);padding:18px 20px}
+  .step .n{
+    width:26px;height:26px;border-radius:50%;background:var(--accent);color:var(--accent-ink);
+    display:flex;align-items:center;justify-content:center;
+    font-family:var(--disp);font-weight:800;font-size:13px;margin-bottom:10px;
+  }
+  .step h3{font-family:var(--disp);font-weight:700;font-size:15px;margin-bottom:5px}
+  .step p{font-size:13px;color:var(--ink-2);line-height:1.55}
+  @media (max-width:920px){.steps{grid-template-columns:1fr}}
+
+  /* ---------- walkthrough story ---------- */
+  .story{
+    background:var(--surface-2);border:1px solid var(--line);border-left:3px solid var(--accent);
+    border-radius:0 14px 14px 0;padding:18px 22px;margin-bottom:24px;
+  }
+  .story .in-h{margin-bottom:10px}
+  .story p{font-size:13.5px;color:var(--ink-2);line-height:1.65;margin-bottom:10px}
+  .story p:last-child{margin-bottom:0}
+  .story b{color:var(--ink);font-weight:700;font-variant-numeric:tabular-nums}
+  .story .tag{
+    display:inline-block;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;
+    font-weight:700;color:var(--ink);background:var(--accent-soft);
+    border-radius:999px;padding:1px 9px;margin-right:6px;transform:translateY(-1px);
+  }
+
+  /* ---------- assumption info icons ---------- */
+  .info{
+    appearance:none;display:inline-flex;align-items:center;justify-content:center;
+    width:15px;height:15px;border-radius:50%;border:1px solid var(--line-strong);
+    background:var(--surface);color:var(--muted);font:italic 700 10px/1 Georgia,serif;
+    margin-left:6px;cursor:help;vertical-align:1px;padding:0;
+  }
+  .info:hover,.info.pin{background:var(--ink);border-color:var(--ink);color:var(--accent)}
 
   /* ---------- toggle switch ---------- */
   .switch{display:inline-flex;align-items:center;gap:9px;font-size:13px;color:var(--ink-2);cursor:pointer;user-select:none}
@@ -291,6 +327,31 @@
   </div>
 </div>
 
+<!-- ══════════════ HOW IT WORKS ══════════════ -->
+<section class="wrap" id="how">
+  <span class="eyebrow">Orientation · How the model works</span>
+  <h2>Three steps, applied to each use case.</h2>
+  <p class="sub">
+    The model is a chain of simple multiplications — no black box. Each use case follows the same logic,
+    and every number in the chain is shown and adjustable.
+  </p>
+  <div class="steps">
+    <div class="step"><div class="n">1</div><h3>Size the book</h3>
+      <p>Start from publicly reported new business — HK$11.8B of APE<sup class="ref"><a href="#sources">1</a></sup> —
+      and convert it into volumes: APE ÷ average premium per policy ≈ policies written per year, narrowed to the
+      segment each use case touches (MCV applications, Mainland claims, agent recruits).</p></div>
+    <div class="step"><div class="n">2</div><h3>Cost today's workflow</h3>
+      <p>Put a price on what the manual process loses now: applicants who give up while underwriting drags on,
+      files that bounce back for rework, staff hours on re-keying, claim value leaking through unverifiable paper
+      bills. Benchmark rates come from the solution brief<sup class="ref"><a href="#sources">2</a></sup> — all adjustable.</p></div>
+    <div class="step"><div class="n">3</div><h3>Net the value</h3>
+      <p>Source verification recovers part of those losses. Recovered value, less Fill Easy's per-check fees,
+      gives the net annual value, the return per dollar spent, and how quickly a year of fees is paid back.</p></div>
+  </div>
+  <p class="caption">Tip: click the <b>ⓘ</b> beside any assumption for a plain-English definition, and read each
+  use case's walkthrough panel for the base case narrated end-to-end with live numbers.</p>
+</section>
+
 <!-- ══════════════ ANCHOR ══════════════ -->
 <section class="wrap" id="anchor">
   <span class="eyebrow">Exhibit 1 · Model foundation</span>
@@ -303,6 +364,7 @@
     translate the APE anchor into addressable application volumes.
   </p>
   <div class="card">
+    <div class="story" id="story-anchor"></div>
     <div class="grid2">
       <div>
         <div class="in-h">Model parameters</div>
@@ -337,6 +399,7 @@
     <div class="card-top">
       <label class="switch"><input type="checkbox" checked data-uc="uc1"><span class="knob"></span>Include in combined total</label>
     </div>
+    <div class="story" id="story-uc1"></div>
     <div class="grid2">
       <div>
         <div class="in-h">Model assumptions</div>
@@ -369,6 +432,7 @@
     <div class="card-top">
       <label class="switch"><input type="checkbox" checked data-uc="uc2"><span class="knob"></span>Include in combined total</label>
     </div>
+    <div class="story" id="story-uc2"></div>
     <div class="grid2">
       <div>
         <div class="in-h">Model assumptions</div>
@@ -400,6 +464,7 @@
     <div class="card-top">
       <label class="switch"><input type="checkbox" checked data-uc="uc3"><span class="knob"></span>Include in combined total</label>
     </div>
+    <div class="story" id="story-uc3"></div>
     <div class="grid2">
       <div>
         <div class="in-h">Model assumptions</div>
@@ -541,6 +606,38 @@
   };
   const UC_NAMES = {uc1:'Use case 1 · MCV HNW onboarding', uc2:'Use case 2 · Claims verification', uc3:'Use case 3 · Agency due diligence'};
 
+  /* Plain-English definition of every assumption, shown via the ⓘ icons. */
+  const TIPS = {
+    ape:        'Annualised Premium Equivalent — the industry\'s standard yardstick for new business volume (all regular premiums plus 10% of single premiums). The base case is Sun Life Hong Kong\'s published FY2025 result.',
+    avgFyp:     'The first-year premium of a typical policy. The model divides APE by this number to estimate how many policies are written per year. HK$200K reflects the high-net-worth cross-border segment.',
+    mcvShare:   'The share of new policies bought by Mainland Chinese visitors (MCV). Only these applications go through the cross-border onboarding chain that use case 1 fixes.',
+    vnbMargin:  'A dollar of premium is not a dollar of profit. This margin converts retained premium into economic value, in the spirit of a value-of-new-business (VNB) ratio. Calibrate to the insurer\'s reported margin.',
+    staffRate:  'The all-in hourly cost of an operations or compliance analyst — salary, benefits and overhead. Used to price every hour of manual work the model removes.',
+    dropoff:    'Out of 100 started applications, how many are abandoned because underwriting drags on for weeks while the client has already returned across the border.',
+    recovery:   'Of those abandoned applications, the share the model assumes would complete if the policy could be issued in the same meeting instead of weeks later.',
+    nigoNow:    '"Not in good order" — the share of application files that bounce back today for missing or mis-keyed information and have to be chased and reworked by hand.',
+    nigoAfter:  'The NIGO rate remaining once data arrives verified from source instead of being self-declared and re-keyed.',
+    reworkCost: 'What one bounced file costs the insurer internally — chasing the client, re-keying, re-reviewing.',
+    hrsNow:     'Total hands-on time per application today, adding up the agent\'s form-filling at the table and the back office\'s processing behind it.',
+    hrsAfter:   'Hands-on time per application when one consented eID tap fills and verifies everything (~5 minutes).',
+    feeOnboard: 'What Fill Easy charges for one full onboarding verification pull (identity, income, medical, screening). Placeholder — replace with quoted pricing.',
+    claims:     'All medical claims the insurer adjudicates in a year, across products and channels.',
+    mlShare:    'The share of those claims that rest on Mainland hospital invoices — today verified only from a photograph of a stamped paper bill.',
+    coverage:   'The share of Mainland hospitals whose invoice records Fill Easy can retrieve directly, including all major Grade 3 facilities.',
+    avgClaim:   'The average payout on one Mainland medical claim.',
+    leakage:    'Out of every HK$100 paid on these claims today, how much is overpaid because paper bills are inflated, altered or simply unverifiable.',
+    caught:     'Of that leakage, the share that checking the invoice with the issuing hospital catches before the claim is paid.',
+    procCost:   'The internal cost of handling one claim today — OCR-reading the photo, then an assessor validating it by hand.',
+    feeClaim:   'What Fill Easy charges to verify one hospital bill at source. Placeholder — replace with quoted pricing.',
+    recruits:   'New agents recruited in a year. For scale: Sun Life\'s agency channel grew 50% in FY2025.',
+    ahrsNow:    'Analyst time to assemble one recruit\'s nineteen "fit and proper" checks by hand — visiting each registry, screenshotting and filing evidence.',
+    ahrsAfter:  'Analyst time when the same nineteen checks run as one request that returns with an evidence artefact per query.',
+    weeksSaved: 'How many weeks sooner a recruit is licensed and able to sell, out of today\'s six-to-eight-week onboarding chain.',
+    agentApeWk: 'The new business (APE) a freshly productive agent writes in a typical week of early tenure. This is what each week of earlier activation is worth.',
+    activation: 'The share of recruits who go on to write any business at all — only they generate value from starting sooner.',
+    feeRecruit: 'What Fill Easy charges for the full nineteen-check screen of one recruit. Placeholder — replace with quoted pricing.'
+  };
+
   /* ---------------- formatting ---------------- */
   const nf0 = new Intl.NumberFormat('en-HK', {maximumFractionDigits:0});
   function money(v){
@@ -585,6 +682,7 @@
         const smax = f.smax != null ? f.smax : (f.max != null ? f.max : 100);
         const sstep = f.sstep != null ? f.sstep : f.step;
         return '<div class="field"><div class="frow"><label for="f-' + k + '">' + f.label +
+          (TIPS[k] ? '<button type="button" class="info" data-info="' + k + '" aria-label="Explain this assumption">i</button>' : '') +
           (f.hint ? '<span class="hint">' + f.hint + '</span>' : '') + '</label>' +
           '<div class="inwrap"><input type="number" id="f-' + k + '" data-key="' + k + '"' +
           ' step="' + f.step + '"' +
@@ -829,6 +927,83 @@
     });
   }
 
+  /* ---------------- assumption tooltips (ⓘ icons) ---------------- */
+  let pinnedInfo = null;
+  function showInfo(btn){
+    const k = btn.dataset.info, f = FIELDS[k];
+    tip.innerHTML = '<div class="tt">' + f.label + '</div>' + TIPS[k] +
+      '<br><span style="opacity:.75">Base case: <b>' + f.def + (f.unit ? '&nbsp;' + f.unit : '') + '</b></span>';
+    tip.style.display = 'block';
+    const r = btn.getBoundingClientRect(), w = tip.offsetWidth, h = tip.offsetHeight;
+    let x = r.left, y = r.bottom + 8;
+    if (x + w > innerWidth - 8) x = innerWidth - w - 8;
+    if (y + h > innerHeight - 8) y = r.top - h - 8;
+    tip.style.left = x + 'px'; tip.style.top = y + 'px';
+  }
+  function hideInfo(){ tip.style.display = 'none'; if (pinnedInfo){ pinnedInfo.classList.remove('pin'); pinnedInfo = null; } }
+  document.addEventListener('mouseover', e => {
+    const btn = e.target.closest('.info');
+    if (btn && !pinnedInfo) showInfo(btn);
+    else if (!btn && !pinnedInfo && !e.target.closest('.crow')) tip.style.display = 'none';
+  });
+  document.addEventListener('click', e => {
+    const btn = e.target.closest('.info');
+    if (btn){
+      e.preventDefault();               // keep the label from focusing its input
+      if (pinnedInfo === btn){ hideInfo(); return; }
+      if (pinnedInfo) pinnedInfo.classList.remove('pin');
+      pinnedInfo = btn; btn.classList.add('pin'); showInfo(btn);
+    } else if (pinnedInfo) hideInfo();
+  });
+  addEventListener('scroll', () => { if (pinnedInfo) hideInfo(); }, {passive:true});
+
+  /* ---------------- base-case walkthroughs (live numbers) ---------------- */
+  function stories(m){
+    const s = state, B = v => '<b>' + v + '</b>', T = t => '<span class="tag">' + t + '</span>';
+    document.getElementById('story-anchor').innerHTML =
+      '<div class="in-h">Walkthrough — sizing the book</div>' +
+      '<p>' + T('Start here') + 'Sun Life reported ' + B(money(s.ape*1e9)) + ' of new business APE in FY2025. At an average first-year premium of ' +
+      B(money(s.avgFyp)) + ' per policy, that is roughly ' + B(count(m.appsTotal)) + ' policies written a year. Assuming ' + B(s.mcvShare + '%') +
+      ' are bought by Mainland Chinese visitors, ' + B(count(m.mcvApps)) + ' applications a year go through the cross-border onboarding chain — the volume use case 1 works on.</p>';
+
+    document.getElementById('story-uc1').innerHTML =
+      '<div class="in-h">Walkthrough — the base case, end to end</div>' +
+      '<p>' + T('Today') + B(count(m.mcvApps)) + ' Mainland-visitor applications a year each pass through four manual checks — identity, financial needs, medical and AML — built on photocopies and self-declaration, over a chain that can run for weeks against a ~3-day visitor stay. Along the way ' +
+      B(s.dropoff + '%') + ' of applicants (' + B(count(m.mcvApps*s.dropoff/100)) + ' cases) give up before issuance, ' + B(s.nigoNow + '%') +
+      ' of files bounce back for rework, and each case absorbs about ' + B(s.hrsNow + ' hours') + ' of agent and back-office time.</p>' +
+      '<p>' + T('With GovVerify') + 'One consented eID tap returns verified identity, income and medical data in the meeting, so the policy can be issued in the same session. The model assumes ' +
+      B(s.recovery + '%') + ' of the walk-aways are saved (' + B(count(m.uc1.casesSaved)) + ' policies), rework falls to ' + B(s.nigoAfter + '%') +
+      ', and handling drops to ' + B(s.hrsAfter + ' hours') + ' per case.</p>' +
+      '<p>' + T('The math') + B(count(m.uc1.casesSaved)) + ' saved policies × ' + B(money(s.avgFyp)) + ' premium = ' + B(money(m.uc1.premRetained)) +
+      ', counted at the ' + B(s.vnbMargin + '%') + ' value margin = ' + B(money(m.uc1.premValue)) + '. Add ' + B(money(m.uc1.reworkSaved)) +
+      ' of avoided rework and ' + B(money(m.uc1.labourSaved1)) + ' of released time → ' + B(money(m.uc1.gross)) + ' gross. Less ' +
+      B(money(m.uc1.cost)) + ' in fees (' + count(m.mcvApps) + ' pulls × ' + money(s.feeOnboard) + ') → ' + B(money(m.uc1.net)) + ' net per year.</p>';
+
+    document.getElementById('story-uc2').innerHTML =
+      '<div class="in-h">Walkthrough — the base case, end to end</div>' +
+      '<p>' + T('Today') + 'Of ' + B(count(s.claims)) + ' claims a year, ' + B(s.mlShare + '%') + ' (' + B(count(m.uc2.mlClaims)) +
+      ') rest on Mainland hospital invoices. The claimant photographs a stamped paper bill, OCR reads the photo, and an assessor re-checks it by hand — authenticity is never confirmed with the hospital. On this basis roughly ' +
+      B(s.leakage + '%') + ' of claim value leaks to inflated or unverifiable bills, and each claim costs about ' + B(money(s.procCost)) + ' to handle.</p>' +
+      '<p>' + T('With GovVerify') + 'The itemised invoice record is retrieved from the issuing hospital itself for ' + B(s.coverage + '%') +
+      ' of facilities — ' + B(count(m.uc2.verClaims)) + ' claims a year arrive already authenticated, with no photo to interpret and no manual re-keying.</p>' +
+      '<p>' + T('The math') + 'Catching ' + B(s.caught + '%') + ' of the leakage on those claims (× ' + B(money(s.avgClaim)) + ' average claim) recovers ' +
+      B(money(m.uc2.leakSaved)) + '; eliminating manual handling saves ' + B(money(m.uc2.procSaved)) + ' → ' + B(money(m.uc2.gross)) +
+      ' gross. Less ' + B(money(m.uc2.cost)) + ' in fees (' + count(m.uc2.verClaims) + ' verifications × ' + money(s.feeClaim) + ') → ' +
+      B(money(m.uc2.net)) + ' net per year.</p>';
+
+    document.getElementById('story-uc3').innerHTML =
+      '<div class="in-h">Walkthrough — the base case, end to end</div>' +
+      '<p>' + T('Today') + 'Onboarding each of ' + B(count(s.recruits)) + ' recruits a year means an analyst assembling nineteen “fit and proper” checks by hand — about ' +
+      B(s.ahrsNow + ' hours') + ' per recruit, one registry at a time — stretching onboarding to six-to-eight weeks before a recruit can sell.</p>' +
+      '<p>' + T('With GovVerify') + 'The same nineteen checks run as one request and return in minutes with evidence attached: about ' +
+      B(s.ahrsAfter + ' hours') + ' of analyst time per recruit, and each recruit becomes productive ' + B(s.weeksSaved + ' weeks') + ' sooner.</p>' +
+      '<p>' + T('The math') + 'Released analyst time is worth ' + B(money(m.uc3.analystSaved)) + '. The ' + B(s.activation + '%') +
+      ' of recruits who activate write ' + B(money(s.agentApeWk)) + ' of APE per productive week, so starting ' + B(s.weeksSaved + ' weeks') +
+      ' earlier adds ' + B(money(m.uc3.earlyApe)) + ' of APE, valued at the ' + B(s.vnbMargin + '%') + ' margin = ' + B(money(m.uc3.earlyValue)) +
+      ' → ' + B(money(m.uc3.gross)) + ' gross. Less ' + B(money(m.uc3.cost)) + ' in fees (' + count(s.recruits) + ' screens × ' + money(s.feeRecruit) +
+      ') → ' + B(money(m.uc3.net)) + ' net per year.</p>';
+  }
+
   /* ---------------- copy summary / print ---------------- */
   function summaryText(m, all){
     const s = state;
@@ -915,6 +1090,7 @@
     tiles('t-uc3', m.uc3);
     renderSens('uc3');
 
+    stories(m);
     renderChart(m);
     tiles('t-all', all);
 
