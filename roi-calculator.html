@@ -52,7 +52,7 @@
   .badge{
     margin-left:auto;display:inline-flex;align-items:center;gap:8px;
     background:var(--surface);border:1px solid var(--line);box-shadow:var(--sh);
-    border-radius:999px;padding:6px 14px;font-size:12.5px;color:var(--ink-2);
+    border-radius:4px;padding:6px 14px;font-size:12.5px;color:var(--ink-2);
   }
   .badge b{color:var(--ink);font-weight:700}
   h1{
@@ -66,7 +66,7 @@
   /* ---------- scenario bar ---------- */
   .toolbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:24px 0 6px}
   .toolbar .lbl{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-right:2px}
-  .seg{display:inline-flex;background:var(--surface);border:1px solid var(--line);box-shadow:var(--sh);border-radius:999px;overflow:hidden}
+  .seg{display:inline-flex;background:var(--surface);border:1px solid var(--line-strong);border-radius:4px;overflow:hidden}
   .seg button{
     appearance:none;border:0;background:transparent;color:var(--ink-2);
     font:inherit;font-size:13.5px;font-weight:500;padding:8px 18px;cursor:pointer;
@@ -75,7 +75,7 @@
   .seg button.on{background:var(--accent);color:var(--accent-ink);font-weight:700}
   .btn{
     appearance:none;border:1px solid var(--line);background:var(--surface);color:var(--ink-2);
-    box-shadow:var(--sh);font:inherit;font-size:13.5px;padding:8px 18px;border-radius:999px;cursor:pointer;
+    font:inherit;font-size:13.5px;padding:8px 18px;border-radius:4px;cursor:pointer;
   }
   .btn:hover{border-color:var(--line-strong);color:var(--ink)}
   .btn.ok{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);font-weight:700}
@@ -84,7 +84,7 @@
   .sticky{
     position:sticky;top:0;z-index:50;margin-top:22px;
     background:rgba(255,255,255,.86);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
-    border-bottom:1px solid var(--line);box-shadow:0 6px 18px rgba(35,24,21,.05);
+    border-bottom:2px solid var(--ink);
   }
   .sticky-in{
     max-width:1120px;margin:0 auto;padding:12px 28px;
@@ -98,15 +98,15 @@
   /* ---------- sections & cards ---------- */
   section{padding:44px 0 6px}
   .eyebrow{
-    display:inline-block;font-size:12px;letter-spacing:.16em;text-transform:uppercase;
-    color:var(--ink);font-weight:700;margin-bottom:10px;
-    background:var(--accent-soft);border-radius:999px;padding:3px 12px;
+    display:block;font-size:11px;letter-spacing:.2em;text-transform:uppercase;
+    color:var(--ink-2);font-weight:700;margin-bottom:12px;
   }
+  .eyebrow::before{content:'';display:inline-block;width:28px;height:3px;background:var(--accent);margin-right:10px;vertical-align:2px}
   h2{font-family:var(--disp);font-weight:800;font-size:clamp(22px,2.8vw,30px);letter-spacing:-.01em;margin-bottom:8px}
   .sub{color:var(--ink-2);max-width:70ch;margin-bottom:22px}
   .card{
-    background:var(--surface);border:1px solid var(--line);border-radius:18px;
-    box-shadow:var(--sh);padding:26px 28px;margin-bottom:18px;
+    background:var(--surface);border:1px solid var(--line);border-radius:6px;
+    padding:28px 30px;margin-bottom:18px;
     transition:opacity .25s ease;
   }
   .card-top{display:flex;align-items:center;justify-content:flex-end;margin:-6px 0 10px}
@@ -117,7 +117,7 @@
 
   /* ---------- how-it-works steps ---------- */
   .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:4px}
-  .step{background:var(--surface);border:1px solid var(--line);border-radius:16px;box-shadow:var(--sh);padding:18px 20px}
+  .step{background:var(--surface);border:1px solid var(--line);border-top:3px solid var(--ink);border-radius:0 0 6px 6px;padding:18px 20px}
   .step .n{
     width:26px;height:26px;border-radius:50%;background:var(--accent);color:var(--accent-ink);
     display:flex;align-items:center;justify-content:center;
@@ -129,8 +129,8 @@
 
   /* ---------- walkthrough story ---------- */
   .story{
-    background:var(--surface-2);border:1px solid var(--line);border-left:3px solid var(--accent);
-    border-radius:0 14px 14px 0;padding:18px 22px;margin-bottom:24px;
+    background:var(--surface-2);border:1px solid var(--line);border-left:3px solid var(--ink);
+    border-radius:0;padding:18px 22px;margin-bottom:24px;
   }
   .story .in-h{margin-bottom:10px}
   .story p{font-size:13.5px;color:var(--ink-2);line-height:1.65;margin-bottom:10px}
@@ -138,8 +138,8 @@
   .story b{color:var(--ink);font-weight:700;font-variant-numeric:tabular-nums}
   .story .tag{
     display:inline-block;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;
-    font-weight:700;color:var(--ink);background:var(--accent-soft);
-    border-radius:999px;padding:1px 9px;margin-right:6px;transform:translateY(-1px);
+    font-weight:700;color:var(--ink-2);background:var(--surface);border:1px solid var(--line-strong);
+    border-radius:3px;padding:1px 8px;margin-right:6px;transform:translateY(-1px);
   }
 
   /* ---------- assumption info icons ---------- */
@@ -169,14 +169,14 @@
   /* ---------- inputs ---------- */
   .in-h{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:12px}
   .controls{display:grid;grid-template-columns:repeat(auto-fill,minmax(212px,1fr));gap:12px 18px;margin-bottom:24px}
-  .ctl{border:1px solid var(--line);border-radius:12px;padding:11px 13px 12px;background:var(--surface);min-width:0}
+  .ctl{border:1px solid var(--line);border-radius:4px;padding:11px 13px 12px;background:var(--surface);min-width:0}
   .ctl.lock{background:var(--inset);border-style:dashed}
   .ctl .lab{display:flex;align-items:center;font-size:12px;color:var(--ink-2);line-height:1.3;margin-bottom:8px;gap:1px}
   .ctl .val{margin-left:auto;padding-left:8px;font-family:var(--disp);font-weight:700;font-size:12.5px;color:var(--ink);white-space:nowrap;font-variant-numeric:tabular-nums}
   .chips{display:flex;flex-wrap:wrap;gap:6px}
   .chip{
     appearance:none;border:1px solid var(--line-strong);background:var(--surface);color:var(--ink-2);
-    border-radius:999px;padding:4px 11px;font:inherit;font-size:12.5px;font-weight:600;cursor:pointer;
+    border-radius:3px;padding:4px 11px;font:inherit;font-size:12.5px;font-weight:600;cursor:pointer;
     font-variant-numeric:tabular-nums;
   }
   .chip.on{background:var(--accent);border-color:var(--accent-deep);color:var(--accent-ink);font-weight:700}
@@ -196,10 +196,10 @@
   /* ---------- at-a-glance ---------- */
   .glance{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
   .gcard{
-    display:block;background:var(--surface);border:1px solid var(--line);border-radius:16px;
-    box-shadow:var(--sh);padding:16px 18px;text-decoration:none;color:inherit;min-width:0;
+    display:block;background:var(--surface);border:1px solid var(--line);border-top:3px solid var(--ink);border-radius:0 0 6px 6px;
+    padding:16px 18px;text-decoration:none;color:inherit;min-width:0;
   }
-  .gcard:hover{border-color:var(--accent-deep);text-decoration:none}
+  .gcard:hover{border-top-color:var(--accent);text-decoration:none}
   .gcard .gk{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
   .gcard .go{font-size:13px;color:var(--ink-2);margin:7px 0 10px;line-height:1.45}
   .gcard .go b{color:var(--ink)}
@@ -209,7 +209,7 @@
 
   /* ---------- operational impact pills ---------- */
   .ops{display:flex;flex-wrap:wrap;gap:8px;margin:-6px 0 20px}
-  .op{font-size:12.5px;font-weight:600;color:var(--ink);background:var(--accent-soft);border-radius:999px;padding:5px 13px;white-space:nowrap}
+  .op{font-size:12.5px;font-weight:600;color:var(--ink);background:var(--inset);border-radius:3px;padding:5px 12px;white-space:nowrap}
   .op b{font-weight:800}
   .inwrap{position:relative}
   .inwrap input{
@@ -264,13 +264,12 @@
   .dnote{font-size:11.5px;color:var(--muted);margin-top:10px}
 
   /* ---------- result tiles ---------- */
-  .tiles{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-top:20px}
-  .tile{background:var(--surface-2);border:1px solid var(--line);border-radius:14px;padding:14px 16px;min-width:0}
-  .tile .k{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);white-space:nowrap}
-  .tile .v{font-family:var(--disp);font-weight:800;font-size:21px;margin-top:4px;white-space:nowrap;font-variant-numeric:tabular-nums}
-  .tile.hero{background:var(--accent);border-color:var(--accent-deep)}
-  .tile.hero .k{color:rgba(35,24,21,.6)}
-  .tile.hero .v{color:var(--accent-ink)}
+  .tiles{display:grid;grid-template-columns:repeat(5,1fr);gap:24px;margin-top:24px}
+  .tile{border-top:2px solid var(--line-strong);padding:10px 0 0;min-width:0}
+  .tile .k{font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);white-space:nowrap}
+  .tile .v{font-family:var(--disp);font-weight:800;font-size:21px;margin-top:5px;white-space:nowrap;font-variant-numeric:tabular-nums;display:inline-block}
+  .tile.hero{border-top-color:var(--accent)}
+  .tile.hero .v{background:linear-gradient(transparent 55%,var(--accent) 55%,var(--accent) 92%,transparent 92%)}
 
   /* ---------- sensitivity ---------- */
   .sens{margin-top:22px;border-top:1px dashed var(--line-strong);padding-top:16px}
@@ -334,7 +333,7 @@
     <div class="brandname">Fill Easy <span>× GovVerify · Corporate ROI model</span></div>
     <div class="badge">Base case · <b>Sun Life Hong Kong</b>&nbsp;· FY2025 new business APE HK$11.8B<sup class="ref"><a href="#sources">1</a></sup></div>
   </div>
-  <h1>Verifying at source could unlock <em>~<span id="h1-net">HK$279M</span></em> a year across three operational levers.</h1>
+  <h1>Verifying at source could unlock <em>~<span id="h1-net">HK$631M</span></em> a year across three operational levers.</h1>
   <p class="lede">
     A record new-business year<sup class="ref"><a href="#sources">1</a></sup> is still processed through manual,
     self-declared checks — losing applicants in underwriting, generating rework, and leaking claims value. This model
@@ -397,20 +396,21 @@
     <div class="step"><div class="n">3</div><h3>Size the capture</h3>
       <p>Value recovered less program cost → net value, return multiple, payback.</p></div>
   </div>
-  <p class="caption">ⓘ marks a definition for each assumption · base-case logic panels show the build with live figures.</p>
+  <p class="caption">Clients set only their own book — volumes, mix, unit costs, fees. Uplift, margin and leakage benchmarks are set by Fill Easy from deployment and industry data, shown in each value build, and flex only with the scenario. ⓘ marks a definition.</p>
 </section>
 
 <!-- ══════════════ ANCHOR ══════════════ -->
 <section class="wrap" id="anchor">
   <span class="eyebrow">Exhibit 1 · Baseline</span>
-  <h2>A HK$11.8B franchise implies ~59,000 applications a year — roughly half cross-border.</h2>
+  <h2>A ~100,000-application book — ~70% cross-border — anchors the model.</h2>
   <p class="sub">
-    Five shared parameters drive all three levers; the anchor is published FY2025 new business APE, up 46% year on
-    year<sup class="ref"><a href="#sources">1</a></sup>.
+    Volumes are client-provided and consistent with published FY2025 new business APE of HK$11.8B, up 46% year on
+    year<sup class="ref"><a href="#sources">1</a></sup>. Uplift and margin assumptions are Fill Easy and industry
+    benchmarks, flexed by scenario rather than edited by hand.
   </p>
   <div class="card">
     <div class="story" id="story-anchor"></div>
-    <div class="in-h">Model parameters</div>
+    <div class="in-h">Client inputs</div>
     <div class="controls" id="in-anchor"></div>
     <p class="dnote">Value margin converts premium into economic value (VNB-style)<sup class="ref"><a href="#sources">5</a></sup>,
     so premium and cost benefits can be added without double counting.</p>
@@ -420,7 +420,7 @@
 <!-- ══════════════ UC1 ══════════════ -->
 <section class="wrap" id="uc1">
   <span class="eyebrow">Lever 1 · MCV HNW onboarding</span>
-  <h2>Same-session issuance could recover ~<span id="h2-uc1">HK$257M</span> a year, led by premium now lost to underwriting delay.</h2>
+  <h2>Same-session issuance could recover ~<span id="h2-uc1">HK$609M</span> a year, led by premium now lost to underwriting delay.</h2>
   <p class="sub">
     The current chain runs four manual checks over ~6 weeks against a ~3-day visitor stay<sup class="ref"><a href="#sources">2</a></sup>;
     one consented eID pull completes verification within the meeting.
@@ -435,7 +435,7 @@
       <label class="switch"><input type="checkbox" checked data-uc="uc1"><span class="knob"></span>Include in combined total</label>
     </div>
     <div class="story" id="story-uc1"></div>
-    <div class="in-h">Model assumptions</div>
+    <div class="in-h">Client inputs</div>
     <div class="controls" id="in-uc1"></div>
     <div class="grid2 half">
       <div>
@@ -467,7 +467,7 @@
       <label class="switch"><input type="checkbox" checked data-uc="uc2"><span class="knob"></span>Include in combined total</label>
     </div>
     <div class="story" id="story-uc2"></div>
-    <div class="in-h">Model assumptions</div>
+    <div class="in-h">Client inputs</div>
     <div class="controls" id="in-uc2"></div>
     <div class="grid2 half">
       <div>
@@ -499,7 +499,7 @@
       <label class="switch"><input type="checkbox" checked data-uc="uc3"><span class="knob"></span>Include in combined total</label>
     </div>
     <div class="story" id="story-uc3"></div>
-    <div class="in-h">Model assumptions</div>
+    <div class="in-h">Client inputs</div>
     <div class="controls" id="in-uc3"></div>
     <div class="grid2 half">
       <div>
@@ -515,7 +515,7 @@
 <!-- ══════════════ COMBINED ══════════════ -->
 <section class="wrap" id="combined">
   <span class="eyebrow">Exhibit 2 · Full potential</span>
-  <h2>Full capture is worth ~<span id="h2-all">HK$279M</span> a year, at a ~<span id="h2-roi">17.1×</span> return on program spend.</h2>
+  <h2>Full capture is worth ~<span id="h2-all">HK$631M</span> a year, at a ~<span id="h2-roi">17.3×</span> return on program spend.</h2>
   <p class="sub">Net annual value by lever, base case — hover a bar for the build. All three draw on one consent rail and one integration.</p>
   <div class="card">
     <div class="chart" id="chart"></div>
@@ -573,19 +573,19 @@
   // def = Sun Life base preset. sc = per-scenario overrides. smin/smax/sstep = slider range.
   const FIELDS = {
     /* anchor */
-    ape:        {sec:'anchor', ctl:'step',   label:'New business APE', unit:'HK$ B', def:11.8, step:0.1, min:0},
+    apps:       {sec:'anchor', ctl:'step',   label:'Applications processed per year', unit:'', def:100000, step:5000, min:0},
     avgFyp:     {sec:'anchor', ctl:'chips',  label:'Average first-year premium', unit:'HK$', def:200000, step:10000, min:1, opts:[100000,200000,300000,500000]},
-    mcvShare:   {sec:'anchor', ctl:'slider', label:'MCV / cross-border share', unit:'%', def:50, step:5, min:0, max:100},
-    vnbMargin:  {sec:'anchor', ctl:'slider', label:'Value margin on new business', unit:'%', def:55, step:5, min:0, max:100},
+    mcvShare:   {sec:'anchor', ctl:'slider', label:'MCV / cross-border share', unit:'%', def:70, step:5, min:0, max:100},
+    vnbMargin:  {sec:'anchor', ctl:'lock',   label:'Value margin — industry standard', unit:'%', def:55, step:5, min:0, max:100},
     staffRate:  {sec:'anchor', ctl:'chips',  label:'Loaded staff cost / hour', unit:'HK$/hr', def:250, step:25, min:0, opts:[200,250,350,500]},
 
     /* uc1 */
     dropoff:    {sec:'uc1', ctl:'slider', label:'Applications lost to slow underwriting', unit:'%', def:12, step:1, min:0, max:100, smax:30,
                  sc:{conservative:8, aggressive:15}},
-    recovery:   {sec:'uc1', ctl:'slider', label:'Recovered by same-session issuance', unit:'%', def:60, step:5, min:0, max:100,
+    recovery:   {sec:'uc1', ctl:'lock',   label:'Recovery uplift — Fill Easy benchmark', unit:'%', def:60, step:5, min:0, max:100,
                  sc:{conservative:40, aggressive:75}},
     nigoNow:    {sec:'uc1', ctl:'lock',   label:'NIGO rework today', unit:'%', def:50, step:5, min:0, max:100},
-    nigoAfter:  {sec:'uc1', ctl:'chips',  label:'NIGO rework with GovVerify', unit:'%', def:10, step:5, min:0, max:100, opts:[5,10,20],
+    nigoAfter:  {sec:'uc1', ctl:'lock',   label:'NIGO with GovVerify — benchmark', unit:'%', def:10, step:5, min:0, max:100,
                  sc:{conservative:20, aggressive:5}},
     reworkCost: {sec:'uc1', ctl:'chips',  label:'Cost per rework case', unit:'HK$', def:2000, step:250, min:0, opts:[1000,2000,3000]},
     hrsNow:     {sec:'uc1', ctl:'lock',   label:'Handling time per case today', unit:'hrs', def:2, step:0.25, min:0},
@@ -598,9 +598,9 @@
     mlShare:    {sec:'uc2', ctl:'slider', label:'Claims with Mainland hospital bills', unit:'%', def:30, step:5, min:0, max:100},
     coverage:   {sec:'uc2', ctl:'lock',   label:'Hospitals retrievable at source', unit:'%', def:80, step:5, min:0, max:100},
     avgClaim:   {sec:'uc2', ctl:'step',   label:'Average claim size', unit:'HK$', def:30000, step:5000, min:0},
-    leakage:    {sec:'uc2', ctl:'slider', label:'Claims leakage today', unit:'%', def:10, step:1, min:0, max:100, smax:25,
+    leakage:    {sec:'uc2', ctl:'lock',   label:'Claims leakage — industry benchmark', unit:'%', def:10, step:1, min:0, max:100,
                  sc:{conservative:6, aggressive:12}},
-    caught:     {sec:'uc2', ctl:'slider', label:'Leakage caught at source', unit:'%', def:50, step:5, min:0, max:100,
+    caught:     {sec:'uc2', ctl:'lock',   label:'Leakage caught — Fill Easy benchmark', unit:'%', def:50, step:5, min:0, max:100,
                  sc:{conservative:30, aggressive:70}},
     procCost:   {sec:'uc2', ctl:'chips',  label:'Manual handling cost per claim', unit:'HK$', def:200, step:25, min:0, opts:[100,200,300]},
     feeClaim:   {sec:'uc2', ctl:'step',   label:'Fill Easy fee per bill verification', unit:'HK$', def:150, step:25, min:0},
@@ -609,7 +609,7 @@
     recruits:   {sec:'uc3', ctl:'step',   label:'Agent recruits per year', unit:'', def:800, step:50, min:0},
     ahrsNow:    {sec:'uc3', ctl:'lock',   label:'Analyst hours per recruit today', unit:'hrs', def:8, step:0.5, min:0},
     ahrsAfter:  {sec:'uc3', ctl:'lock',   label:'Analyst hours with Fill Easy', unit:'hrs', def:0.5, step:0.25, min:0},
-    weeksSaved: {sec:'uc3', ctl:'chips',  label:'Weeks of onboarding removed', unit:'wks', def:5, step:1, min:0, opts:[3,5,7],
+    weeksSaved: {sec:'uc3', ctl:'lock',   label:'Onboarding weeks removed — benchmark', unit:'wks', def:5, step:1, min:0,
                  sc:{conservative:3, aggressive:7}},
     agentApeWk: {sec:'uc3', ctl:'step',   label:'New-agent APE per productive week', unit:'HK$', def:8000, step:1000, min:0},
     activation: {sec:'uc3', ctl:'slider', label:'Recruits who activate', unit:'%', def:70, step:5, min:0, max:100,
@@ -625,15 +625,15 @@
 
   /* Plain-English definition of every assumption, shown via the ⓘ icons. */
   const TIPS = {
-    ape:        'Annualised Premium Equivalent — the industry\'s standard yardstick for new business volume (all regular premiums plus 10% of single premiums). The base case is Sun Life Hong Kong\'s published FY2025 result.',
+    apps:       'Total individual applications processed per year across channels — provided by the client. ~100,000 is consistent with HK$11.8B of FY2025 new business APE at a blended average premium.',
     avgFyp:     'The first-year premium of a typical policy. The model divides APE by this number to estimate how many policies are written per year. HK$200K reflects the high-net-worth cross-border segment.',
     mcvShare:   'The share of new policies bought by Mainland Chinese visitors (MCV). Only these applications go through the cross-border onboarding chain that use case 1 fixes.',
-    vnbMargin:  'A dollar of premium is not a dollar of profit. This margin converts retained premium into economic value, in the spirit of a value-of-new-business (VNB) ratio. Calibrate to the insurer\'s reported margin.',
+    vnbMargin:  'Converts premium into economic value on a value-of-new-business basis. Set to the industry standard (~55%), in line with reported VNB margins of leading Hong Kong life insurers; flexed by scenario only.',
     staffRate:  'The all-in hourly cost of an operations or compliance analyst — salary, benefits and overhead. Used to price every hour of manual work the model removes.',
     dropoff:    'Out of 100 started applications, how many are abandoned because underwriting drags on for weeks while the client has already returned across the border.',
-    recovery:   'Of those abandoned applications, the share the model assumes would complete if the policy could be issued in the same meeting instead of weeks later.',
+    recovery:   'Share of abandoned applications recovered when the policy is issued in the same meeting. Fill Easy benchmark from same-session issuance deployments; flexed by scenario only.',
     nigoNow:    '"Not in good order" — the share of application files that bounce back today for missing or mis-keyed information and have to be chased and reworked by hand.',
-    nigoAfter:  'The NIGO rate remaining once data arrives verified from source instead of being self-declared and re-keyed.',
+    nigoAfter:  'Residual NIGO once data arrives verified from source. Fill Easy deployment benchmark; flexed by scenario only.',
     reworkCost: 'What one bounced file costs the insurer internally — chasing the client, re-keying, re-reviewing.',
     hrsNow:     'Total hands-on time per application today, adding up the agent\'s form-filling at the table and the back office\'s processing behind it.',
     hrsAfter:   'Hands-on time per application when one consented eID tap fills and verifies everything (~5 minutes).',
@@ -642,14 +642,14 @@
     mlShare:    'The share of those claims that rest on Mainland hospital invoices — today verified only from a photograph of a stamped paper bill.',
     coverage:   'The share of Mainland hospitals whose invoice records Fill Easy can retrieve directly, including all major Grade 3 facilities.',
     avgClaim:   'The average payout on one Mainland medical claim.',
-    leakage:    'Out of every HK$100 paid on these claims today, how much is overpaid because paper bills are inflated, altered or simply unverifiable.',
-    caught:     'Of that leakage, the share that checking the invoice with the issuing hospital catches before the claim is paid.',
+    leakage:    'Share of claim value overpaid on unverifiable paper bills. Industry benchmark (~10%); flexed by scenario only.',
+    caught:     'Share of leakage detected when the invoice is checked with the issuing hospital before payment. Fill Easy benchmark; flexed by scenario only.',
     procCost:   'The internal cost of handling one claim today — OCR-reading the photo, then an assessor validating it by hand.',
     feeClaim:   'What Fill Easy charges to verify one hospital bill at source. Placeholder — replace with quoted pricing.',
     recruits:   'New agents recruited in a year. For scale: Sun Life\'s agency channel grew 50% in FY2025.',
     ahrsNow:    'Analyst time to assemble one recruit\'s nineteen "fit and proper" checks by hand — visiting each registry, screenshotting and filing evidence.',
     ahrsAfter:  'Analyst time when the same nineteen checks run as one request that returns with an evidence artefact per query.',
-    weeksSaved: 'How many weeks sooner a recruit is licensed and able to sell, out of today\'s six-to-eight-week onboarding chain.',
+    weeksSaved: 'Weeks removed from the six-to-eight-week onboarding chain. Fill Easy benchmark from screening deployments; flexed by scenario only.',
     agentApeWk: 'The new business (APE) a freshly productive agent writes in a typical week of early tenure. This is what each week of earlier activation is worth.',
     activation: 'The share of recruits who go on to write any business at all — only they generate value from starting sooner.',
     feeRecruit: 'What Fill Easy charges for the full nineteen-check screen of one recruit. Placeholder — replace with quoted pricing.'
@@ -710,7 +710,7 @@
     const bySec = {};
     for (const k in FIELDS) (bySec[FIELDS[k].sec] = bySec[FIELDS[k].sec] || []).push(k);
     for (const sec in bySec){
-      document.getElementById('in-' + sec).innerHTML = bySec[sec].map(k => {
+      document.getElementById('in-' + sec).innerHTML = bySec[sec].filter(k => FIELDS[k].ctl !== 'lock').map(k => {
         const f = FIELDS[k];
         const lab = '<div class="lab">' + f.label + infoBtn(k) +
           (f.ctl === 'slider' ? '<span class="val" id="v-' + k + '"></span>' : '') + '</div>';
@@ -729,7 +729,7 @@
             (f.unit ? '<span class="unit">' + f.unit + '</span>' : '') + '</div>' +
             '<button type="button" class="sbtn" data-key="' + k + '" data-stp="1" aria-label="Increase">+</button></div>';
         } else { /* lock */
-          body = '<div class="lockv"><span class="lv" id="v-' + k + '"></span><span class="lk">Fixed benchmark</span></div>';
+          body = '<div class="lockv"><span class="lv" id="v-' + k + '"></span><span class="lk">Benchmark</span></div>';
         }
         return '<div class="ctl' + (f.ctl === 'lock' ? ' lock' : '') + '">' + lab + body + '</div>';
       }).join('');
@@ -785,8 +785,6 @@
         syncChips(k);
       } else if (f.ctl === 'step'){
         document.getElementById('f-' + k).value = state[k];
-      } else {
-        document.getElementById('v-' + k).textContent = fmtVal(k, state[k]);
       }
     }
   }
@@ -828,7 +826,7 @@
   function compute(s){
     const pct = v => v/100;
 
-    const appsTotal = s.ape * 1e9 / s.avgFyp;
+    const appsTotal = s.apps;
     const mcvApps   = appsTotal * pct(s.mcvShare);
 
     /* uc1 — MCV HNW onboarding */
@@ -1033,8 +1031,8 @@
     const s = state, B = v => '<b>' + v + '</b>', T = t => '<span class="tag">' + t + '</span>';
     document.getElementById('story-anchor').innerHTML =
       '<div class="in-h">Baseline build</div>' +
-      '<p>' + B(money(s.ape*1e9)) + ' APE ÷ ' + B(money(s.avgFyp)) + ' avg premium ≈ ' + B(count(m.appsTotal)) +
-      ' policies/yr · ' + B(s.mcvShare + '%') + ' MCV → ' + B(count(m.mcvApps)) + ' applications in scope.</p>';
+      '<p>' + B(count(m.appsTotal)) + ' applications p.a. (client estimate) · ' + B(s.mcvShare + '%') + ' MCV → ' +
+      B(count(m.mcvApps)) + ' applications in scope for Lever 1 · consistent with HK$11.8B FY2025 APE.</p>';
 
     document.getElementById('story-uc1').innerHTML =
       '<div class="in-h">Base-case logic</div>' +
@@ -1072,7 +1070,7 @@
     const s = state;
     const L = [];
     L.push('Fill Easy × GovVerify — Corporate ROI model (directional estimates)');
-    L.push('Base case: Sun Life Hong Kong · FY2025 new business APE HK$' + s.ape + 'B (press release, Apr 2026)');
+    L.push('Base case: Sun Life Hong Kong · ~' + count(state.apps) + ' applications p.a. · FY2025 new business APE HK$11.8B (press release, Apr 2026)');
     L.push('Book: ' + count(m.appsTotal) + ' applications p.a. · ' + s.mcvShare + '% MCV share · avg first-year premium ' + money(s.avgFyp) + ' · value margin ' + s.vnbMargin + '%');
     L.push('');
     for (const uc of ['uc1','uc2','uc3']){
