@@ -453,11 +453,13 @@
   <span class="eyebrow">Lever 2 · Claims verification</span>
   <h2>Source-verified invoices could yield ~<span id="h2-uc2">HK$9.3M</span> a year from leakage and assessment cost.</h2>
   <p class="sub">
-    Mainland claims are adjudicated from photographs of paper bills, with ~10% of claim value
-    leaking<sup class="ref"><a href="#sources">3</a></sup>; retrieval from the issuing hospital removes both the
-    leakage and the manual review.
+    Claims are adjudicated from photographs of paper bills and certificates that are never confirmed with the
+    issuer — ICAC prosecutions show the exposure: HK$37.5M taken in a single critical-illness scheme on bogus
+    medical certificates, HK$26M by one claims syndicate<sup class="ref"><a href="#sources">3</a></sup>.
+    Retrieval from the issuing hospital removes the fraud surface and the manual review with it.
   </p>
   <div class="ops">
+    <span class="op">Fraud exposure: <b>HK$37.5M</b> in one ICAC case</span>
     <span class="op">Verification: photo + OCR → <b>at source</b></span>
     <span class="op">Coverage: <b>~80%</b> of Mainland hospitals</span>
     <span class="op">Assessor re-keying: <b>eliminated</b></span>
@@ -545,12 +547,18 @@
         <a href="https://www.sunlife.com.hk/en/about-us/newsroom/news-releases/2026/sun-life-hong-kong-achieves-record-breaking-hk-11-8-billion/" target="_blank" rel="noopener">Press release, April 2026</a>.</li>
       <li><b>Onboarding benchmarks</b> — Fill Easy solution brief (2026): NIGO ~50%→10%; ~12% drop-off, ~60% recoverable
         same-session; ~2 hrs → ~5 min per case; HK$2,000 per rework case; ~3-day average visitor stay.</li>
-      <li><b>Claims benchmarks</b> — solution brief: ~10% leakage on paper bills; ~80% Mainland hospital coverage incl.
-        all major Grade 3; OCR + assessor review eliminated on straight-through claims.</li>
+      <li><b>Claims fraud &amp; leakage</b> — ICAC prosecutions:
+        <a href="https://www.icac.org.hk/en/p/press-archive/index_id_1827.html" target="_blank" rel="noopener">HK$37.5M critical-illness compensation fraud</a>
+        on bogus medical certificates and clinic impersonation (jail up to 6 years 4 months);
+        HK$26M claims syndicate across three insurers; ~HK$77M of insurance frauds cracked in one 2021 operation;
+        <a href="https://www.icac.org.hk/en/p/press/index_id_1029.html" target="_blank" rel="noopener">medical claims and commission fraud charges</a>.
+        Leakage rate (~10%) and source-capture share are Fill Easy / industry benchmarks; ~80% Mainland hospital
+        coverage incl. all major Grade 3; OCR + assessor review eliminated on straight-through claims.</li>
       <li><b>Agency benchmarks</b> — solution brief: 19 checks per recruit; 6–8 weeks of GL23 evidence by hand today;
         ~15-minute turnaround as one request.</li>
-      <li><b>Pricing</b> — Fill Easy list price, fixed: HK$250 per full onboarding case (identity, income, medical and
-        screening included), HK$150 per bill verification, HK$800 per recruit screen.</li>
+      <li><b>Pricing &amp; staff cost</b> — Fill Easy list price, fixed: HK$250 per full onboarding case (identity, income,
+        medical and screening included), HK$150 per bill verification, HK$800 per recruit screen. Loaded staff cost
+        held at the industry-standard ~HK$250/hr from Hong Kong market salary benchmarks.</li>
     </ol>
   </div>
 </section>
@@ -576,7 +584,7 @@
     apps:       {sec:'anchor', ctl:'step',   label:'Applications processed per year', unit:'', def:100000, step:5000, min:0},
     avgFyp:     {sec:'anchor', ctl:'chips',  label:'Average first-year premium', unit:'HK$', def:200000, step:10000, min:1, opts:[100000,200000,300000,500000]},
     mcvShare:   {sec:'anchor', ctl:'slider', label:'MCV / cross-border share', unit:'%', def:70, step:5, min:0, max:100},
-    staffRate:  {sec:'anchor', ctl:'chips',  label:'Loaded staff cost / hour', unit:'HK$/hr', def:250, step:25, min:0, opts:[200,250,350,500]},
+    staffRate:  {sec:'anchor', ctl:'lock',   label:'Loaded staff cost — industry standard', unit:'HK$/hr', def:250, step:25, min:0},
 
     /* uc1 */
     dropoff:    {sec:'uc1', ctl:'slider', label:'Applications lost to slow underwriting', unit:'%', def:12, step:1, min:0, max:100, smax:30,
@@ -627,7 +635,7 @@
     apps:       'Total individual applications processed per year across channels — provided by the client. ~100,000 is consistent with HK$11.8B of FY2025 new business APE at a blended average premium.',
     avgFyp:     'The first-year premium of a typical policy. The model divides APE by this number to estimate how many policies are written per year. HK$200K reflects the high-net-worth cross-border segment.',
     mcvShare:   'The share of new policies bought by Mainland Chinese visitors (MCV). Only these applications go through the cross-border onboarding chain that use case 1 fixes.',
-    staffRate:  'The all-in hourly cost of an operations or compliance analyst — salary, benefits and overhead. Used to price every hour of manual work the model removes.',
+    staffRate:  'All-in hourly cost of an operations or compliance analyst — salary, benefits and overhead. Set to the industry standard (~HK$250/hr) from Hong Kong market salary benchmarks.',
     dropoff:    'Out of 100 started applications, how many are abandoned because underwriting drags on for weeks while the client has already returned across the border.',
     recovery:   'Share of abandoned applications recovered when the policy is issued in the same meeting. Fill Easy benchmark from same-session issuance deployments; flexed by scenario only.',
     nigoNow:    '"Not in good order" — the share of application files that bounce back today for missing or mis-keyed information and have to be chased and reworked by hand.',
@@ -640,7 +648,7 @@
     mlShare:    'The share of those claims that rest on Mainland hospital invoices — today verified only from a photograph of a stamped paper bill.',
     coverage:   'The share of Mainland hospitals whose invoice records Fill Easy can retrieve directly, including all major Grade 3 facilities.',
     avgClaim:   'The average payout on one Mainland medical claim.',
-    leakage:    'Share of claim value overpaid on unverifiable paper bills. Industry benchmark (~10%); flexed by scenario only.',
+    leakage:    'Share of claim value overpaid on unverifiable paper bills and certificates. Industry benchmark (~10%), consistent with ICAC-prosecuted schemes — HK$37.5M in one critical-illness scam, HK$26M by one syndicate; flexed by scenario only.',
     caught:     'Share of leakage detected when the invoice is checked with the issuing hospital before payment. Fill Easy benchmark; flexed by scenario only.',
     procCost:   'The internal cost of handling one claim today — OCR-reading the photo, then an assessor validating it by hand.',
     feeClaim:   'Fill Easy list price, fixed: HK$150 per invoice verified at source with the issuing hospital.',
@@ -1045,7 +1053,7 @@
     document.getElementById('story-uc2').innerHTML =
       '<div class="in-h">Base-case logic</div>' +
       '<p>' + T('Baseline') + count(s.claims) + ' claims/yr · ' + B(s.mlShare + '%') + ' on Mainland paper bills (' + B(count(m.uc2.mlClaims)) +
-      ') · verified from photos, never at source · ' + B(s.leakage + '%') + ' leakage · ' + B(money(s.procCost)) + ' handling each.</p>' +
+      ') · verified from photos, never at source · ' + B(s.leakage + '%') + ' leakage (ICAC: HK$37.5M in one scheme) · ' + B(money(s.procCost)) + ' handling each.</p>' +
       '<p>' + T('With verification') + 'Invoice record retrieved from the issuing hospital for ' + B(s.coverage + '%') + ' of facilities → ' +
       B(count(m.uc2.verClaims)) + ' claims arrive authenticated.</p>' +
       '<p>' + T('Value build') + count(m.uc2.verClaims) + ' × ' + s.leakage + '% × ' + s.caught + '% caught × ' + money(s.avgClaim) + ' = ' +
@@ -1125,7 +1133,7 @@
     drows('d-uc2', [
       {l:'Claims with Mainland hospital bills', f:count(s.claims) + ' claims × ' + s.mlShare + '%', v:count(m.uc2.mlClaims)},
       {l:'Verifiable at source', f:'× ' + s.coverage + '% hospital coverage', v:count(m.uc2.verClaims)},
-      {l:'Leakage recovered', f:'× ' + s.leakage + '% leakage × ' + s.caught + '% caught × ' + money(s.avgClaim) + ' avg claim', v:money(m.uc2.leakSaved)},
+      {l:'Fraud & leakage retained', f:'× ' + s.leakage + '% leakage × ' + s.caught + '% caught × ' + money(s.avgClaim) + ' avg claim', v:money(m.uc2.leakSaved)},
       {l:'Manual handling eliminated', f:'× ' + money(s.procCost) + ' OCR + assessor cost/claim', v:money(m.uc2.procSaved)},
       {l:'Gross annual value pool', v:money(m.uc2.gross), total:true}
     ]);
